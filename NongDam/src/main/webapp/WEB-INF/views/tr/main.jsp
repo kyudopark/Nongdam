@@ -13,7 +13,7 @@
     <meta charset="UTF-8">
     <!-- 기본 화면 보기 설정 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+	
     <!-- bootstrap 5.3.2 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
@@ -33,27 +33,31 @@
     <!-- 기본js -->
     <script type="text/javascript" src="${contextPath }/resources/common/js/common.js"></script>
     
-
+    <meta name="농담" content="안녕하세요, 농업 정보 커뮤니티 농담입니다."/>
     
-<script type="text/javascript">
-    
-    //페이지 번호 클릭 할때 이동하기
-  $(document).ready(function () {
-        $(".page-link").on("click", function (e) {
-            e.preventDefault();  // 기본 이벤트 막기
-            
-            var page = $(this).attr("href");  // 페이지 번호 가져오기
-            $("#page").val(page);  // 페이지 값 폼에 설정
-            $("#pageFrm").submit();  // 폼 서브밋
-        });
-  
-    });
-
-</script>
-    
-   
+    <!-- 파비콘 -->
+    <link rel="icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
+    <link rel="shortcut icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
     
     <title>농담 | 농업 정보 커뮤니티</title>
+    
+    
+    
+	<script type="text/javascript">
+	    
+	    //페이지 번호 클릭 할때 이동하기
+	  $(document).ready(function () {
+	        $(".page-link").on("click", function (e) {
+	            e.preventDefault();  // 기본 이벤트 막기
+	            
+	            var page = $(this).attr("href");  // 페이지 번호 가져오기
+	            $("#page").val(page);  // 페이지 값 폼에 설정
+	            $("#pageFrm").submit();  // 폼 서브밋
+	        });
+	  
+	    });
+	
+	</script>
     
 </head>
 <body>
@@ -103,7 +107,7 @@
 					<div class="col  pb-4">
 						<a class="text-decoration-none" href="#">
 							<div class="card">
-								<img src="..." class="border-bottom rounded-2 bg-light"
+								<img src="..." class="border-bottom rounded-2 bg-light w-100"
 									height="200">
 								<div class="card-body">
 									<h5 class="card-title title-overflow-3">${li.tr_title }</h5>
