@@ -39,17 +39,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		
 		<update id="updateByIdx" parameterType="int">
 			update Tr set tr_title=#{tr_title},tr_content=#{tr_content}
-			where tr_Idx=#{tr_Idx}
+			where tr_idx=#{tr_idx}
 		</update>
 		
 		
 		<delete id="deleteByIdx" parameterType="int">
-			delete from Tr where tr_Idx=#{tr_Idx}
+			delete from Tr where tr_idx=#{tr_idx}
 		</delete>
 		
 		<insert id="insert" parameterType="kr.co.ezen.entity.Tr">
-			insert info Tr (tr_title,tr_content,tr_time,user_idx,tr_imgpath)
-			    VALUES (#{tr_title}, #{tr_content}, DEFAULT,1,null)
+			insert into Tr (tr_title,tr_content,user_idx,tr_imgpath)
+			    VALUES (#{tr_title}, #{tr_content},1,null)
 		</insert>
 
 
