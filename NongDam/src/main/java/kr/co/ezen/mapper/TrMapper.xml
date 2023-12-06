@@ -7,4 +7,58 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	
 	<mapper namespace="kr.co.ezen.mapper.TrMapper">
+	
+	<sql id="search">
+		    <if test="type == 'user_nickname'">
+		        where user_nickname like concat('%',#{keyword},'%')
+		    </if>
+		    <if test="type == 'tr_title'">
+		        where tr_title like concat('%',#{keyword},'%')
+		    </if>
+		</sql>
+		
+	<select resultType="kr.co.ezen.entity.Tr" id="findAll"
+		parameterType="kr.co.ezen.entity.Criteria">
+		select tr_title,tr_content,tr_time,user_nickname,user_idx,tr_idx from tr natural join User
+		<include refid="search"/>
+		order by tr_idx
+	 	limit #{pageStart}, #{perPageNum}	
+	</select> 
+	
+	
+	<select resultType="kr.co.ezen.entity.Tr" parameterType="kr.co.ezen.entity.Criteria" id="findByIdx">
+		select tr_title,tr_content,tr_time,user_nickname,user_idx,tr_idx from tr natural join User 
+		where tr_idx=#{tr_idx}
+	</select>
+	
+
+	      <!-- 231109 -->
+      <select id="totalCount" resultType="int"
+      parameterType="kr.co.ezen.entity.Criteria">
+         select count(*) from tr natural join User 
+         <include refid="search"/>
+      </select>
+
+	
+	
+	<insert id="insert" parameterType="kr.co.ezen.entity.Tr">
+		insert info Tr (tr_title,tr_content,tr_time,user_idx,tr_imgpath)
+		    VALUES (#{tr_title}, #{tr_content}, DEFAULT,1,null)
+	</insert>
+	
+	
+	
+	<update id="updateByIdx" parameterType="kr.co.ezen.entity.Tr">
+		update Tr set tr_title=#{tr_title},tr_content=#{tr_content}
+		where tr_Idx=#{tr_Idx}
+	</update>
+	
+	
+	<delete id="deleteByIdx" parameterType="int">
+		delete from Tr where tr_Idx=#{tr_Idx}
+	</delete>
+	<delete id="trdeleteInfo" parameterType="int">
+		delete from Tr where tr_Idx=#{tr_Idx}
+	</delete>
+	
 	</mapper>
