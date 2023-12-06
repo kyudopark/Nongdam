@@ -47,6 +47,15 @@
 <!-- fontAwesome -->
 <script src="https://kit.fontawesome.com/f34a67d667.js"
 	crossorigin="anonymous"></script>
+	
+<script type="text/javascript">
+  $(document).ready(function(){
+    if(${!empty msgType}){
+      $("#messageType").attr("class", "modal-content panel-warning");    
+      $("#myMessage").modal("show");
+    }
+  });
+  </script>
 </head>
 <body>
 	<div class="container">
@@ -55,17 +64,17 @@
 		<div class="row justify-content-center text-center mt-5 mb-5">
 			<div class="col-12 col-md-10 col-lg-7 col-xl-6">
 				<h4 class="mb-5">로그인</h4>
-				<!-- form 영역-->
+				<form action="${contextPath }/user/userLogin" method="post">
 				<div>
 					<!-- input의 placeholder와 라벨의 이름을 같게 주세요.-->
 					<!-- 아이디 -->
 					<div class="form-floating mb-3">
-						<input type="text" class="form-control" id="user_id"
+						<input type="text" class="form-control" id="user_id" name="user_id"
 							placeholder="아이디" /> <label for="user_id">아이디</label>
 					</div>
 					<!-- 비밀번호 -->
 					<div class="form-floating mb-3">
-						<input type="password" class="form-control" id="user_pw"
+						<input type="password" class="form-control" id="user_pw" name="user_pw"
 							placeholder="비밀번호" /> <label for="user_pw">비밀번호</label>
 					</div>
 					<!-- 아이디/비밀번호 찾기 -->
@@ -81,10 +90,11 @@
 				</div>
 				<!-- 로그인 버튼 -->
 				<div class="form-group mb-4">
-					<button class="form-control btn btn-lg btn-secondary">
+					<button type="submit" class="form-control btn btn-lg btn-secondary">
 						<i class="fa-solid fa-right-to-bracket"></i> 로그인
 					</button>
 				</div>
+				</form>
 				<!-- form 영역 끝 -->
 
 				<!-- a 태그들 -->
@@ -110,6 +120,25 @@
 		</div>
 		<!-- 로그인 끝 -->
 	</div>
+	
+	<!-- 실패 메세지를 출력(modal) -->
+  <div id="myMessage" class="modal fade" role="dialog" >
+    <div class="modal-dialog">  
+      <!-- Modal content-->
+      <div id="messageType" class="modal-content panel-info">
+        <div class="modal-header panel-heading">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">${msgType}</h4>
+        </div>
+        <div class="modal-body">
+          <p>${msg}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>  
+    </div>
+  </div>  
 
 
 </body>

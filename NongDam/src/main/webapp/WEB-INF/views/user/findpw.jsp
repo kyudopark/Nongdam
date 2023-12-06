@@ -77,7 +77,7 @@
 					<button class="col-10 btn btn-secondary">이메일 전송</button>
 				</div>
 				<div class="form-group mb-4 text-center">
-				<button class="col-10 btn btn-outline-secondary"><i
+				<button href="${contextPath }/user/login" class="col-10 btn btn-outline-secondary"><i
 						class="fa-solid fa-right-to-bracket"></i> 로그인하러 가기</button>
 				</div>
 			</div>

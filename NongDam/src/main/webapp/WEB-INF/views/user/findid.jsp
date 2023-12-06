@@ -71,9 +71,9 @@
 					<button class="col-10 btn btn-secondary">아이디 찾기</button>
 				</div>
 				<div class="form-group mb-4 text-center">
-					<a class="col-5 btn btn-outline-secondary">비밀번호 찾기</a> <a
-						class="col-5 btn btn-outline-secondary"><i
-						class="fa-solid fa-right-to-bracket"></i> 로그인하러 가기</a>
+					<a href="${contextPath }/user/findpw" class="col-5 btn btn-outline-secondary">비밀번호 찾기</a> 
+					<a href="${contextPath }/user/login" class="col-5 btn btn-outline-secondary">
+						<i class="fa-solid fa-right-to-bracket"></i> 로그인하러 가기</a>
 				</div>
 			</div>
 		</div>
