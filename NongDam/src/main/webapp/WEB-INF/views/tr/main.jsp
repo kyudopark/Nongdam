@@ -45,17 +45,29 @@
     
 	<script type="text/javascript">
 	    
-	    //페이지 번호 클릭 할때 이동하기
-	  $(document).ready(function () {
-	        $(".page-link").on("click", function (e) {
-	            e.preventDefault();  // 기본 이벤트 막기
-	            
-	            var page = $(this).attr("href");  // 페이지 번호 가져오기
-	            $("#page").val(page);  // 페이지 값 폼에 설정
-	            $("#pageFrm").submit();  // 폼 서브밋
-	        });
-	  
-	    });
+	//페이지 번호 클릭 할때 이동하기
+	$(document).ready(function () {
+		//-231206
+		$(".page-link").on("click", function (e) {
+		    e.preventDefault();  // 기본 이벤트 막기
+		    
+		    var page = $(this).attr("href");  // 페이지 번호 가져오기
+		    $("#page").val(page);  // 페이지 값 폼에 설정
+		    $("#pageFrm").submit();  // 폼 서브밋
+		});
+		
+		
+		//231207 (게시글 넘어가는 부분)
+		$(".tr-list-click").click(function(e){
+			e.preventDefault();
+			$("#pageFrm").attr('action','${contextPath}/tr/detail')
+			let p_tr_idx = $(this).attr("href");  // 페이지 번호 가져오기
+		    let t_tr_idx = "<input type='hidden' name='tr_idx' value='"+p_tr_idx+"'>";
+		    $("#pageFrm").append(t_tr_idx);
+		    $("#pageFrm").submit();  // 폼 서브밋
+		})
+		
+	});
 	
 	</script>
     
@@ -105,7 +117,7 @@
 				<c:forEach var="li" items="${li }">
 
 					<div class="col  pb-4">
-						<a class="text-decoration-none" href="#">
+						<a class="text-decoration-none tr-list-click" href="${li.tr_idx}">
 							<div class="card">
 								<img src="..." class="border-bottom rounded-2 bg-light w-100"
 									height="200">
@@ -115,7 +127,7 @@
 										<span class="title-overflow-1">작성자 ${li.user_nickname }</span><br>
 										<span class="title-overflow-1">작성일 <fmt:formatDate value="${li.tr_time }" pattern="YYYY-MM-dd "/></span>
 									</p>
-									<!-- 아래 div 태그는 공동구매에서만 사용-->
+									
 								</div>
 							</div>
 						</a>
@@ -156,12 +168,16 @@
 				
 			</div>
 			<!-- 페이징 끝 -->
+			<!-- 페이징 폼 + 231207 추가) 이동시에도 사용 -->
 			<form id="pageFrm" action="${contextPath}/tr/main" method="get">
 				<input type="hidden" id="page" name="page" value="${pageCre.cri.page }"/>
-               <input type="hidden" id="perPageNum" name="perPageNum" value="${pageCre.cri.perPageNum }"/>
-               <input type="hidden" name="type" value="${ pageCre.cri.type}"/>
-               <input type="hidden" name="keyword" value="${ pageCre.cri.keyword}"/>
-				</form>
+				<input type="hidden" id="perPageNum" name="perPageNum" value="${pageCre.cri.perPageNum }"/>
+				<c:if test="${!empty pageCre.cri.keyword}">
+					<!-- 231207 페이지 이동시 무조건 검색값 함께 가져가는 것 방지 -->
+					<input type="hidden" name="type" value="${ pageCre.cri.type}"/>
+					<input type="hidden" name="keyword" value="${ pageCre.cri.keyword}"/>
+                </c:if>
+			</form>
 				<!-- 페이징 폼 -->
 		</div>
 	</div>

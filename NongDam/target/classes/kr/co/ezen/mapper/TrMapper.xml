@@ -78,16 +78,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</delete>
 		
 		<insert id="insertComment" parameterType="kr.co.ezen.entity.TrComment">
-			<selectKey order="BEFORE" keyProperty="tr_parent_idx" resultType="kr.co.ezen.entity.TrComment">
+			<selectKey order="BEFORE" keyProperty="tr_parent_idx" resultType="int">
 				select IFNULL(max(tr_comment_idx)+1,1) as tr_parent_idx from trComment
 			</selectKey>
 			insert into trComment (tr_idx,tr_parent_idx,user_idx,tr_comment_content,tr_comment_useable) 
-			values (#{tr_idx},#{tr_parent_idx},#{user_idx},${tr_comment_content},1)
+			values (#{tr_idx},#{tr_parent_idx},#{user_idx},#{tr_comment_content},1)
 		</insert>
 		
 		<insert id="insertReplyComment" parameterType="kr.co.ezen.entity.TrComment">
 			insert into trComment (tr_idx,tr_parent_idx,user_idx,tr_comment_content,tr_comment_useable) 
-			values (#{tr_idx},#{tr_parent_idx},#{user_idx},${tr_comment_content},1)
+			values (#{tr_idx},#{tr_parent_idx},#{user_idx},#{tr_comment_content},1)
 		</insert>
 		
 		<!-- ============================================== -->
