@@ -16,10 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-<<<<<<< HEAD
 import org.springframework.web.bind.annotation.ResponseBody;
-=======
->>>>>>> branch 'tr' of https://github.com/YJY1129/Nongdam.git
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.oreilly.servlet.MultipartRequest;
@@ -84,8 +81,6 @@ public class TrController {
 		MultipartRequest multi = null;
 		int fileSize = 40 * 1024 * 1024; // 10MB
 		String sPath = request.getRealPath("resources/image/tr");
-<<<<<<< HEAD
-=======
 		
 		multi = new MultipartRequest(request, sPath, fileSize, "UTF-8", new DefaultFileRenamePolicy());
 		
@@ -116,43 +111,12 @@ public class TrController {
 	@PostMapping("/delete")
 	public String delete(@RequestParam("tr_idx") int tr_idx) {
 		//삭제 버튼 눌렀을때 정말 삭제하시겠습니까?띄우고 확인 누르면 /delete로 이동
->>>>>>> branch 'tr' of https://github.com/YJY1129/Nongdam.git
-		
-		multi = new MultipartRequest(request, sPath, fileSize, "UTF-8", new DefaultFileRenamePolicy());
-		
-		String newPro="";
-		File file = multi.getFile("tr_imgpath");
-		if (file != null) {
-			String ext = file.getName().substring(file.getName().lastIndexOf(".") + 1);
-			ext = ext.toUpperCase();
-			if (ext.equals("PNG") || ext.equals("GIF") || ext.equals("JPG")) {
-				
-				newPro=file.getName();
-			}else {
-				if(file.exists()) {
-					file.delete();
-				}
-				return "redirect:/tr/write";
-			}
-		}
-		vo.setTr_imgpath(newPro);
-		trService.insert(vo);
-		
+
 		return "redirect:/tr/main";
 	}
 	
-	@GetMapping("/modify")
-	public String modify(Model m,@RequestParam("tr_idx") int tr_idx) {
-		
-		
-		Tr vo=trService.findByIdx(tr_idx);
-		
-		m.addAttribute("vo",vo);
-		
-		return "/tr/modify";
-	}
-	
-<<<<<<< HEAD
+
+
 	@GetMapping("/modify")
 	public String modify(Model m,@RequestParam("tr_idx") int tr_idx) {
 		
@@ -170,19 +134,11 @@ public class TrController {
 	
 	
 	//--------------------------------------------------------
-=======
-	@PostMapping("/modify")
-	public String modify(Tr vo) {
-		
-		trService.updateByIdx(vo);
-		return "redirect:/tr/main";
-	}
->>>>>>> branch 'tr' of https://github.com/YJY1129/Nongdam.git
-	
-<<<<<<< HEAD
+
+
+
 	@PostMapping("/insertComment")
 	public @ResponseBody void insertComment(TrComment cvo) {
-		System.out.println(cvo.getTr_comment_content());
 		trService.insertComment(cvo);
 	}
 	
@@ -204,6 +160,6 @@ public class TrController {
 	}
 	
 }
-=======
-}
->>>>>>> branch 'tr' of https://github.com/YJY1129/Nongdam.git
+
+
+
