@@ -7,3 +7,8 @@
 1. 2023-12-06 / 오전 11시 11분
 - 프로젝트 Nongdam 파일 업로드.
 - HomeController에 있는 RequestMapping("/user") 부분 삭제.
+
+
+23-12-07/
+- MailUtils .java 클래스 추가
+- userHeader 추가
