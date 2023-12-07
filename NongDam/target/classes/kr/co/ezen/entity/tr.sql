@@ -1,4 +1,4 @@
-
+drop table User
 
 create table User(
 user_idx int auto_increment,
@@ -50,6 +50,7 @@ create table trComment(
 	tr_comment_useable int,
 	primary key (tr_comment_idx)
 )
+select * from tr
 
 --1번 게시글
 -- 1번 댓글을 달았음
