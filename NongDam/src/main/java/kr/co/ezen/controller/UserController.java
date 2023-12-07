@@ -1,11 +1,14 @@
 package kr.co.ezen.controller;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,6 +26,9 @@ public class UserController {
 	
 	@Autowired
     private UserService userService;
+	
+	@Autowired
+	JavaMailSenderImpl mailSender ; 
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String userLogin() {
@@ -47,6 +53,12 @@ public class UserController {
        
         return "user/findpw";
     }
+    
+    @RequestMapping(value = "/findpw", method = RequestMethod.POST)
+    public void findPwPOST(@ModelAttribute User user, HttpServletResponse response) throws Exception{
+    	userService.findPw(response, user);
+    }
+    
     
     @RequestMapping("/userRegisterCheck")
 	public @ResponseBody int memRegisterCheck(@RequestParam("user_id") String user_id) {
@@ -132,6 +144,20 @@ public class UserController {
         session.invalidate();
         return "redirect:/";
     }
+    
+    @PostMapping("/checkId")
+    @ResponseBody
+    public String checkUserId(@RequestParam("user_name") String user_name, @RequestParam("user_email") String user_email, User user) {
+         user = userService.findUserId(user_name, user_email);
+         if (user != null) {
+             return user.getUser_id();
+         } else {
+             return null;
+         }
+         
+    }
+
+    
 
     
 }

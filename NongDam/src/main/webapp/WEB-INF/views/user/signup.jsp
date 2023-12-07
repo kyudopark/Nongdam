@@ -163,6 +163,8 @@ function registerCheck(){
 </head>
 <body>
 
+	<jsp:include page="userHeader.jsp"/>
+
 	<div class="container">
 		<form name="frm" method="post" action="${contextPath }/user/signup">
 			 <input type="hidden" id="user_pw1" name="user_pw1" value="" /> 
@@ -295,8 +297,7 @@ function registerCheck(){
 		<!-- 버튼 -->
 		<div
 			class="mt-5 mb-5 d-flex flex-wrap justify-content-between align-items-end">
-			<span class="fst-italic text-danger">{에러메세지 또는 설명 텍스트인데 쓸거 없으면
-				그냥 텍스트만 비워주세요.}</span>
+			<span class="fst-italic text-danger"></span>
 			<div class="text-end">
 				<button type="submit" class="btn btn-secondary">
 					<i class="fa-solid fa-user-check"></i> 회원가입

@@ -36,7 +36,22 @@
 		<!-- mybatis spring -->
 		<mybatis-spring:scan base-package="kr.co.ezen.mapper"/>
 		
-		
+		<!-- mail설정 1207 -->
+		<!-- javax mail bean -->
+   
+   
+   <bean id="mailSender" class ="org.springframework.mail.javamail.JavaMailSenderImpl" >
+		<property name="host" value="smtp.gmail.com" />
+		<property name="port" value="587" />
+		<property name="username" value="kdpark1002@gmail.com" />
+		<property name="password" value="ysmr eint wxzt fvnu" />
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+			</props>
+		</property>
+</bean>
+   
 		
 		
 		

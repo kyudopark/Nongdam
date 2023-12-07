@@ -42,13 +42,35 @@
 <script
 	src="https://cdn.ckeditor.com/ckeditor5/40.1.0/classic/ckeditor.js"></script>
 
-<link rel="stylesheet" href="/common.css" />
+<link rel="stylesheet" href="${contextPath }/resources/common/css/style.css">
 
 <!-- fontAwesome -->
 <script src="https://kit.fontawesome.com/f34a67d667.js"
 	crossorigin="anonymous"></script>
+	
+	
+<script>
+$(function(){
+	$("#findBtn").click(function(){
+		$.ajax({
+			url : "${contextPath}/user/findpw",
+			type : "POST",
+			data : {
+				user_id : $("#user_id").val(),
+				user_email : $("#user_email").val(),
+				user_name : $("#user_name").val()
+			},
+			success : function(result) {
+				alert(result);
+			},
+		})
+	});
+})
+</script>
 </head>
 <body>
+
+	<jsp:include page="userHeader.jsp"/>
 
 	<div class="container mt-5 mb-5">
 		<div class="row justify-content-center mt-5 mb-5">
@@ -57,28 +79,28 @@
 				<div class="mb-3 row justify-content-center">
 					<label for="user_name" class="col-2 col-form-label">이름</label>
 					<div class="col-8">
-						<input type="text" class="form-control" id="user_name" />
+						<input type="text" class="form-control" id="user_name" name="user_name" />
 					</div>
 				</div>
 				<div class="mb-4 row justify-content-center">
 					<label for="user_id" class="col-2 col-form-label">아이디</label>
 					<div class="col-8">
-						<input type="text" class="form-control" id="user_id" />
+						<input type="text" class="form-control" id="user_id" name="user_id"/>
 					</div>
 				</div>
 				<div class="mb-4 row justify-content-center">
 					<label for="user_email" class="col-2 col-form-label">이메일</label>
 					<div class="col-8">
-						<input type="email" class="form-control" id="user_email" />
+						<input type="email" class="form-control" id="user_email" name="user_email" />
 					</div>
 				</div>
 				<!-- 버튼 영역 -->
 				<div class="form-group mb-4 text-center">
-					<button class="col-10 btn btn-secondary">이메일 전송</button>
+					<button class="col-10 btn btn-secondary" id="findBtn">이메일 전송</button>
 				</div>
 				<div class="form-group mb-4 text-center">
-				<button href="${contextPath }/user/login" class="col-10 btn btn-outline-secondary"><i
-						class="fa-solid fa-right-to-bracket"></i> 로그인하러 가기</button>
+				<a href="${contextPath }/user/login" class="col-10 btn btn-outline-secondary"><i
+						class="fa-solid fa-right-to-bracket"></i> 로그인하러 가기</a>
 				</div>
 			</div>
 		</div>

@@ -13,7 +13,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		user_zipcode, user_addr) VALUES (#{user_id}, #{user_pw}, #{user_name}, #{user_nickname}, 
 		#{user_gender}, #{user_email}, #{user_zipcode}, #{user_addr}) </insert> -->
 	<insert id="insertUser" parameterType="kr.co.ezen.entity.User">
-		INSERT INTO nongUser (user_id, user_pw, user_name, user_nickname,user_gender, user_email, user_zipcode, user_addr)VALUES (#{user_id}, #{user_pw}, #{user_name}, #{user_nickname},#{user_gender}, #{user_email}, #{user_zipcode}, #{user_addr})
+		INSERT INTO nongUser
+		(user_id, user_pw, user_name, user_nickname,user_gender, user_email,
+		user_zipcode, user_addr)VALUES (#{user_id}, #{user_pw}, #{user_name},
+		#{user_nickname},#{user_gender}, #{user_email}, #{user_zipcode},
+		#{user_addr})
 	</insert>
 
 
@@ -29,4 +33,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		user_pw=#{user_pw}
 	</select>
 
+	<!-- 해당 이름을 가진 회원이 존재하는지 확인 -->
+	<select id="isNameExists" parameterType="String"
+		resultType="boolean">
+		SELECT COUNT(*) > 0 FROM nongUser WHERE user_name = #{user_name}
+	</select>
+
+	<!-- 해당 아이디를 가진 회원이 존재하는지 확인 -->
+	<select id="isEmailExists" parameterType="String"
+		resultType="boolean">
+		SELECT COUNT(*) > 0 FROM nongUser WHERE user_email = #{user_email}
+	</select>
+
+	<select id="findUserId" resultType="kr.co.ezen.entity.User">
+		SELECT user_id
+		FROM nongUser
+		WHERE user_name = #{user_name}
+		AND user_email = #{user_email}
+	</select>
+
+
+	<update id="updatePw">
+		update nongUser set user_pw = #{user_pw} where user_id = #{user_id}
+	</update>
+
+
+	<select id="readUser" parameterType="string" resultType="kr.co.ezen.entity.User">
+		SELECT * FROM nongUser WHERE user_id = #{user_id}
+	</select>
 </mapper>

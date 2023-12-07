@@ -42,7 +42,7 @@
 <script
 	src="https://cdn.ckeditor.com/ckeditor5/40.1.0/classic/ckeditor.js"></script>
 
-<link rel="stylesheet" href="/common.css" />
+<link rel="stylesheet" href="${contextPath }/resources/common/css/style.css">
 
 <!-- fontAwesome -->
 <script src="https://kit.fontawesome.com/f34a67d667.js"
@@ -58,6 +58,8 @@
   </script>
 </head>
 <body>
+	<jsp:include page="userHeader.jsp"/>
+
 	<div class="container">
 		<!-- 로그인 -->
 		<!-- https://getbootstrap.com/docs/5.3/forms/floating-labels/#example -->

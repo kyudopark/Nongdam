@@ -42,13 +42,15 @@
 <script
 	src="https://cdn.ckeditor.com/ckeditor5/40.1.0/classic/ckeditor.js"></script>
 
-<link rel="stylesheet" href="/common.css" />
+<link rel="stylesheet" href="${contextPath }/resources/common/css/style.css">
 
 <!-- fontAwesome -->
 <script src="https://kit.fontawesome.com/f34a67d667.js"
 	crossorigin="anonymous"></script>
 </head>
 <body>
+
+	<jsp:include page="userHeader.jsp"/>
 
 	<div class="container mt-5 mb-5">
 		<div class="row justify-content-center mt-5 mb-5">
@@ -61,14 +63,14 @@
 					</div>
 				</div>
 				<div class="mb-4 row justify-content-center">
-					<label for="user_id" class="col-2 col-form-label">아이디</label>
+					<label for="user_email" class="col-2 col-form-label">이메일</label>
 					<div class="col-8">
-						<input type="text" class="form-control" id="user_id" />
+						<input type="email" class="form-control" id="user_email" />
 					</div>
 				</div>
 				<!-- 버튼 영역 -->
 				<div class="form-group mb-4 text-center">
-					<button class="col-10 btn btn-secondary">아이디 찾기</button>
+					<button class="col-10 btn btn-secondary" onclick="checkId()">아이디 찾기</button>
 				</div>
 				<div class="form-group mb-4 text-center">
 					<a href="${contextPath }/user/findpw" class="col-5 btn btn-outline-secondary">비밀번호 찾기</a> 
@@ -78,6 +80,58 @@
 			</div>
 		</div>
 	</div>
+	
+	<!-- 모달 창 -->
+    <div class="modal fade" id="idModal" tabindex="-1" aria-labelledby="idModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="idModalLabel">아이디 찾기</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="idModalBody">
+                    <!-- 아이디를 여기에 표시 -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+	<script>
+        function checkId() {
+            var user_name = $("#user_name").val();
+            var user_email = $("#user_email").val();
+            
+            if (!user_name || !user_email) {
+                alert("이름과 이메일을 모두 입력해주세요.");
+                return;
+            }
+
+            // Ajax로 서버에 아이디 확인 요청
+            $.ajax({
+                url: "${contextPath}/user/checkId",
+                type: "post",
+                data: { "user_name": user_name, "user_email": user_email },
+                success: function (result) {
+                    if (result) {
+                    	 $("#idModalBody").text("찾은 아이디: " + result );
+                         
+                         $("#idModal").modal("show");
+                    }
+                    else {
+                        $("#idModalBody").text("해당하는 정보가 없습니다.");
+                        $("#idModal").modal("show");
+                    }
+                },
+                error: function () {
+                    alert("오류가 발생했습니다.");
+                }
+            });
+        }
+    </script>
+	
 
 </body>
 </html>
