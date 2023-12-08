@@ -220,10 +220,6 @@
 			<artifactId>gson</artifactId>
 			<version>2.8.9</version>
 		</dependency>
-
-		<!-- mail관련 추가 -->
-<<<<<<< HEAD
-	
 	
 		<!-- 231208 썸네일 FileUpload -->
 		<dependency>
@@ -238,7 +234,6 @@
     		<version>2.4</version>
 		</dependency>
 	
-=======
 		<!-- 231207 메일 관련 -->
 		<!-- https://mvnrepository.com/artifact/javax.mail/javax.mail-api -->
 		<dependency>
@@ -265,8 +260,6 @@
 			<version>1.6.2</version> <!-- 최신 버전 사용 -->
 		</dependency>
 
-
->>>>>>> branch 'main' of https://github.com/YJY1129/Nongdam.git
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
