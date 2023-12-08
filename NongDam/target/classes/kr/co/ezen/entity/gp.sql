@@ -1,21 +1,4 @@
-create table User(
-user_idx int auto_increment,
-user_id varchar(30),
-user_pw varchar(30),
-user_zipcode varchar(30),
-user_addr varchar(200),
-user_gender char(1),
-user_nickname varchar(50),
-user_name varchar(30),
-user_email varchar(50),
-primary key(user_idx)
 
-);
-
-insert into User (user_id,user_pw,user_nickname,user_name) 
-values("admin","admin","nickname","name");
-
-select * from user;
 
 ----------------------------------------------------------------------------
 
