@@ -1,6 +1,7 @@
 package kr.co.ezen.service;
 
 import java.io.PrintWriter;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -85,8 +86,8 @@ public class UserServiceImpl implements UserService {
 
 			email.setAuthentication(hostSMTPid, hostSMTPpwd);
 			email.setTLS(true);
-			email.addTo(mail, charSet);
-			email.setFrom(fromEmail, fromName, charSet);
+			email.addTo(mail);
+			email.setFrom(fromEmail, fromName);
 			email.setSubject(subject);
 			email.setHtmlMsg(msg);
 			email.send();
@@ -131,4 +132,8 @@ public class UserServiceImpl implements UserService {
 	public User readUser(String user_id) {
 		return  userMapper.readUser(user_id);
 	}
+
+	
+	
+	
 }

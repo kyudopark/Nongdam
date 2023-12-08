@@ -1,6 +1,7 @@
 package kr.co.ezen.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.util.UUID;
 
 import javax.activation.DataSource;
 import javax.mail.MessagingException;
@@ -44,4 +45,9 @@ public class MailUtils {
     public void send() {
         mailSender.send(message);		// 메일 전송
     }
+    
+    public static String generateToken() {
+        return UUID.randomUUID().toString();
+    }
+    
 }

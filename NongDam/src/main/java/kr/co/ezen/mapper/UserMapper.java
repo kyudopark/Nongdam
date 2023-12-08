@@ -28,5 +28,9 @@ public interface UserMapper {
     public int updatePw(User user) throws Exception;
     
     public  User readUser(String user_id);
+    
+    //public int sendEmailVerification(String user_email);
+    
+    //public boolean verifyCode(String user_email, String verificationCode);
 
 }
