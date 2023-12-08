@@ -120,7 +120,7 @@
 						<a class="text-decoration-none tr-list-click" href="${li.tr_idx}">
 							<div class="card">
 								<img src="${contextPath }/resources/image/tr/${li.tr_imgpath }" 
-								class="border-bottom rounded-2 bg-light w-100"
+								class="border-bottom rounded-2 bg-light w-100 "
 									height="200">
 								<div class="card-body">
 									<h5 class="card-title title-overflow-3">${li.tr_title }</h5>
