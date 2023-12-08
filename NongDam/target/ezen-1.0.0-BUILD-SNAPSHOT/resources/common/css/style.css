@@ -1,0 +1,65 @@
+@charset "UTF-8";
+
+
+/* 폰트 설정 */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap');
+body{
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+
+/* bootstrap nav */
+.nav-link.active{
+    font-weight: 600;
+}
+/* bootstrap 마이페이지 왼쪽 배경색 재정의 */
+.accordion-button:not(.collapsed){
+    background-color: var(--bs-body-bg);
+    color:var(--bs-body-color);
+}
+
+
+
+/* ckEditor 다크모드 관련 */
+.ck.ck-editor__main>.ck-editor__editable{
+    background: none;
+}
+
+
+/* 글자수가 많을 때 '...'로 만들어주는 자체 클래스 */
+/* table 태그 안에서는 통하지 않으니 주의 */
+.title-overflow-1{
+    display: -webkit-box; 
+    overflow: hidden; 
+    -webkit-line-clamp: 1; 
+    -webkit-box-orient: vertical;
+}
+.title-overflow-2{
+    display: -webkit-box; 
+    overflow: hidden; 
+    -webkit-line-clamp: 2; 
+    -webkit-box-orient: vertical;
+}
+.title-overflow-3{
+    display: -webkit-box; 
+    overflow: hidden; 
+    -webkit-line-clamp: 3; 
+    -webkit-box-orient: vertical;
+}
+.title-overflow-6{
+    display: -webkit-box; 
+    overflow: hidden; 
+    -webkit-line-clamp: 6; 
+    -webkit-box-orient: vertical;
+}
+
+
+/* input type=date인 input 태그의 placeholder를 재정의 */
+input[type='date']::before {
+    content: attr(data-placeholder);
+    width: 100%;
+}
+input[type='date']:focus::before,
+input[type='date']:valid::before {
+    display: none;
+}
