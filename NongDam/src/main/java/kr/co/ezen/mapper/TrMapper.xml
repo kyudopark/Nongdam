@@ -19,7 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			parameterType="kr.co.ezen.entity.Criteria">
 			select tr_title,tr_content,tr_time,user_nickname,user_idx,tr_idx,tr_imgpath from tr natural join User
 			<include refid="search"/>
-			order by tr_idx
+			order by tr_idx desc
 		 	limit #{pageStart}, #{perPageNum}	
 		</select> 
 	
@@ -33,12 +33,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 		<select resultType="kr.co.ezen.entity.Tr" 
 		parameterType="int" id="findByIdx">
-			select tr_title,tr_content,tr_time,user_nickname,user_idx,tr_idx from tr natural join User 
+			select tr_title,tr_content,tr_time,user_nickname,user_idx,tr_idx,tr_imgpath from tr natural join User 
 			where tr_idx=#{tr_idx}
 		</select>
 		
-		<update id="updateByIdx" parameterType="int">
-			update Tr set tr_title=#{tr_title},tr_content=#{tr_content}
+		<update id="updateByIdx" parameterType="kr.co.ezen.entity.Tr">
+			update tr set tr_title=#{tr_title},tr_content=#{tr_content}
 			where tr_idx=#{tr_idx}
 		</update>
 		

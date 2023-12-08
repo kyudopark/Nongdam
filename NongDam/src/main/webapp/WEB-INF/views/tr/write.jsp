@@ -51,6 +51,7 @@
 	    <!-- 글 작성 div container-->
     <div class="container mt-5 mb-5">
         <h4 class="mt-5 mb-5"> 게시글 작성</h4>
+
         <form method="post" action="${contextPath }/tr/write" enctype="multipart/form-data" >
             
 
