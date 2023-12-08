@@ -57,7 +57,7 @@
             <!--제목-->
             <div class="form-group mb-3">
                 <input type="text" id="title" name="tr_title" 
-                value="asdas" class="form-control" placeholder="제목을 입력하세요.">
+                 class="form-control" placeholder="제목을 입력하세요.">
             </div>
 
             <!-- 말머리 있는 버전 -->
@@ -113,7 +113,7 @@
 
             <!-- 글 작성하기 버튼-->
             <div class="text-center">
-                <button type="sumbit" class="btn btn-secondary">글 작성하기</button>
+                <button type="submit" class="btn btn-secondary">글 작성하기</button>
                 <a href="javascript:history.go(-1)" class="btn btn-outline-secondary">취소</a>
             </div>
         </form>

@@ -107,7 +107,7 @@
 
             <!-- 글 작성하기 버튼-->
             <div class="text-center">
-                <button type="sumbit" class="btn btn-secondary">글 작성하기</button>
+                <button type="submit" class="btn btn-secondary">글 작성하기</button>
                 <a href="javascript:history.go(-1)" class="btn btn-outline-secondary">취소</a>
             </div>
         </form>
