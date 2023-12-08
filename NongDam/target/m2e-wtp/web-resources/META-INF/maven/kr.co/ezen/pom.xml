@@ -222,6 +222,23 @@
 		</dependency>
 
 		<!-- mail관련 추가 -->
+<<<<<<< HEAD
+	
+	
+		<!-- 231208 썸네일 FileUpload -->
+		<dependency>
+    		<groupId>commons-fileupload</groupId>
+    		<artifactId>commons-fileupload</artifactId>
+    		<version>1.4</version>
+		</dependency>
+		<!-- commons-io -->
+		<dependency>
+    		<groupId>commons-io</groupId>
+    		<artifactId>commons-io</artifactId>
+    		<version>2.4</version>
+		</dependency>
+	
+=======
 		<!-- 231207 메일 관련 -->
 		<!-- https://mvnrepository.com/artifact/javax.mail/javax.mail-api -->
 		<dependency>
@@ -249,6 +266,7 @@
 		</dependency>
 
 
+>>>>>>> branch 'main' of https://github.com/YJY1129/Nongdam.git
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
