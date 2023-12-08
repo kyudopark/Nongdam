@@ -42,17 +42,14 @@ public class FreeController {
 	}
 	
 	@GetMapping("/detail")
-	public String detail(@RequestParam("free_idx") int gp_idx, Model m,
+	public String detail(@RequestParam("free_idx") int free_idx, Model m,
 			@ModelAttribute("cri") Criteria cri) {
 		//게시글조회
 		
-		  = .findByIdx(gp_idx);
-		//List<GpUser> cvo = gpService.findByUser(gp_idx);
-		
+		Free fr=FreeController.findByIdx(free_idx);
 		m.addAttribute("vo", vo);
-		//m.addAttribute("cvo", cvo);		
 		
-		return "gp/detail";
+		return "free/idx"
 	}
 	
 	@GetMapping("get")

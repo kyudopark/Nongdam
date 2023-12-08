@@ -241,11 +241,10 @@
 			<artifactId>spring-context-support</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>com.sun.mail</groupId>
-			<artifactId>javax.mail</artifactId>
-			<version>1.6.2</version> <!-- 최신 버전 사용 -->
+			<artifactId>avax.mail</artifactId>
+			<version>1.6.2</version><!-- 최신 버전 사용 -->
 		</dependency>
 
 
@@ -255,68 +254,11 @@
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
 			<scope>test</scope>
-<<<<<<< HEAD
-		</dependency>  
-		
-			<!-- 이미지 업로드 -->
-		    <dependency>
-		        <groupId>org.apache.commons</groupId>
-		        <artifactId>commons-lang3</artifactId>
-		        <version>3.4</version>
-		    </dependency>
-            
-	        <dependency>
-			    <groupId>commons-fileupload</groupId>
-			    <artifactId>commons-fileupload</artifactId>
-			    <version>1.3.3</version>
-			</dependency>
-           
-=======
 		</dependency>
->>>>>>> branch 'main' of https://github.com/YJY1129/Nongdam.git
+
 	</dependencies>
-<<<<<<< HEAD
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-eclipse-plugin</artifactId>
-                <version>2.9</version>
-                <configuration>
-                    <additionalProjectnatures>
-                        <projectnature>org.springframework.ide.eclipse.core.springnature</projectnature>
-                    </additionalProjectnatures>
-                    <additionalBuildcommands>
-                        <buildcommand>org.springframework.ide.eclipse.core.springbuilder</buildcommand>
-                    </additionalBuildcommands>
-                    <downloadSources>true</downloadSources>
-                    <downloadJavadocs>true</downloadJavadocs>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.5.1</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                    <compilerArgument>-Xlint:all</compilerArgument>
-                    <showWarnings>true</showWarnings>
-                    <showDeprecation>true</showDeprecation>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.2.1</version>
-                <configuration>
-                    <mainClass>org.test.int1.Main</mainClass>
-                </configuration>
-                
-            </plugin>
-        </plugins>
-    </build>
-=======
-	<build>
+    
+	<build> 
 		<plugins>
 			<plugin>
 				<artifactId>maven-eclipse-plugin</artifactId>
@@ -354,5 +296,5 @@
 			</plugin>
 		</plugins>
 	</build>
->>>>>>> branch 'main' of https://github.com/YJY1129/Nongdam.git
+
 </project>
