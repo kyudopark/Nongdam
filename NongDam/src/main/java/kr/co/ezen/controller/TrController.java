@@ -78,6 +78,7 @@ public class TrController {
 	@PostMapping("/write")
 	public String write(Tr vo,HttpServletRequest request, HttpSession session, RedirectAttributes rttr)
 			throws IOException{ 
+		
 		MultipartRequest multi = null;
 		int fileSize = 40 * 1024 * 1024; // 10MB
 		String sPath = request.getRealPath("resources/image/tr");
@@ -108,13 +109,6 @@ public class TrController {
 				
 	}
 	
-	@PostMapping("/delete")
-	public String delete(@RequestParam("tr_idx") int tr_idx) {
-		//삭제 버튼 눌렀을때 정말 삭제하시겠습니까?띄우고 확인 누르면 /delete로 이동
-
-		return "redirect:/tr/main";
-	}
-	
 
 
 	@GetMapping("/modify")
@@ -136,27 +130,33 @@ public class TrController {
 	//--------------------------------------------------------
 
 
-
+	//231206
 	@PostMapping("/insertComment")
 	public @ResponseBody void insertComment(TrComment cvo) {
 		trService.insertComment(cvo);
 	}
-	
 	@GetMapping("/getComment")
 	public @ResponseBody List<TrComment> getComment(int tr_idx){
 		List<TrComment> cvo = trService.findAllComment(tr_idx);
 		return cvo;
 	}
-	
-	@PutMapping("/deleteByIdx")
+	@PostMapping("/deleteByIdx")
 	public @ResponseBody void deleteByIdx(int tr_idx) {
 		trService.deleteByIdx(tr_idx);
 		trService.deleteCommentByTr_idx(tr_idx);
-	}
-	
-	@PutMapping("/deleteCommentByIdx")
+	}	
+	@PostMapping("/deleteCommentByIdx")
 	public @ResponseBody void deleteCommentByIdx(int tr_comment_idx) {
 		trService.deleteCommentByIdx(tr_comment_idx);
+	}
+	@PostMapping("/insertReplyComment")
+	public @ResponseBody void insertReplyComment(TrComment vo) {
+		trService.insertReplyComment(vo);
+	}
+	//231207
+	@PostMapping("/updateComment")
+	public @ResponseBody void updateComment(TrComment cvo) {
+		trService.updateCommentByIdx(cvo);
 	}
 	
 }

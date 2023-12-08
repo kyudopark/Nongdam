@@ -66,14 +66,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</select>
 		
 		<update id="updateCommentByIdx" parameterType="kr.co.ezen.entity.TrComment">
-			update set tr_comment=#{tr_comment} where tr_comment_idx=#{tr_comment_idx}
+			update trComment set tr_comment_content=#{tr_comment_content} where tr_comment_idx=#{tr_comment_idx}
 		</update>
 		
 		<update id="deleteCommentByIdx" parameterType="int">
-			update set tr_comment_useable=0 where tr_comment_idx=#{tr_comment_idx}
+			update trComment set tr_comment_useable=0 where tr_comment_idx=#{tr_comment_idx}
 		</update>
 		
-		<delete id="deletrCommentByTr_idx" parameterType="int">
+		<delete id="deleteCommentByTr_idx" parameterType="int">
 			delete from tr_comment where tr_idx=#{tr_idx}
 		</delete>
 		

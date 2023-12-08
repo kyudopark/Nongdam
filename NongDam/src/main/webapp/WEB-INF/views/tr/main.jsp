@@ -40,7 +40,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
     
     <title>농담 | 농업 정보 커뮤니티</title>
-    
+    <script type="text/javascript" src="${contextPath }/resources/common/js/tr/bannerText.js"></script>
     
     
 	<script type="text/javascript">
@@ -152,7 +152,7 @@
 						<c:forEach var="pageNum" begin="${pageCre.startPage }"
 							end="${pageCre.endPage }">
 							<li class="page-item  ${pageCre.cri.page==pageNum? 'active text-secondary' :'' }">
-								<a class="page-link   ${pageCre.cri.page==pageNum? 'bg-secondary border-secondary':'' }" href="${pageNum}">${pageNum }</a>
+								<a class="page-link  ${pageCre.cri.page==pageNum? 'bg-secondary border-secondary':' text-body' }" href="${pageNum}">${pageNum }</a>
 							</li>
 						</c:forEach>
 

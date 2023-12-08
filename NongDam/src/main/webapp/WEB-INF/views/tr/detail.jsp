@@ -40,7 +40,8 @@
     <link rel="shortcut icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
     
     <title>농담 | 농업 정보 커뮤니티</title>
-	
+	<script type="text/javascript" src="${contextPath }/resources/common/js/tr/bannerText.js"></script>
+    
 	<script type="text/javascript">
 		
 		$(document).ready(function(){
@@ -64,61 +65,94 @@
 			let fmtTime;
 			let commentList ="";
 			$.each(data, function(index,obj){
-				
+				//231207 치환
+				obj.tr_comment_content = obj.tr_comment_content.replaceAll("<", "&lt;");
+				obj.tr_comment_content = obj.tr_comment_content.replaceAll(">", "&gt;");
+				obj.tr_comment_content = obj.tr_comment_content.replaceAll("\\(", "&#40;");
+				obj.tr_comment_content = obj.tr_comment_content.replaceAll("\\)", "&#41;");
+				obj.tr_comment_content = obj.tr_comment_content.replaceAll("'", "&#x27;");
+				//231206 포맷팅
 				date.setTime(obj.tr_comment_time);
 				fmtTime = date.toISOString().replace(/T/, ' ').replace(/\..+/, '');
 				
 				commentList += "<div class='p-3 mt-3 mb-3 d-flex flex-nowrap gap-1'>";
 				// 답글여부
 				if(obj.tr_parent_idx != obj.tr_comment_idx){
-					commentList += "	<div class='ms-2 me-3'> </div> ";
+				commentList += "	<div class='ms-2 me-3'> </div> ";
 				}
 				commentList += "	<div style='width: 22px; height: 22px; border-radius: 50%;'>";
 				
 				// 썸네일
 				if(obj.user_profile == null || obj.user_profile == ''){
-					commentList += "		<i class='fa-regular fa-user'></i>";
+				commentList += "		<i class='fa-regular fa-user'></i>";
 				}else{
-					commentList +="			<img class='object-fit-cover' style='width: 22px; height: 22px; border-radius: 50%;'";
-					commentList += " 			src='"+ obj.user_profile +"'>"
+				commentList +="			<img class='object-fit-cover' style='width: 22px; height: 22px; border-radius: 50%;'";
+				commentList += " 			src='"+ obj.user_profile +"'>"
 				}
 				commentList += "	</div>";
-				commentList += "	<div class='w-100'>";
+				commentList += "	<div class='w-100' id='comment"+obj.tr_comment_idx+"'>";
 				commentList += "		<div>";
 				commentList += " 			<h6 class='d-inline-block'>"+ obj.user_nickname +"</h6>";
-				commentList += "			<small class='text-secondary'>"+fmtTime+"</small>";
+				commentList += "			<small class='text-secondary'>"+ fmtTime+"</small>";
 				commentList += "		</div>";
 				if(obj.tr_comment_useable == 1){
-				commentList += "		<div class='pb-2'>";
-				commentList += "			<div>"+obj.tr_comment_content+"</div>";
+				commentList += "		<div class='pb-2'  id='comment_content"+obj.tr_comment_idx+"'>";
+				commentList += "			<div class='viewcommdiv text-break pb-1'>"+obj.tr_comment_content+"</div>";
 				commentList += "			<c:if test='${empty uvo }'> ";
-				commentList += " 				<div class='d-none'>";
+				commentList += " 				<div class='updatecommdiv d-none pb-1'>";
+				commentList += "				<form>";
 				commentList += "					<textarea class='form-control'>"+obj.tr_comment_content+"</textarea>";
-				commentList += "				</div>";
+				commentList += "					<button type='button' class='btn btn-sm btn-secondary mt-2'";
+				commentList += "					onclick='updateComment("+obj.tr_comment_idx+")'>수정하기</button>";
+				commentList += "					<button type='button' class='btn btn-sm btn-outline-secondary mt-2'";
+				commentList += "					onclick='updateCommentCancel("+obj.tr_comment_idx+")'>수정 취소</button>";
+				commentList += "				</form>";
+				commentList += "				</div >";
 				commentList += "				<small class='d-flex flex-nowrap gap-2'>";
-				commentList += "					<a class='text-secondary text-decoration-none'>답글</a>";
-				commentList += "  					<a class='text-secondary text-decoration-none'>수정</a>";
+				if(obj.tr_parent_idx == obj.tr_comment_idx){
+				commentList += "					<a href='javascript:replyCommentToggle("+obj.tr_comment_idx+")' class='text-secondary text-decoration-none'>답글</a>";
+				} //중첩
+				commentList += "  					<a href='javascript:updateCommentButton("+obj.tr_comment_idx+")' class='text-secondary text-decoration-none'>수정</a>";
 				commentList += "					<a href='javascript:deleteCommentByIdx("+obj.tr_comment_idx+")' class='text-secondary text-decoration-none'>삭제</a>";
 				commentList += "					<c:if test='${"+obj.user_idx +" eq uvo.user_idx }'>";
 				commentList += "					</c:if>";
 				commentList += "				</small>";
 				commentList += "			</c:if>";
 				commentList += "		</div>";
-				}else{
+				}else{ //useable1
 				commentList += "		<div class='pb-2'>";
-				commentList += "			<div>삭제된 게시글입니다.</div>";
+				commentList += "			<div class='text-muted fst-italic' >삭제된 댓글입니다.</div>";
 				commentList += "		</div>";
+				}
+				if(obj.tr_parent_idx == obj.tr_comment_idx){
+				commentList += "		<form class='mt-2' style='display:none'>";
+				
+				commentList += "			<h6 class='border-top pt-2'>답글 달기</h6>";
+				commentList += "			<textarea class='form-control tr_comment_content'></textarea>";
+				commentList += "			<button type='button' onclick='replyComment("+obj.tr_parent_idx+")'";
+				commentList += "			class='btn btn-sm btn-secondary mt-2 ms-auto'>등록하기</button>";
+				
+				commentList += "		</form>";
 				}
 				commentList += "	</div>"; 
 				commentList += "</div>";
 				
 			})
-			if(commentList != "")
-			$('#commentView').html(commentList);
+			if(commentList != ""){
+				$('#commentView').html(commentList);
+				
+			}
+			textareaResizing();
+			
 		}
 		
-		
 		function insertComment(){
+			let tr_comment_content = $('#tr_comment_content').val();
+			if(tr_comment_content.length < 2){
+				alert("최소 2글자 이상 작성해주세요.");
+				return;
+			}
+			
 			const cvo = $('#insertCommentForm').serialize();
 
 			 $.ajax({
@@ -141,7 +175,6 @@
 		}
 		
 		function deleteByIdx(tr_idx){
-			
 			let result = confirm('정말 삭제하시겠습니까? 게시글을 삭제하면 댓글까지 전부 삭제됩니다.');
 				
 			if(result == false){
@@ -149,7 +182,7 @@
 			}else{
 				$.ajax({
 					url:"deleteByIdx",
-					type:"put",
+					type:"post",
 					data:{"tr_idx":tr_idx},
 					success:function(data){
 						alert("성공적으로 삭제되었습니다.");
@@ -163,15 +196,13 @@
 			}
 		}
 		function deleteCommentByIdx(tr_comment_idx){
-			
 			let result = confirm('정말 삭제하시겠습니까? 삭제한 댓글은 되돌릴 수 없습니다.');
-				
 			if(result == false){
 				return;
 			}else{
 				$.ajax({
 					url:"deleteCommentByIdx",
-					type:"put",
+					type:"post",
 					data:{"tr_comment_idx":tr_comment_idx},
 					success:function(){
 						alert("성공적으로 삭제되었습니다.");
@@ -184,6 +215,63 @@
 				
 			}
 		}
+		// 231207 댓글추가
+		function updateCommentButton(tr_comment_idx){    
+            $('#comment_content'+tr_comment_idx).children('.viewcommdiv').addClass("d-none");
+            $('#comment_content'+tr_comment_idx).children('.updatecommdiv').removeClass("d-none");
+        }
+        function updateCommentCancel(tr_comment_idx){
+            $('#comment_content'+tr_comment_idx).children('.viewcommdiv').removeClass("d-none");
+            $('#comment_content'+tr_comment_idx).children('.updatecommdiv').addClass("d-none");
+        }
+        function updateComment(tr_comment_idx){
+        	let tr_comment_content = $('#comment_content'+tr_comment_idx+' form textarea').val();
+        	if(tr_comment_content.length < 2){
+        		alert("최소 2글자 이상 작성해주세요.");
+            	return;
+            }
+        	$.ajax({
+				url:"updateComment",
+				type:"post",
+				data:{"tr_comment_idx":tr_comment_idx,
+					"tr_comment_content":tr_comment_content},
+				success:function(data){
+					alert("댓글이 수정되었습니다.");
+					getComment();
+				},
+				error:function(){
+					alert("error");
+				}
+			})
+        }
+        function replyCommentToggle(tr_comment_idx){
+            $('#comment'+tr_comment_idx+" form").slideToggle();
+        }
+        function replyComment(tr_parent_idx){
+            let tr_comment_content_val = $('#comment'+tr_parent_idx+' form .tr_comment_content').val();
+            if(tr_comment_content_val.length < 2){
+            	alert("최소 2글자 이상 작성해주세요.");
+            	return;
+            }
+            
+            $('#replyCommentForm #retr_comment_content').val(tr_comment_content_val);
+            $('#replyCommentForm #retr_parent_idx').val(tr_parent_idx);
+			
+            let cvo = $('#replyCommentForm').serialize();
+            $.ajax({
+				url:"insertReplyComment",
+				type:"post",
+				data:cvo,
+				success:function(data){
+					alert("입력되었습니다.");
+					getComment();
+				},
+				error:function(){
+					alert("error");
+				}
+			})
+        }
+        //-----------------------------------------------------
 	</script>
 </head>
 <body>
@@ -221,7 +309,7 @@
 
         <!-- 기타 버튼 -->
         <div class="border-bottom text-end pb-3">
-            <a class="btn btn-secondary">수정</a>
+            <a  href="${contextPath }/tr/modify?tr_idx=${vo.tr_idx}" class="btn btn-secondary">수정</a>
             <button onclick="deleteByIdx(${vo.tr_idx})" class="btn btn-danger">삭제</button>
             <a href="javascript:history.go(-1)" class="btn btn-secondary">리스트</a>
         </div>
@@ -237,11 +325,25 @@
 	                <label for="tr_comment_content">댓글 내용</label>
 	            </div>
 	            <div>
-	                <span class="text-danger d-inline-block">최대 글자수를 초과하였습니다.</span>
+	                <span id="commentFull" class="text-danger d-inline-block d-none">최대 글자수를 초과하였습니다.</span>
 	                <button type="button" onclick="insertComment()" class="btn btn-sm btn-secondary d-inline-block">등록</button>
 	            </div>
 	        </div>
         </form>
+        <script>
+	        $(document).ready(function(){
+	        	$('#tr_comment_content').on('input',function(){
+	        		let textLength = $(this).val().length;
+	        		if (textLength >= 254) {
+	        			$(this).val($(this).val().substr(0, 255));
+	        			$('#commentFull').removeClass('d-none');
+	        		}else{
+	        			$('#commentFull').addClass('d-none');
+	        		}
+	        	
+	        	})
+	        })
+        </script>
         
         <!-- 등록된 댓글들 -->
         <h6 class="border-top mt-3 p-3 pb-0">댓글</h6>
@@ -252,10 +354,22 @@
 			</div>
             
         </div>
+        
+        <!-- 대댓글 -->
+        <form id="replyCommentForm" method="post">
+	        <input type="hidden" id="retr_idx" name="tr_idx" value="${vo.tr_idx}">
+	        <input type="hidden" id="retr_parent_idx" name="tr_parent_idx" value="">
+	        <input type="hidden" id="reuser_idx" name="user_idx" value="1">
+	        <input type="hidden" id="retr_comment_content" name="tr_comment_content" value="">
+	    </form>
 		<!--댓글이 있는 페이지에 있어야 하는 스크립트 영역 -->
         <script>
             $(document).ready(function(){
-                $('textarea.form-control').css('resize','none');
+            	textareaResizing();
+            });
+            
+            function textareaResizing(){
+            	$('textarea.form-control').css('resize','none');
                 $('textarea.form-control').css('overflow','hidden');
                 $('textarea').each(function(){
                     this.style.height = 'auto';
@@ -264,7 +378,7 @@
                     this.style.height = 'auto';
                     this.style.height = (this.scrollHeight+10) + 'px';
                 })
-            });
+            }
         </script>
     </div>
     

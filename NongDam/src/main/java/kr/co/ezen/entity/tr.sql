@@ -29,7 +29,7 @@ create table tr(
 )
 
 insert into tr (tr_title,tr_content,user_idx)
-values ('예시 제목','<p>예시 내용입니다</p><button class="btn btn-primary">버튼</button> ',1)
+values ('예시 제목','<p>예시 내용입니다</p><button>버튼</button> ',1)
 
 
 insert into Tr (tr_title,tr_content,user_idx,tr_imgpath)
