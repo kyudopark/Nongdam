@@ -48,7 +48,7 @@
     <div class="container mt-5 mb-5">
         <h4 class="mt-5 mb-5"> 게시글 작성</h4>
         <form method="post" enctype="multipart/form-data" >
-            
+            <input type="hidden" name="tr_idx" value="${vo.tr_idx }">
 
             <!--제목-->
             <div class="form-group mb-3">
@@ -66,13 +66,17 @@
                     <div class="rounded bg-light 
                     d-flex justify-content-center align-items-center" 
                     style="height: 200px;">
+                    <c:if test="${!empty vo.tr_imgpath }">
                         <!-- 이미지 존재시 아래 img태그에 src추가 -->
                         <img id="" class="object-fit-cover w-100 h-100" 
-                        src="#">    
+                        src="${contextPath }/resources/image/tr/${vo.tr_imgpath}">    
                         <!-- 이미지 없을 때 아래 div 태그 보이게 -->
-                        <div class="d-none"> 
+                    </c:if>
+                    <c:if test="${empty vo.tr_imgpath }">
+                        <div> 
                             썸네일을 등록해주세요. 
                         </div>
+                    </c:if>
                     </div>
                 </div>
 
@@ -82,7 +86,7 @@
                     <!-- 파일 업로드 input태그 -->
                     <div class="mb-3">
                         <label for="tr_imgpath" class="form-label">썸네일 올리기</label>
-                        <input class="form-control" type="file" id="tr_imgpath" readonly="true">
+                        <input class="form-control" type="file" id="tr_imgpath" name="tr_imgpath">
                     </div>
                 </div>
             </div>
@@ -92,7 +96,7 @@
             <div class="form-group mt-5 mb-3">
                 <!-- 실제 에디터 박스-->
                 <!-- id는 변경하지 마세요 -->
-                <textarea id="editor" name="tr_content" readonly="true"> ${vo.tr_content } </textarea>
+                <textarea id="editor" name="tr_content"> ${vo.tr_content } </textarea>
                     
                 
                 <!-- 스크립트문. 항상 에디터 박스 바로 뒤에 놓을 것-->

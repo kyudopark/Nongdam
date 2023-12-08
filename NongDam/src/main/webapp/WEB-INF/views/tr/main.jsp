@@ -119,12 +119,13 @@
 					<div class="col  pb-4">
 						<a class="text-decoration-none tr-list-click" href="${li.tr_idx}">
 							<div class="card">
-								<img src="..." class="border-bottom rounded-2 bg-light w-100"
+								<img src="${contextPath }/resources/image/tr/${li.tr_imgpath }" 
+								class="border-bottom rounded-2 bg-light w-100 object-fit-cover" 
 									height="200">
 								<div class="card-body">
 									<h5 class="card-title title-overflow-3">${li.tr_title }</h5>
 									<p class="card-text">
-										<span class="title-overflow-1">작성자 ${li.user_nickname }</span><br>
+										<span class="title-overflow-1">작성자 ${li.user_nickname }</span>
 										<span class="title-overflow-1">작성일 <fmt:formatDate value="${li.tr_time }" pattern="YYYY-MM-dd "/></span>
 									</p>
 									
