@@ -12,8 +12,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.oreilly.servlet.MultipartRequest;
@@ -108,23 +111,17 @@ public class TrController {
 	@PostMapping("/delete")
 	public String delete(@RequestParam("tr_idx") int tr_idx) {
 		//삭제 버튼 눌렀을때 정말 삭제하시겠습니까?띄우고 확인 누르면 /delete로 이동
-		
-		//tr_idx로 글 삭제
-		
-		//tr_idx로 댓글들 삭제
-		trService.deleteByIdx(tr_idx);
-		
+
 		return "redirect:/tr/main";
 	}
 	
+
+
 	@GetMapping("/modify")
 	public String modify(Model m,@RequestParam("tr_idx") int tr_idx) {
 		
-		
 		Tr vo=trService.findByIdx(tr_idx);
-		
 		m.addAttribute("vo",vo);
-		
 		return "/tr/modify";
 	}
 	
@@ -135,4 +132,34 @@ public class TrController {
 		return "redirect:/tr/main";
 	}
 	
+	
+	//--------------------------------------------------------
+
+
+
+	@PostMapping("/insertComment")
+	public @ResponseBody void insertComment(TrComment cvo) {
+		trService.insertComment(cvo);
+	}
+	
+	@GetMapping("/getComment")
+	public @ResponseBody List<TrComment> getComment(int tr_idx){
+		List<TrComment> cvo = trService.findAllComment(tr_idx);
+		return cvo;
+	}
+	
+	@PutMapping("/deleteByIdx")
+	public @ResponseBody void deleteByIdx(int tr_idx) {
+		trService.deleteByIdx(tr_idx);
+		trService.deleteCommentByTr_idx(tr_idx);
+	}
+	
+	@PutMapping("/deleteCommentByIdx")
+	public @ResponseBody void deleteCommentByIdx(int tr_comment_idx) {
+		trService.deleteCommentByIdx(tr_comment_idx);
+	}
+	
 }
+
+
+

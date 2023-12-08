@@ -32,8 +32,13 @@ insert into tr (tr_title,tr_content,user_idx)
 values ('예시 제목','<p>예시 내용입니다</p><button class="btn btn-primary">버튼</button> ',1)
 
 
+insert into Tr (tr_title,tr_content,user_idx,tr_imgpath)
+			    VALUES ('123','123',1,null)
+			    
+			    
 ---------------------------------------------------------------------
 drop table trComment
+select * from trComment
 
 create table trComment(
 	tr_idx int,
@@ -50,26 +55,24 @@ select * from tr
 --1번 게시글
 -- 1번 댓글을 달았음
 delete from trComment
-insert into trComment (tr_idx,tr_parent_idx,user_idx,tr_comment_content)
-values (1,1,1,'댓글')
+insert into trComment (tr_idx,tr_parent_idx,user_idx,tr_comment_content,tr_comment_useable)
+values (1,1,1,'댓글1',1)
 
 --1번 게시글
 -- 2번 댓글을 달았음
-insert into trComment (tr_idx,tr_parent_idx,user_idx,tr_comment_content)
-values (1,1,1,'댓글')
+insert into trComment (tr_idx,tr_parent_idx,user_idx,tr_comment_content,tr_comment_useable)
+values (1,2,1,'댓글2',1)
 
 --1번 게시글
 -- 1번 댓글에 대댓글을 달앗음
-insert into trComment (tr_idx,tr_parent_idx,user_idx,tr_comment_content)
-values (1,3,1,'댓글')
+insert into trComment (tr_idx,tr_parent_idx,user_idx,tr_comment_content,tr_comment_useable)
+values (1,1,1,'댓글3',1)
 
 --1번 게시글
 --1번 댓글에 대댓글을 달았음
-insert into trComment (tr_idx,tr_parent_idx,user_idx,tr_comment_content)
-values (1,1,1,'댓글')
-
+insert into trComment (tr_idx,tr_parent_idx,user_idx,tr_comment_content,tr_comment_useable)
+values (1,1,1,'댓글4',1)
 
 
 -----------------------------
-
 

@@ -22,6 +22,6 @@ public interface TrService {
 	public void updateCommentByIdx(TrComment cvo);
 	public void deleteCommentByIdx(int tr_comment_idx);
 	public void deleteCommentByTr_idx(int tr_idx);
-	public void insertComment(TrComment vo);
-	public void insertReplyComment(TrComment vo);
+	public void insertComment(TrComment cvo);
+	public void insertReplyComment(TrComment cvo);
 }

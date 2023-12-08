@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import kr.co.ezen.entity.Criteria;
 import kr.co.ezen.entity.Tr;
@@ -61,28 +62,27 @@ public class TrServiceImpl implements TrService {
 
 	@Override
 	public void updateCommentByIdx(TrComment cvo) {
-		
-		
+		trMapper.updateCommentByIdx(cvo);
 	}
 
 	@Override
 	public void deleteCommentByIdx(int tr_comment_idx) {
-	
+		trMapper.deleteCommentByIdx(tr_comment_idx);
 	}
 
 	@Override
 	public void deleteCommentByTr_idx(int tr_idx) {
-	
+		trMapper.deleteByIdx(tr_idx);
 	}
 
 	@Override
-	public void insertComment(TrComment vo) {
-
+	public void insertComment(TrComment cvo) {
+		trMapper.insertComment(cvo);
 	}
 
 	@Override
-	public void insertReplyComment(TrComment vo) {
-
+	public void insertReplyComment(TrComment cvo) {
+		trMapper.insertReplyComment(cvo);
 	}
 
 }
