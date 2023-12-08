@@ -76,35 +76,10 @@ public class TrController {
 	}
 	
 	@PostMapping("/write")
-	public String write(Tr vo,HttpServletRequest request, HttpSession session, RedirectAttributes rttr)
-			throws IOException{ 
+	public String write(Tr vo){ 
 		
-		MultipartRequest multi = null;
-		int fileSize = 40 * 1024 * 1024; // 10MB
-		String sPath = request.getRealPath("resources/image/tr");
-		
-		multi = new MultipartRequest(request, sPath, fileSize, "UTF-8", new DefaultFileRenamePolicy());
-		
-		String newPro="";
-		File file = multi.getFile("tr_imgpath");
-		if (file != null) {
-			String ext = file.getName().substring(file.getName().lastIndexOf(".") + 1);
-			ext = ext.toUpperCase();
-			if (ext.equals("PNG") || ext.equals("GIF") || ext.equals("JPG")) {
-				
-			
-			newPro=file.getName();
-			}else {
-				if(file.exists()) {
-					file.delete();
-				}
-				return "redirect:/tr/write";
-			}
-		}
-		vo.setTr_imgpath(newPro);
 		trService.insert(vo);
 
-		
 		return "redirect:/tr/main";
 				
 	}

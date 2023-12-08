@@ -19,7 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			parameterType="kr.co.ezen.entity.Criteria">
 			select tr_title,tr_content,tr_time,user_nickname,user_idx,tr_idx from tr natural join User
 			<include refid="search"/>
-			order by tr_idx
+			order by tr_idx desc,tr_time desc
 		 	limit #{pageStart}, #{perPageNum}	
 		</select> 
 	
