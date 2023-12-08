@@ -1,4 +1,4 @@
-CREATE TABLE nongUser (
+CREATE TABLE User (
     user_idx INT AUTO_INCREMENT PRIMARY KEY,
     user_id VARCHAR(20) NOT NULL,
     user_pw VARCHAR(15) NOT NULL,
@@ -13,6 +13,6 @@ CREATE TABLE nongUser (
     user_admin BOOLEAN NOT NULL DEFAULT false
 );
 select*from nongUser;
-delete from nongUser where user_idx=8;
+delete from nongUser;
 
-INSERT INTO nongUser (user_id, user_pw, user_admin, user_nickname, user_name, user_email) VALUES ('admin', '1234', true, 'admin', 'admin', 'kdpark1002@naver.com');
+INSERT INTO User (user_id, user_pw, user_admin, user_nickname, user_name, user_email) VALUES ('admin', '1234', true, 'admin', 'admin', 'kdpark1002@naver.com');
