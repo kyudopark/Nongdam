@@ -179,7 +179,7 @@
 					<input type="hidden" name="keyword" value="${ pageCre.cri.keyword}"/>
                 </c:if>
 			</form>
-				<!-- 페이징 폼 -->
+				<!-- 페이징 폼  -->
 		</div>
 	</div>
 	
