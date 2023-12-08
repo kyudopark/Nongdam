@@ -41,15 +41,25 @@
     
     <title>농담 | 농업 정보 커뮤니티</title>
     
-    <script>
-    	function checkinsert() {
-    		
-    			location.href="../free/detail";
-    		}
-    	
-
-    </script>
     
+    <!-- 페이지 이동(글쓰기)  -->
+    <script>
+    function clickinsert() {
+    	 window.location.href ="../free/detail";
+    	}
+ 
+</script>
+
+	<!-- 페이지 이동 자세히보기  -->
+
+	<script>
+    function checkinsert() {
+    	 window.location.href ="../free/modify";
+    	}
+ 
+</script>
+
+
 </head>
 <body>
 
@@ -94,19 +104,20 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>${free_idx}</td>
+                    <td>${fre.free_idx}</td>
                     <td class="text-start">
-                        <a href="javascript:void(0)" class="text-decoration-none text-body" id="a4button">
-                            <span class="text-muted">[{태그명}]</span>
-                            ${free_title}
+                        <a href="javascript:void(0)" class="text-decoration-none text-body" id="a4button" onclick="clickinsert()" >
+                            <span class="text-muted">${fre.free_tag }</span>
+                            ${fre.free_title}
                         </a>
                     </td>
-                    <td class="text-muted d-none d-md-table-cell">${free_date}</td>
-                    <td class=" d-none d-md-table-cell">${user_nickname}</td>
-                    <td class=" d-none d-md-table-cell">{추천}</td>
-                    <td class=" d-none d-md-table-cell">${free_idx}</td>
+                    <td class="text-muted d-none d-md-table-cell">${fre.free_date}</td>
+                    <td class=" d-none d-md-table-cell">${fre.user_nickname}</td>
+                    <td class=" d-none d-md-table-cell">${fre.free_idx}</td>
                 </tr>
                 <tr>
+                
+                
                     <td colspan="6">
                         <div class="d-flex flex-wrap justify-content-between">
                             <!-- 정렬용 더미 -->

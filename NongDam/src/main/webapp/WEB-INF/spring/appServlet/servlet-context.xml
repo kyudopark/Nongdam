@@ -26,7 +26,11 @@
 	<!-- 빈등록 -->
 	<context:component-scan base-package="kr.co.ezen.controller" />
 	
+		<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		
+		
 	
+	</beans:bean>
 	
 	
 

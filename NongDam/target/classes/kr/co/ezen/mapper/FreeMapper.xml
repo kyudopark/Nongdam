@@ -8,17 +8,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<mapper namespace="kr.co.ezen.mapper.FreeMapper">
 	
-	<select id="frelist" resultType="kr.co.ezen.mapper.FreeMapper">
+	<select id="findAll" resultType="kr.co.ezen.entity.Free">
 	
 	select * from free order by free_idx desc
 	
 	</select>
 	
-	<insert id="freinsert" parameterType="kr.co.ezen.mapper.FreeMapper">
+	<select id="findByidx" resultType="kr.co.ezen.entity.Free">
+		select *from free where free_idx=#{free_idx}
+	</select>
 	
-	insert into free (free_title, free_content, free_date, free_tag)
-	values (#{free_title}, #{free_content}, #{free_date}, #{free_tag})
 	
+	<insert id="insert" parameterType="kr.co.ezen.entity.Free">
+	insert into free (free_title, free_content, free_tag)
+	values (#{free_title},#{free_content}, #{free_tag})
 	</insert>
 	
 	</mapper>

@@ -55,11 +55,11 @@
         </div>
         <!-- 글 제목 -->
         <div class="border-bottom">
-            <h4 class="fw-4">{글 제목}</h4>
+            <h4 class="fw-4"> ${fre.free_title}</h4>
             <p class="d-flex flex-wrap align-items-center gap-2">
-                <span class="d-block me-auto fst-italic text-muted">{YYYY-MM-DD hh:mm}</span>
+                <span class="d-block me-auto fst-italic text-muted">${fre.free_date}</span>
 
-                <span class="d-inline-block">{작성자닉네임}</span>
+                <span class="d-inline-block">${fre.user_nickname}</span>
                 <button class="btn btn-sm btn-outline-secondary">
                     <i class="fa-regular fa-comment"></i>
                     1:1 채팅
@@ -69,20 +69,10 @@
             <!-- 글 본문(ckEditor) -->
             <div class="pt-3 pb-3 ck-content">
                 <!-- 이 안에서 출력-->
-                {content}
+                ${fre.free_content}
             </div>
 
-            <!-- 추천 파트. 추천 기능 없을시 div태그 자체를 삭제하세요 -->
-            <div class=" pb-3">
-                <div class="m-auto text-center">
-                    <button class="btn  btn-outline-secondary">
-                        <span><i class="fa-regular fa-thumbs-up"></i></span>
-                        <span>120</span>
-                        
-                    </button>
-                </div>
-            </div>
-
+            
             <!-- 기타 버튼 -->
             <div class="border-bottom text-end pb-3">
                 <button class="btn btn-secondary">수정</button>
@@ -123,9 +113,9 @@
                 <!-- 댓글 필수 컨텐츠 -->
                 <div class="w-100">
                     <div>
-                        <h6 class="d-inline-block">{작성자 닉네임}</h6>
+                        <h6 class="d-inline-block">${fre.user_name}</h6>
                         <small class="text-secondary">
-                            {YYYY-MM-DD hh-mm}
+                            ${fre.free_date}
                         </small>
                     </div>
                     <div class="pb-2">

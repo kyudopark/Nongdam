@@ -7,7 +7,8 @@ import kr.co.ezen.entity.Free;
 
 public interface FreeMapper {
 	
-	public List<Free> frelist(Criteria cre);
-	public void freinsert();
+	public List<Free> findAll(Criteria cre);
+	public void insert(Free fr);
+	public Free findByidx(int idx);
 
 }

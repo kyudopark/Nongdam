@@ -16,14 +16,22 @@ public class FreeServiceImpl implements FreeService {
 	private FreeMapper freemapper;
 
 	@Override
-	public List<Free> frelist(Criteria cre) {
-		List<Free> li=freemapper.frelist(cre);
+	
+	public List<Free> findAll(Criteria cre) {
+		List<Free> li=freemapper.findAll(cre);
 		return li;
 	}
 
+
 	@Override
-	public void freinsert() {
-		
+	public Free findByidx(int idx) {
+		Free fre=freemapper.findByidx(idx);
+		return fre;
+	}
+
+	@Override
+	public void insert(Free fr) {
+		freemapper.insert(fr);
 		
 	}
 
