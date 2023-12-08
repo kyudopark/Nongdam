@@ -51,7 +51,7 @@
 	    <!-- 글 작성 div container-->
     <div class="container mt-5 mb-5">
         <h4 class="mt-5 mb-5"> 게시글 작성</h4>
-        <form method="post" enctype="multipart/form-data" >
+        <form method="post" action="${contextPath }/tr/write" enctype="multipart/form-data" >
             
 
             <!--제목-->
@@ -59,10 +59,6 @@
                 <input type="text" id="title" name="tr_title" 
                  class="form-control" placeholder="제목을 입력하세요.">
             </div>
-
-            <!-- 말머리 있는 버전 -->
-         
-
 
             <!-- 썸네일 -->
             <div  class="row g-3 mb-3" >
@@ -86,7 +82,7 @@
                     <!-- 파일 업로드 input태그 -->
                     <div class="mb-3">
                         <label for="tr_imgpath" class="form-label">썸네일 올리기</label>
-                        <input class="form-control" type="file" id="tr_imgpath">
+                        <input class="form-control" type="file" id="tr_imgpath" name="tr_imgpath">
                     </div>
                 </div>
             </div>

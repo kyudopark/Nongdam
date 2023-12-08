@@ -76,38 +76,51 @@ public class TrController {
 	}
 	
 	@PostMapping("/write")
-	public String write(Tr vo,HttpServletRequest request, HttpSession session, RedirectAttributes rttr)
-			throws IOException{ 
+	public String write(HttpServletRequest request, 
+			HttpSession session, RedirectAttributes rttr) throws IOException {
 		
+		//리퀘스트영역에있는걸가져와서 파일저장
+
+		//멀티파트
 		MultipartRequest multi = null;
 		int fileSize = 40 * 1024 * 1024; // 10MB
-		String sPath = request.getRealPath("resources/image/tr");
+		String sPath = request.getRealPath("resources/image/tr"); 
 		
 		multi = new MultipartRequest(request, sPath, fileSize, "UTF-8", new DefaultFileRenamePolicy());
-		
+		      
+         
+		// 데이터베이스 테이블에 회원이미지를 업데이트
+		String tr_title = multi.getParameter("tr_title");
+		String user_idx = multi.getParameter("user_idx");
+		String tr_content = multi.getParameter("tr_content");
 		String newPro="";
-		File file = multi.getFile("tr_imgpath");
-		if (file != null) {
-			String ext = file.getName().substring(file.getName().lastIndexOf(".") + 1);
-			ext = ext.toUpperCase();
-			if (ext.equals("PNG") || ext.equals("GIF") || ext.equals("JPG")) {
-				
-			
-			newPro=file.getName();
+		File file=multi.getFile("tr_imgpath"); 
+		if(file !=null) { 
+		   String ext=file.getName().substring(file.getName().lastIndexOf(".")+1);
+		   ext=ext.toUpperCase(); 
+			if(ext.equals("PNG") || ext.equals("GIF") || ext.equals("JPG")){
+			   
+			   newPro=file.getName();
+			   
 			}else {
 				if(file.exists()) {
-					file.delete();
+					file.delete(); 
 				}
-				return "redirect:/tr/write";
-			}
-		}
-		vo.setTr_imgpath(newPro);
-		trService.insert(vo);
-
+			   return "redirect:/tr/write";
+		    }
+		 }
+		 //이미지를 db에 업데이트
+		 Tr vo=new Tr();
+		 vo.setTr_title(tr_title);
+		 vo.setTr_content(tr_content);
+		vo.setUser_idx(user_idx);
+		 vo.setTr_imgpath(newPro);
 		
+		 trService.insert(vo);
+
 		return "redirect:/tr/main";
-				
 	}
+	
 	
 
 
@@ -121,7 +134,7 @@ public class TrController {
 	
 	@PostMapping("/modify")
 	public String modify(Tr vo) {
-		
+
 		trService.updateByIdx(vo);
 		return "redirect:/tr/main";
 	}
@@ -158,6 +171,7 @@ public class TrController {
 	public @ResponseBody void updateComment(TrComment cvo) {
 		trService.updateCommentByIdx(cvo);
 	}
+	
 	
 }
 

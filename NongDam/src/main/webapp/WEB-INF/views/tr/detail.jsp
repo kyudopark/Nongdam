@@ -71,6 +71,7 @@
 				obj.tr_comment_content = obj.tr_comment_content.replaceAll("\\(", "&#40;");
 				obj.tr_comment_content = obj.tr_comment_content.replaceAll("\\)", "&#41;");
 				obj.tr_comment_content = obj.tr_comment_content.replaceAll("'", "&#x27;");
+				let tr_comment_content = obj.tr_comment_content.replaceAll("\n", "<br/>");
 				//231206 포맷팅
 				date.setTime(obj.tr_comment_time);
 				fmtTime = date.toISOString().replace(/T/, ' ').replace(/\..+/, '');
@@ -80,7 +81,7 @@
 				if(obj.tr_parent_idx != obj.tr_comment_idx){
 				commentList += "	<div class='ms-2 me-3'> </div> ";
 				}
-				commentList += "	<div style='width: 22px; height: 22px; border-radius: 50%;'>";
+				commentList += "	<div style='margin-top:2px;width: 22px; height: 22px; border-radius: 50%; display: flex; justify-content: center; align-items: center; '>";
 				
 				// 썸네일
 				if(obj.user_profile == null || obj.user_profile == ''){
@@ -97,15 +98,14 @@
 				commentList += "		</div>";
 				if(obj.tr_comment_useable == 1){
 				commentList += "		<div class='pb-2'  id='comment_content"+obj.tr_comment_idx+"'>";
-				commentList += "			<div class='viewcommdiv text-break pb-1'>"+obj.tr_comment_content+"</div>";
+				commentList += "			<div class='viewcommdiv text-break pb-1'>"+tr_comment_content+"</div>";
 				commentList += "			<c:if test='${empty uvo }'> ";
-				commentList += " 				<div class='updatecommdiv d-none pb-1'>";
+				commentList += " 				<div class='updatecommdiv pb-1'>";
 				commentList += "				<form>";
 				commentList += "					<textarea class='form-control'>"+obj.tr_comment_content+"</textarea>";
 				commentList += "					<button type='button' class='btn btn-sm btn-secondary mt-2'";
 				commentList += "					onclick='updateComment("+obj.tr_comment_idx+")'>수정하기</button>";
-				commentList += "					<button type='button' class='btn btn-sm btn-outline-secondary mt-2'";
-				commentList += "					onclick='updateCommentCancel("+obj.tr_comment_idx+")'>수정 취소</button>";
+				
 				commentList += "				</form>";
 				commentList += "				</div >";
 				commentList += "				<small class='d-flex flex-nowrap gap-2'>";
@@ -125,7 +125,7 @@
 				commentList += "		</div>";
 				}
 				if(obj.tr_parent_idx == obj.tr_comment_idx){
-				commentList += "		<form class='mt-2' style='display:none'>";
+				commentList += "		<form class='mt-2 replyComment' style='display:none'>";
 				
 				commentList += "			<h6 class='border-top pt-2'>답글 달기</h6>";
 				commentList += "			<textarea class='form-control tr_comment_content'></textarea>";
@@ -140,9 +140,10 @@
 			})
 			if(commentList != ""){
 				$('#commentView').html(commentList);
-				
+				$('.updatecommdiv').hide();
 			}
 			textareaResizing();
+			
 			
 		}
 		
@@ -216,14 +217,13 @@
 			}
 		}
 		// 231207 댓글추가
-		function updateCommentButton(tr_comment_idx){    
-            $('#comment_content'+tr_comment_idx).children('.viewcommdiv').addClass("d-none");
-            $('#comment_content'+tr_comment_idx).children('.updatecommdiv').removeClass("d-none");
+		function updateCommentButton(tr_comment_idx){
+			
+            $('#comment_content'+tr_comment_idx).children('.viewcommdiv').toggle();
+            $('#comment_content'+tr_comment_idx).children('.updatecommdiv').toggle();
+            $('#comment'+tr_comment_idx+" .replyComment").hide();
         }
-        function updateCommentCancel(tr_comment_idx){
-            $('#comment_content'+tr_comment_idx).children('.viewcommdiv').removeClass("d-none");
-            $('#comment_content'+tr_comment_idx).children('.updatecommdiv').addClass("d-none");
-        }
+        
         function updateComment(tr_comment_idx){
         	let tr_comment_content = $('#comment_content'+tr_comment_idx+' form textarea').val();
         	if(tr_comment_content.length < 2){
@@ -245,7 +245,9 @@
 			})
         }
         function replyCommentToggle(tr_comment_idx){
-            $('#comment'+tr_comment_idx+" form").slideToggle();
+        	$('#comment_content'+tr_comment_idx).children('.viewcommdiv').show();
+            $('#comment_content'+tr_comment_idx).children('.updatecommdiv').hide();
+            $('#comment'+tr_comment_idx+" .replyComment").slideToggle();
         }
         function replyComment(tr_parent_idx){
             let tr_comment_content_val = $('#comment'+tr_parent_idx+' form .tr_comment_content').val();
@@ -346,7 +348,7 @@
         </script>
         
         <!-- 등록된 댓글들 -->
-        <h6 class="border-top mt-3 p-3 pb-0">댓글</h6>
+        <h6 class="border-top mt-3 p-3 pb-0">댓글 <span class="text-muted">(최신순)</span></h6>
         <div id="commentView">
             
 			<div class="p-3 mt-3 mb-3 text-muted">
@@ -369,8 +371,8 @@
             });
             
             function textareaResizing(){
-            	$('textarea.form-control').css('resize','none');
-                $('textarea.form-control').css('overflow','hidden');
+            	$('textarea').css('resize','none');
+                $('textarea').css('overflow','hidden');
                 $('textarea').each(function(){
                     this.style.height = 'auto';
                     this.style.height = (this.scrollHeight+10) + 'px';
