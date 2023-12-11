@@ -38,7 +38,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</select>
 		
 		<update id="updateByIdx" parameterType="kr.co.ezen.entity.Tr">
-			update tr set tr_title=#{tr_title},tr_content=#{tr_content}
+			update tr set tr_title=#{tr_title},tr_content=#{tr_content},tr_imgpath=#{tr_imgpath}
 			where tr_idx=#{tr_idx}
 		</update>
 		

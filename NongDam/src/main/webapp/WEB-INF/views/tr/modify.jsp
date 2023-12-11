@@ -66,17 +66,14 @@
                     <div class="rounded bg-light 
                     d-flex justify-content-center align-items-center" 
                     style="height: 200px;">
-                    <c:if test="${!empty vo.tr_imgpath }">
                         <!-- 이미지 존재시 아래 img태그에 src추가 -->
-                        <img id="" class="object-fit-cover w-100 h-100" 
+                        <img id="thumbnail" class="object-fit-cover w-100 h-100" 
                         src="${contextPath }/resources/image/tr/${vo.tr_imgpath}">    
-                        <!-- 이미지 없을 때 아래 div 태그 보이게 -->
-                    </c:if>
-                    <c:if test="${empty vo.tr_imgpath }">
-                        <div> 
-                            썸네일을 등록해주세요. 
+                  
+                        <div id="thumbnailPlaceholder" class="d-none"> 
+                            이미지를 등록해주세요
                         </div>
-                    </c:if>
+                 
                     </div>
                 </div>
 
@@ -86,10 +83,34 @@
                     <!-- 파일 업로드 input태그 -->
                     <div class="mb-3">
                         <label for="tr_imgpath" class="form-label">썸네일 올리기</label>
-                        <input class="form-control" type="file" id="tr_imgpath" name="tr_imgpath">
+                        <input class="form-control" type="file" id="tr_imgpath" name="tr_imgpath" onchange="previewThumbnail(event)">
                     </div>
                 </div>
-            </div>
+            </div>            
+<script>
+    // 파일 선택 시 썸네일 미리보기 함수
+    document.getElementById('tr_imgpath').addEventListener('change', function(event) {
+        var input = event.target;
+        var thumbnail = document.getElementById('thumbnail');
+        var thumbnailPlaceholder = document.getElementById('thumbnailPlaceholder');
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                thumbnail.src = e.target.result;
+                thumbnailPlaceholder.classList.add('d-none');
+                thumbnail.classList.remove('d-none');
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            thumbnail.src = '#';
+            thumbnail.classList.add('d-none');
+            thumbnailPlaceholder.classList.remove('d-none');
+        }
+    });
+</script>
 
 
             <!-- ckEditor -->
