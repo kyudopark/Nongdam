@@ -58,7 +58,7 @@
         <h4 class="mt-5 mb-5"> 게시글 작성</h4>
 
         <form method="post" action="${contextPath }/tr/write" enctype="multipart/form-data" >
-            
+            <input type="hidden" name="user_idx" value="${uvo.user_idx }">
 
             <!--제목-->
             <div class="form-group mb-3">

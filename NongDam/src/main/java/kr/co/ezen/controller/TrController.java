@@ -111,7 +111,7 @@ public class TrController {
 		 Tr vo=new Tr();
 		 vo.setTr_title(tr_title);
 		 vo.setTr_content(tr_content);
-		vo.setUser_idx(user_idx);
+		 vo.setUser_idx(user_idx);
 		 vo.setTr_imgpath(newPro);
 		
 		 trService.insert(vo);
