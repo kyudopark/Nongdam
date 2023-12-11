@@ -52,9 +52,8 @@
 	<!-- 글 작성 div container-->
     <div class="container mt-5 mb-5">
         <h4 class="mt-5 mb-5">공동구매 게시글 작성</h4>
-        <form method="post" id = "writeForm">
+        <form method="post" enctype="multipart/form-data">
             
-
             <!--제목-->
             <div class="form-group mb-3">
                 <input type="text" id="gp_title" name="gp_title" value="${vo.gp_title}" 
@@ -69,7 +68,7 @@
                     style="height: 200px;">
                         <!-- 이미지 존재시 아래 img태그에 src추가 -->
                         <img class="object-fit-cover w-100 h-100" 
-                        src="#">    
+                        src="/resource/image/gp/${vo.gp_thumb }">    
                         <!-- 이미지 없을 때 아래 div 태그 보이게 -->
                         <div class="d-none"> 
                             썸네일을 등록해주세요. 
@@ -85,7 +84,7 @@
                             <input type="date"
                             class="form-control"
                             name="gp_date_start"
-                            value="${vo.gp_date_start}"
+                            value="<fmt:formatDate value="${vo.gp_date_start }" pattern="YYYY-MM-dd "/>"
                             data-placeholder="시작일 선택"
                             required
                             aria-required="true" >
@@ -94,7 +93,7 @@
                             <input type="date" 
                             class="form-control"
                             name="gp_date_last"
-                            value="${vo.gp_date_last}"
+                            value="<fmt:formatDate value="${vo.gp_date_last }" pattern="YYYY-MM-dd "/>"
                             data-placeholder="마감일 선택"
                             required
                             aria-required="true" >
@@ -102,7 +101,7 @@
                     </div>
                     <!-- 파일 업로드 input태그 -->
                     <div class="mb-3">
-                        <label for="formFile" class="form-label">썸네일 올리기</label>
+                        <label for="gp_thumb" class="form-label">썸네일 올리기</label>
                         <input class="form-control" type="file" id="gp_thumb">
                     </div>
                     

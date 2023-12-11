@@ -49,5 +49,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<delete id="deleteByIdx" parameterType="int">
 			delete from gp where gp_idx=#{gp_idx}
 		</delete>
+		
+		<insert id="request" parameterType="kr.co.ezen.entity.GpUser">
+			insert into GpUser (gp_idx, user_idx, gp_addr, gp_name, gp_email, gp_total, gp_num)
+			VALUES (#{gp_idx}, #{user_idx},#{gp_addr},#{gp_name},#{gp_email},#{gp_total}, #{gp_num})
+		</insert>
 
 	</mapper>

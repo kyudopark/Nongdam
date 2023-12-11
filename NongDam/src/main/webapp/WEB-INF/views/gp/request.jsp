@@ -32,6 +32,7 @@
     <link rel="stylesheet" href="${contextPath }/resources/common/css/style.css">
     <!-- 기본js -->
     <script type="text/javascript" src="${contextPath }/resources/common/js/common.js"></script>
+    <script type="text/javascript" src="${contextPath }/resources/gp/js/script.js"></script>
     
     <meta name="농담" content="안녕하세요, 농업 정보 커뮤니티 농담입니다."/>
     
@@ -42,14 +43,27 @@
     <!-- 카카오페이 결제 -->
 	<!-- iamport.payment.js -->
 	<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
-	<script type="text/javascript" src="${contextPath }/resources/gp/js/script.js"></script>
 	
 	<!-- 다음(카카오) 우편번호 -->
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+	
     <title>농담 | 농업 정보 커뮤니티</title>
-    
-    
-    
+	
+	<script type="text/javascript">
+	 $("#gp_num").on('input', function() {
+			var num = $("#gp_num").val();
+			var price = ${vo.gp_price};
+					
+			if (num !== null && $.isNumeric(num)) {
+				var totalPrice = price * num;
+				$("#gp_total_output").val(totalPrice); 
+			} else {
+		        $("#gp_total_output").val(0);
+		    }
+		});
+	</script>
+	
     
 </head>
 <body>
@@ -65,7 +79,7 @@
             <div class="row">
                 <!--썸네일-->
                 <div class="col-lg-7 col-12 p-0 bg-light" style="min-height: 280px;">
-                    <img src="" style="width: 100%; height: 100%;">
+                    <img src="${contextPath }/resources/image/gp/${vo.gp_thumb }" style="width: 100%; height: 100%;">
                 </div>
                 <!--오른쪽-->
                 <div class="border-start col-lg-5 col-12 p-3">
@@ -83,7 +97,7 @@
                     </p>
                     <p class="pt-3 fs-5">
                         <span class="fw-bolder">가격 </span>
-                        <span>${vo.gp_price}원</span>
+                        <span>${vo.gp_price} 원</span>
                     </p>
                 </div>
             </div>
@@ -93,9 +107,11 @@
     <!-- 신청 폼 블럭 -->
     <div class="container mt-4 mb-5">
         <div class="border rounded-2 ">
+        <form method="post">
             <h4 class="p-4 border-bottom">신청 폼</h4>
             
             <div class="container pt-5 pb-5 col-lg-10 ">
+            
                 
                 <!-- 수령자명 -->
                 <div class="mb-4 col-12 col-md-6 col-lg-5">
@@ -111,27 +127,27 @@
                         수령자 연락처
                     </label>
                     <input type="eamil" class="form-control" 
-                        id="gp_email" placeholder="이메일">
+                        id="gp_email" name = "gp_email" placeholder="이메일">
                 </div>
                 <!-- 수량 -->
                 <div class="mb-4 col-4 col-md-3 col-lg-2">
-                    <label for="gp_email" class="form-label">
+                    <label for="gp_num" class="form-label">
                         수량
                     </label>
                     <div class="d-flex align-items-center gap-2">
                         <input type="text" class="form-control" 
-                            id="gp_product" placeholder="0~9">
+                            id="gp_num" name = "gp_num" placeholder="0~9">
                         <div></div>
                     </div>
                 </div>
                 <!-- 총 가격 -->
                 <div class="mb-4 col-5 col-md-4 col-lg-3">
-                    <label for="gp_price" class="form-label" id = "fullprice">
+                    <label for="gp_total" class="form-label">
                         총 가격
                     </label>
                     <div class="d-flex align-items-center gap-2">
                         <input type="text" readonly class="form-control" 
-                            id="gp_price" placeholder="-">
+                            id="gp_total_output" name="gp_total" placeholder="-">
                         <div>원</div>
                     </div>
                 </div>
@@ -165,7 +181,7 @@
                             <div class="row g-2">
                                 <div class="col-auto">
                                     <!-- 우편번호. readonly로 되어있으나 풀어도 됩니다 -->
-                                    <input type="text" class="form-control" id="user_zipcode" readonly>
+                                    <input type="text" class="form-control" id="gp_zipcode" readonly>
                                 </div>
                                 <div class="col-auto">
                                     <!-- 우편번호 찾기 버튼-->
@@ -175,25 +191,30 @@
                                 </div>
                             </div>
                         </div>
-                        <input type="text" class="form-control mb-2" id="user_zipcode2" placeholder="주소">
-                        <input type="text" class="form-control" id="user_zipcode3" placeholder="상세 주소">
+                        <input type="text" class="form-control mb-2" id="gp_zipcode2" placeholder="주소">
+                        <input type="text" class="form-control" id="gp_zipcode3" placeholder="상세 주소">
                         <div class="mt-2 form-check d-flex justify-content-end gap-1">
-                            <input class="form-check-input" type="checkbox" value="" id="asdf">
-                            <label class="form-check-label" for="asdf"></label>기본 배송지로 설정</label>
+                            <input class="form-check-input" type="checkbox" value="updateAddr" id="updateAddr" name="updateAddr">
+                            <label class="form-check-label" for="updateAddr"></label>기본 배송지로 설정</label>
                           </div>
                     </div>
                 </div>
 
             </div>
+            
             <!-- 신청하기 버튼 -->
             <div class="container pt-5 pb-4 text-center">
                 <button class="btn btn-secondary" onclick="kakaoPay()">즉시결제</button>
                 <a class="btn btn-outline-secondary">취소</a>
             </div>
+            </form>
         </div>
     </div>
     <!-- 신청 폼 블럭 끝 -->
-	
+	<form id="fr" method="get">
+		<input type="hidden" id="gp_idx" name="gp_idx" value="${vo.gp_idx }"/>
+		<input type="hidden" id="user_idx" name="user_idx" value="1"/>
+	</form>
 	
 	
 	<jsp:include page="../common/footer.jsp"/>

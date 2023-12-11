@@ -19,4 +19,6 @@ public interface GpService {
 	public void updateByIdx(Gp vo);
 	public void deleteByIdx(int gp_idx);
 	
+	public void request(GpUser gp);
+	
 }

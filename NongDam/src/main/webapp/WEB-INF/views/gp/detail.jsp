@@ -91,8 +91,8 @@
         <div class="border rounded-2 container">
             <div class="row">
                 <!--썸네일-->
-                <div class="col-lg-7 col-12 p-0 bg-light" style="min-height: 280px;">
-                    <img src="" style="width: 100%; height: 100%;">
+                <div class="col-lg-7 col-12 p-0 bg-light" style="height: 300px;">
+                    <img src="${contextPath }/resources/image/gp/${vo.gp_thumb }" style="width: 100%; height: 100%;">
                 </div>
                 <!--오른쪽-->
                 <div class="border-start col-lg-5 col-12 p-3">
@@ -126,14 +126,18 @@
             <div class="container pt-5 pb-4 text-center">
                 <button class="btn btn-secondary" data-btn = "request" >신청하기</button>
                 <button class="btn btn-outline-secondary" data-btn = "back" >목록으로</button>
-                <button class="btn btn-success" data-btn = "modify" >수정하기</button>
-                <button class="btn btn-warning" data-btn = "delete">삭제하기</button>
+                
+                <%-- <c:if test="${user_idx eq 1 }"> --%>
+                	<button class="btn btn-success" data-btn = "modify" >수정하기</button>
+                	<button class="btn btn-warning" data-btn = "delete">삭제하기</button>
+                <%-- </c:if> --%>
             </div>
         </div>
     </div>
     
     <form id="fr" method="get">
 		<input type="hidden" id="gp_idx" name="gp_idx" value="${vo.gp_idx }"/>
+		<input type="hidden" id="user_idx" name="user_idx" value="1"/>
 	</form>
 	
 	

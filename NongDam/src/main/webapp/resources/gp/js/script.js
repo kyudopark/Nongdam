@@ -8,6 +8,8 @@ $(document).ready(function () {
 	        $("#banner-content2").text(bannerText2);
 	  
 	    });
+	    
+
 
 function kakaoPay() {
 	if (confirm("구매 하시겠습니까?")) { // 구매 클릭시 한번 더 확인하기
@@ -46,14 +48,14 @@ function kakaoPay() {
 function execDaumPostcode() {
         new daum.Postcode( {
           oncomplete: function( data ) {
-            document.getElementById( 'user_zipcode' ).value = data.zonecode;
-            document.getElementById( 'user_zipcode2' ).value = data.address;
-            document.getElementById( 'user_zipcode3' ).focus();
+            document.getElementById( 'gp_zipcode' ).value = data.zonecode;
+            document.getElementById( 'gp_zipcode2' ).value = data.address;
+            document.getElementById( 'gp_zipcode3' ).focus();
           }
         } ).open();
       }
       function execDaumPostcodeReset() {
-        document.getElementById( 'user_zipcode' ).value = null;
-        document.getElementById( 'user_zipcode2' ).value = null;
-        document.getElementById( 'user_zipcode3' ).value = null;
+        document.getElementById( 'gp_zipcode' ).value = null;
+        document.getElementById( 'gp_zipcode2' ).value = null;
+        document.getElementById( 'gp_zipcode3' ).value = null;
       }

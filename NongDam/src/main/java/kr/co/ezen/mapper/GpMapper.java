@@ -15,5 +15,6 @@ public interface GpMapper {
 	public void updateByIdx(Gp vo);
 	public void deleteByIdx(int gp_idx);
 	public void insert(Gp vo);
+	public void request(GpUser gu);
 
 }

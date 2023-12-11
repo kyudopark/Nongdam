@@ -32,7 +32,7 @@
     <link rel="stylesheet" href="${contextPath }/resources/common/css/style.css">
     <!-- 기본js -->
     <script type="text/javascript" src="${contextPath }/resources/common/js/common.js"></script>
-    
+    <script type="text/javascript" src="${contextPath }/resources/gp/js/script.js"></script>
     <meta name="농담" content="안녕하세요, 농업 정보 커뮤니티 농담입니다."/>
     
     <!-- 파비콘 -->
@@ -66,17 +66,14 @@
 	    			}
 	    			fData.submit();
 	    		}); */
+	    		
+	            if(${!empty msgType}){
+	                $("#messageType").attr("class", "modal-content panel-warning");    
+	                $("#myMessage").modal("show");
+	              }
 	            
 	        });
-	        
-	        var bannerTitle = "공동구매 게시판";
-	        var bannerText1 = "다양한 제품들을 많은 사람들과 함께 싼 가격에 구매해보세요";
-	        var bannerText2 = "공동구매 게시글들은 문의 혹은 별도의 연락을 받아 게시글을 올려드리고 있습니다.";
-	        
-	        $("#banner-title").text(bannerTitle);
-	        $("#banner-content1").text(bannerText1);
-	        $("#banner-content2").text(bannerText2);
-	        
+
 	        /* $("input[name=start]").on("change", function(e){
 	        	var valS = $("input[name=start]").val();
 	        	var tagS = "<input type='hidden' name='gp_date_start' value='"+valS+"'/>";
@@ -104,7 +101,6 @@
     <div class="container mt-5 mb-5">
         <h4 class="mt-5 mb-5">공동구매 게시글 작성</h4>
         <form method="post" enctype="multipart/form-data">
-            
 
             <!--제목-->
             <div class="form-group mb-3">
@@ -151,8 +147,8 @@
                     </div>
                     <!-- 파일 업로드 input태그 -->
                     <div class="mb-3">
-                        <label for="gp_thumb" class="form-label">썸네일 올리기</label>
-                        <input class="form-control" type="file" id="gp_thumb">
+                        <label for="thumbImg" class="form-label">썸네일 올리기</label>
+                        <input class="form-control" type="file" id="thumbImg" name="thumbImg">
                     </div>
                     
                     <div class="md-3">
@@ -190,6 +186,24 @@
             </div>
         </form>
     </div>
+    
+    <div id="myMessage" class="modal fade" role="dialog" >
+    <div class="modal-dialog">  
+      <!-- Modal content-->
+      <div id="messageType" class="modal-content panel-info">
+        <div class="modal-header panel-heading">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">${msgType}</h4>
+        </div>
+        <div class="modal-body">
+          <p>${msg}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>  
+    </div>
+  </div>  
     <!-- ============================================== -->
 	
 	<jsp:include page="../common/footer.jsp"/>

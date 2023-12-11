@@ -32,6 +32,7 @@
     <link rel="stylesheet" href="${contextPath }/resources/common/css/style.css">
     <!-- 기본js -->
     <script type="text/javascript" src="${contextPath }/resources/common/js/common.js"></script>
+    <script type="text/javascript" src="${contextPath }/resources/gp/js/script.js"></script>
     
     <meta name="농담" content="안녕하세요, 농업 정보 커뮤니티 농담입니다."/>
     
@@ -68,7 +69,7 @@
                     style="height: 200px;">
                         <!-- 이미지 존재시 아래 img태그에 src추가 -->
                         <img class="object-fit-cover w-100 h-100" 
-                        src="/resource/image/gp/${vo.gp_thumb }">    
+                        src="${contextPath }/resources/image/gp/${vo.gp_thumb }">    
                         <!-- 이미지 없을 때 아래 div 태그 보이게 -->
                         <div class="d-none"> 
                             썸네일을 등록해주세요. 
@@ -84,7 +85,6 @@
                             <input type="date"
                             class="form-control"
                             name="gp_date_start"
-                            value="<fmt:formatDate value="${vo.gp_date_start }" pattern="YYYY-MM-dd "/>"
                             data-placeholder="시작일 선택"
                             required
                             aria-required="true" >
@@ -93,7 +93,6 @@
                             <input type="date" 
                             class="form-control"
                             name="gp_date_last"
-                            value="<fmt:formatDate value="${vo.gp_date_last }" pattern="YYYY-MM-dd "/>"
                             data-placeholder="마감일 선택"
                             required
                             aria-required="true" >
@@ -101,8 +100,8 @@
                     </div>
                     <!-- 파일 업로드 input태그 -->
                     <div class="mb-3">
-                        <label for="gp_thumb" class="form-label">썸네일 올리기</label>
-                        <input class="form-control" type="file" id="gp_thumb">
+                        <label for="thumbImg" class="form-label">썸네일 올리기</label>
+                        <input class="form-control" type="file" id="thumbImg" name="thumbImg">
                     </div>
                     
                     <div class="md-3">
@@ -120,8 +119,6 @@
                 <!-- id는 변경하지 마세요 -->
                 <textarea id="editor" name="gp_content">
                     <p>${vo.gp_content }</p>
-                    <p></p>
-                    <p></p>
                 </textarea>
                 <!-- 스크립트문. 항상 에디터 박스 바로 뒤에 놓을 것-->
                 <script>

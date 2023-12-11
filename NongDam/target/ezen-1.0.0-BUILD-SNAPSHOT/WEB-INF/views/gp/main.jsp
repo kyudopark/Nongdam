@@ -32,7 +32,7 @@
     <link rel="stylesheet" href="${contextPath }/resources/common/css/style.css">
     <!-- 기본js -->
     <script type="text/javascript" src="${contextPath }/resources/common/js/common.js"></script>
-    
+    <script type="text/javascript" src="${contextPath }/resources/gp/js/script.js"></script>
     <meta name="농담" content="안녕하세요, 농업 정보 커뮤니티 농담입니다."/>
     
     <!-- 파비콘 -->
@@ -59,14 +59,6 @@
 		         pageFrm.attr("method","get");
 		         pageFrm.submit();
 		     });
-	        
-	        var bannerTitle = "공동구매 게시판";
-	        var bannerText1 = "다양한 제품들을 많은 사람들과 함께 싼 가격에 구매해보세요";
-	        var bannerText2 = "공동구매 게시글들은 문의 혹은 별도의 연락을 받아 게시글을 올려드리고 있습니다.";
-	        
-	        $("#banner-title").text(bannerTitle);
-	        $("#banner-content1").text(bannerText1);
-	        $("#banner-content2").text(bannerText2);
 	  
 	    });
 	
@@ -127,7 +119,7 @@
                 <div class="col pb-4">
                     <a class="text-decoration-none" href="${contextPath}/gp/detail?gp_idx=${li.gp_idx}">
                         <div class="card">
-                            <img src="..." class="border-bottom rounded-2 bg-light w-100 object-fit-cover" height="200">
+                            <img src="${contextPath }/resources/image/gp/${li.gp_thumb }" class="border-bottom rounded-2 bg-light w-100 object-fit-cover" height="200">
                             <div class="card-body">
                                 <h5 class="card-title title-overflow-3">
                                     ${li.gp_title}
@@ -144,7 +136,7 @@
                 </div>
                 </c:forEach>
                 <!-- 카드 하나 끝 -->
-                
+                <!-- 주석 -->
 
 
             </div>

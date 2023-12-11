@@ -43,7 +43,6 @@ public class GpServiceImpl implements GpService{
 	@Override
 	public void insert(Gp vo) {
 		gpMapper.insert(vo);
-		
 	}
 	
 	@Override
@@ -54,6 +53,11 @@ public class GpServiceImpl implements GpService{
 	@Override
 	public void deleteByIdx(int gp_idx) {
 		gpMapper.deleteByIdx(gp_idx);
+	}
+	
+	@Override
+	public void request(GpUser gu) {
+		gpMapper.request(gu);
 	}
 
 }

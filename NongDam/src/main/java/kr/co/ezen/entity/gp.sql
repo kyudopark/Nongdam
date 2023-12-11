@@ -46,8 +46,10 @@ user_idx int,
 gp_addr varchar(50),
 gp_name	varchar(20),
 gp_email varchar(20),
+gp_total varchar(20),
 gp_num varchar(20),
 FOREIGN KEY (user_idx) REFERENCES User (user_idx)
 )
 
+drop table gpUser;
 

@@ -1,5 +1,6 @@
 package kr.co.ezen.entity;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;

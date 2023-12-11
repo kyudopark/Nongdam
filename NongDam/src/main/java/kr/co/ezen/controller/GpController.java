@@ -2,6 +2,10 @@ package kr.co.ezen.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -112,7 +116,8 @@ public class GpController {
 	}
 	
 	@PostMapping("/request")
-	public String request(Gp vo, RedirectAttributes rttr){
+	public String request(GpUser gu, RedirectAttributes rttr){
+		gpService.request(gu);
 		return "redirect:/gp/main";
 	}
 	
@@ -125,29 +130,42 @@ public class GpController {
 	}
 	
 	@PostMapping("/modify")
-	public String modify(Gp vo, HttpSession session, HttpServletRequest request) throws IOException {
+	public String modify(Gp vo, HttpSession session, HttpServletRequest request) throws IOException, ParseException {
 		MultipartRequest multi = null;
 		int fileSize = 40 * 1024 * 1024;
-		ServletContext context = session.getServletContext();
-		String realPath = context.getRealPath("/resources/image/gp");
+		String sPath = request.getRealPath("resources/image/gp"); 
+		multi = new MultipartRequest(request, sPath, fileSize, "UTF-8", new DefaultFileRenamePolicy());
 		
-		multi = new MultipartRequest(request, realPath, fileSize, "UTF-8", new DefaultFileRenamePolicy());
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		
+		String gp_title = multi.getParameter("gp_title");
+		String gp_price = multi.getParameter("gp_price");
+		String gp_content = multi.getParameter("gp_content");
+		
+		Date gp_date_start = formatter.parse(multi.getParameter("gp_date_start"));
+		Date gp_date_last = formatter.parse(multi.getParameter("gp_date_last"));
 		
 		String thumb="";
-		File file = multi.getFile("imgThumb");
+		File file = multi.getFile("thumbImg");
 		if (file != null) {
+			
 			String ext = file.getName().substring(file.getName().lastIndexOf(".") + 1);
 			ext = ext.toUpperCase();
 			if (ext.equals("PNG") || ext.equals("GIF") || ext.equals("JPG")) {
-				
-			thumb=file.getName();
-			}else {
+			
+				thumb=file.getName();
+			} else {
 				if(file.exists()) {
 					file.delete();
 				}
 				return "redirect:/gp/write";
 			}
 		}
+		vo.setGp_title(gp_title);
+		vo.setGp_date_start(gp_date_start);
+		vo.setGp_date_last(gp_date_last);
+		vo.setGp_content(gp_content);
+		vo.setGp_price(gp_price);
 		vo.setGp_thumb(thumb);
 		gpService.updateByIdx(vo);
 		return "redirect:/gp/main";
@@ -158,9 +176,5 @@ public class GpController {
 		gpService.deleteByIdx(gp_idx);
 		return "redirect:/gp/main";
 	}
-	
-	
-	
-	
 	
 }

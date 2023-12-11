@@ -14,6 +14,7 @@ public class GpUser {
 	private String gp_name;
 	private String gp_email;
 	private String gp_num;
+	private String gp_total;
 
 	
 }

@@ -87,8 +87,10 @@
     <div class="container mt-5 mb-3 d-flex flex-wrap justify-content-between">
     	
         <div>
-        	<a class="text-decoration-none" href="${contextPath}/gp/write">
-            <button class="btn btn-secondary">글쓰기</button>
+        	<%-- <c:if test="${user_idx eq 1 }"> --%>
+        		<a class="text-decoration-none" href="${contextPath}/gp/write">
+            	<button class="btn btn-secondary">글쓰기</button>
+            <%-- </c:if> --%>
             </a>
         </div>
         <div style="width: 20rem;">

@@ -23,12 +23,6 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<!-- File Uploard -->
-	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<beans:property name="maxUploadSize" value="52428800" />
-		<beans:property name="defaultEncoding" value="utf-8" />
-	</beans:bean>
-	
 	<!-- 빈등록 -->
 	<context:component-scan base-package="kr.co.ezen.controller" />
 	
