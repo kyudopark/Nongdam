@@ -7,6 +7,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
 
+
+
 <html lang="ko" data-bs-theme="light">
 <head>
     <!-- UTF-8 사용-->
@@ -41,6 +43,45 @@
     
     <title>농담 | 농업 정보 커뮤니티</title>
     
+<script>
+ $(document).ready(function() {
+     $("#submitBtn").click(function() {
+        var formData = {
+            category: $("#inquire_category").val(),
+            title: $("#inquire_title").val(),
+            content: $("#inquire_content").val(),
+            email: $("#inquire_email").val()
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "${contextPath}/inquire/submitEmailForm",
+            data: formData,
+            success: function(response) {
+                console.log("Email sent successfully", response);
+                alert("성공");
+                // 성공한 경우 사용자에게 알림 등을 추가할 수 있습니다.
+            },
+            error: function(error) {
+                 console.error("Failed to send email", error);
+                // 실패한 경우 사용자에게 알림 등을 추가할 수 있습니다.
+                alert("실패");  
+            }
+        });
+    }); 
+    
+    $("form[name='submitEmailForm'] :input").on("input", function() {
+        // 입력값이 하나라도 비어있으면 버튼 비활성화
+        var isDisabled = !$("form[name='submitEmailForm']").serializeArray().every(function(item) {
+            return item.value.trim() !== "";
+        });
+
+        $("#submitBtn").prop("disabled", isDisabled);
+    });
+    
+}); 
+</script>
+    
 </head>
 <body>
 
@@ -50,22 +91,20 @@
 	
 	
     <!-- 문의하기 -->
+    <form name="submitEmailForm" method="post" action="${contextPath }/inquire/submitEmailForm">
     <div class="container mt-5 mb-5">
         <div class="mt-5 mb-5">
             <div class="mb-4 d-flex flex-wrap justify-content-between">
                 <h4>
                     이메일 문의
                 </h4>
-                <div>
-                    <button type="button" class="btn btn-outline-secondary"><i class="fa-solid fa-xmark"></i> 문의 취소</button>
-                    <button type="button" class="btn btn-secondary"><i class="fa-solid fa-paper-plane"></i> 문의하기</button>
-                </div>
+                
             </div>
             <hr>
             <div class="mb-3 row">
-                <label for="user_pw2" class="col-sm-3 col-md-2 col-form-label">분류<span class="text-danger">*</span></label>
+                <label for="inquire_category" class="col-sm-3 col-md-2 col-form-label">분류<span class="text-danger">*</span></label>
                 <div class="col-sm-5 col-md-4 col-lg-3">
-                    <select class="form-select">
+                    <select class="form-select" name="inquire_category" id="inquire_category">
                         <option>결제</option>
                         <option>계정</option>
                         <option>공동구매 신청</option>
@@ -74,43 +113,42 @@
                 </div>
             </div>
             <div class="mb-3 row">
-                <label for="user_pw2" class="col-sm-3 col-md-2 col-form-label">제목<span class="text-danger">*</span></label>
+                <label for="inquire_title" class="col-sm-3 col-md-2 col-form-label">제목<span class="text-danger">*</span></label>
                 <div class="col-sm-9 col-md-10">
-                    <input type="text" class="form-control" id="user_pw2" placeholder="제목을 입력해주세요.">
+                    <input type="text" class="form-control" id="inquire_title" name="inquire_title" placeholder="제목을 입력해주세요.">
                     <!-- 아래 span태그를 가리려면 span class에 d-none을 추가하면 됩니다 -->
                     <!-- 편한 자리로 옮기거나 추가해서 사용하세요-->
-                    <span class="text-danger">{에러메세지 또는 설명 텍스트}</span>
+                    <span class="text-danger"></span>
                 </div>
             </div>
             <div class="mb-3 row">
-                <label for="user_pw2" class="col-sm-3 col-md-2 col-form-label">내용<span class="text-danger">*</span></label>
+                <label for="inquire_content" class="col-sm-3 col-md-2 col-form-label">내용<span class="text-danger">*</span></label>
                 <div class="col-sm-9 col-md-10">
-                    <textarea class="form-control" placeholder="문의 내용을 작성해주세요." style="min-height: 300px"></textarea>
+                    <textarea class="form-control" id="inquire_content" name="inquire_content" placeholder="문의 내용을 작성해주세요." style="min-height: 300px"></textarea>
                 </div>
             </div>
             <div class="mb-3 row">
-                <label for="user_pw2" class="col-sm-3 col-md-2 col-form-label">이메일 주소<span class="text-danger">*</span></label>
+                <label for="inquire_email" class="col-sm-3 col-md-2 col-form-label">이메일 주소<span class="text-danger">*</span></label>
                 <div class="col-sm-9 col-md-10">
-                    <input type="email" class="form-control" id="user_pw2" placeholder="답장을 받으실 이메일 주소를 입력해주세요.">
+                    <input type="email" class="form-control" id="inquire_email" name="inquire_email" placeholder="답장을 받으실 이메일 주소를 입력해주세요.">
                 </div>
             </div>
-            <div class="mb-3 row">
-                <label for="formFile" class="col-sm-3 col-md-2 col-form-label">첨부 파일</label>
-                <div class="col-sm-9 col-md-10">
-                    <input class="form-control" type="file" id="formFile">
-                </div>
-            </div>
+            
+            
             
             <!-- 버튼 -->
             <div class="mt-5 mb-5 d-flex flex-wrap justify-content-center align-items-end">
             
                 <div class="text-end">
                     <a class="btn btn-outline-secondary" href="#"><i class="fa-solid fa-xmark"></i> 문의 취소</a>
-                    <button type="submit" class="btn btn-secondary"><i class="fa-solid fa-paper-plane"></i> 문의하기</button>
+                    
+                    <button type="submit" class="btn btn-secondary" id="submitBtn"><i class="fa-solid fa-paper-plane"></i> 문의하기</button>
                 </div>
             </div>
         </div>
     </div>
+    
+</form>
 	
 	<jsp:include page="../common/footer.jsp"/>
 </body>
