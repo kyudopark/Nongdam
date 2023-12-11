@@ -44,6 +44,14 @@
 
 <link rel="stylesheet" href="${contextPath }/resources/common/css/style.css">
 
+<meta name="농담" content="안녕하세요, 농업 정보 커뮤니티 농담입니다."/>
+    
+    <!-- 파비콘 -->
+    <link rel="icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
+    <link rel="shortcut icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
+    
+    <title>농담 | 농업 정보 커뮤니티</title>
+
 <!-- fontAwesome -->
 <script src="https://kit.fontawesome.com/f34a67d667.js"
 	crossorigin="anonymous"></script>
