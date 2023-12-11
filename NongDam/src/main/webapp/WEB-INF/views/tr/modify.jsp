@@ -84,6 +84,8 @@
                     <div class="mb-3">
                         <label for="tr_imgpath" class="form-label">썸네일 올리기</label>
                         <input class="form-control" type="file" id="tr_imgpath" name="tr_imgpath" onchange="previewThumbnail(event)">
+                        <input type="hidden" name="existing_image" value="${vo.tr_imgpath}">
+                        
                     </div>
                 </div>
             </div>            

@@ -131,49 +131,60 @@ public class TrController {
 	}
 	
 	@PostMapping("/modify")
-	public String modify(HttpServletRequest request, 
-	HttpSession session, RedirectAttributes rttr) throws IOException {
-		
-		//멀티파트
-		MultipartRequest multi = null;
-		int fileSize = 40 * 1024 * 1024; // 10MB
-		String sPath = request.getRealPath("resources/image/tr"); 
-		
-		multi = new MultipartRequest(request, sPath, fileSize, "UTF-8", new DefaultFileRenamePolicy());
-		      
-		 
-		// 데이터베이스 테이블에 회원이미지를 업데이트
-		String tr_idx_String = multi.getParameter("tr_idx");
-		int tr_idx = Integer.parseInt(tr_idx_String);
-		String tr_title = multi.getParameter("tr_title");
-		String tr_content = multi.getParameter("tr_content");
-		String newPro="";
-		File file=multi.getFile("tr_imgpath"); 
-		if(file !=null) { 
-		   String ext=file.getName().substring(file.getName().lastIndexOf(".")+1);
-		   ext=ext.toUpperCase(); 
-			if(ext.equals("PNG") || ext.equals("GIF") || ext.equals("JPG")){
-			   
-			   newPro=file.getName();
-			   
-			}else {
-				if(file.exists()) {
-					file.delete(); 
-				}
-			   return "redirect:/tr/modify";
-		    }
-		 }
-		 //이미지를 db에 업데이트
-		 Tr vo=new Tr();
-		 vo.setTr_idx(tr_idx);
-		 vo.setTr_title(tr_title);
-		 vo.setTr_content(tr_content);
-		 
-		 vo.setTr_imgpath(newPro);
-		
-		 trService.updateByIdx(vo);
-		
-		return "redirect:/tr/main";
+	public String modify(HttpServletRequest request, HttpSession session, RedirectAttributes rttr) throws IOException {
+
+	    // 멀티파트
+	    MultipartRequest multi = null;
+	    int fileSize = 40 * 1024 * 1024; // 10MB
+	    String sPath = request.getRealPath("resources/image/tr");
+
+	    multi = new MultipartRequest(request, sPath, fileSize, "UTF-8", new DefaultFileRenamePolicy());
+
+	    // 데이터베이스 테이블에 회원이미지를 업데이트
+	    String tr_idx_String = multi.getParameter("tr_idx");
+	    int tr_idx = Integer.parseInt(tr_idx_String);
+	    String tr_title = multi.getParameter("tr_title");
+	    String tr_content = multi.getParameter("tr_content");
+	    String newPro = "";
+	    File file = multi.getFile("tr_imgpath");
+	    if (file != null) {
+	        String ext = file.getName().substring(file.getName().lastIndexOf(".") + 1);
+	        ext = ext.toUpperCase();
+	        if (ext.equals("PNG") || ext.equals("GIF") || ext.equals("JPG")) {
+	            newPro = file.getName();
+	        } else {
+	            if (file.exists()) {
+	                file.delete();
+	            }
+	            return "redirect:/tr/modify";
+	        }
+	    }
+
+	    // 이미지 삭제
+	    String existingImage = multi.getParameter("existing_image");
+	    if (existingImage != null || !existingImage.isEmpty()) {
+	        String imagePath = request.getServletContext().getRealPath("resources/image/tr/") + existingImage;
+	        File existingFile = new File(imagePath);
+	        if (existingFile.exists()) {
+	            if (existingFile.delete()) {
+	                System.out.println("기존 파일 삭제 성공");
+	            } else {
+	                System.out.println("기존 파일 삭제 실패");
+	            }
+	        } else {
+	            System.out.println("존재하지 않는 파일입니다.");
+	        }
+	    }
+
+	    // 이미지를 DB에 업데이트
+	    Tr vo = new Tr();
+	    vo.setTr_idx(tr_idx);
+	    vo.setTr_title(tr_title);
+	    vo.setTr_content(tr_content);
+	    vo.setTr_imgpath(newPro);
+	    trService.updateByIdx(vo);
+
+	    return "redirect:/tr/main";
 	}
 	
 	

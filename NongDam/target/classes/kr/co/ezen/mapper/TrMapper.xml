@@ -49,7 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		
 		<insert id="insert" parameterType="kr.co.ezen.entity.Tr">
 			insert into Tr (tr_title,tr_content,user_idx,tr_imgpath)
-			    VALUES (#{tr_title}, #{tr_content},1,#{tr_imgpath})
+			    VALUES (#{tr_title}, #{tr_content},#{user_idx},#{tr_imgpath})
 		</insert>
 
 
