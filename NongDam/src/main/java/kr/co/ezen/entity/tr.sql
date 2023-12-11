@@ -58,3 +58,10 @@ values (1,1,1,'댓글4',1)
 
 
 -----------------------------
+<<<<<<< HEAD
+=======
+
+
+drop table User;
+
+>>>>>>> branch 'tr' of https://github.com/YJY1129/Nongdam.git
