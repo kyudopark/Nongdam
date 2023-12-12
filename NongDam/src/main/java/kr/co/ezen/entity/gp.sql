@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+=======
+
+
+----------------------------------------------------------------------------
+
+>>>>>>> branch 'main' of https://github.com/YJY1129/Nongdam.git
 create table gp (
 gp_idx int auto_increment,
 gp_title varchar(90),

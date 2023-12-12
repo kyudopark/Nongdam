@@ -1,7 +1,7 @@
 
 	/* 채팅방 오픈 함수 */
 	function openChat(){
-	    window.open("${root}/chat/list","채팅하기","width=400, height=500, left=100, top=50");
+	    window.open("${contextPath}/chat/list","채팅하기","width=400, height=500, left=100, top=50");
 	}
 	
 	$(document).ready(function(){

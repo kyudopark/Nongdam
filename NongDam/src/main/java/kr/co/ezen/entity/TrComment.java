@@ -13,7 +13,9 @@ public class TrComment {
 	private int user_idx;
 	private Date tr_comment_time;
 	private String tr_comment_content;
+	private int tr_comment_useable;
 	
 	//join
 	private String user_nickname;
+	private String user_Profile;
 }
