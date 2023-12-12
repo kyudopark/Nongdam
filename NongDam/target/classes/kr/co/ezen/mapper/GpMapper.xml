@@ -17,7 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		
 		<select resultType="kr.co.ezen.entity.Gp" id="findAll"
 			parameterType="kr.co.ezen.entity.Criteria">
-			select gp_title, gp_date, gp_date_start, gp_date_last, gp_idx, gp_thumb from gp
+			select gp_title, gp_date, gp_date_start, gp_date_last, user_idx, gp_idx, gp_thumb from gp natural join User
 			<include refid="search"/>
 			order by gp_idx
 		 	limit #{pageStart}, #{perPageNum}	
@@ -30,13 +30,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		
 		<select resultType="kr.co.ezen.entity.Gp" 
 		parameterType="int" id="findByIdx">
-			select gp_title, gp_price, gp_date_start, gp_date_last, gp_content, gp_idx, gp_thumb from gp
+			select gp_title, gp_price, gp_date_start, gp_date_last, gp_content, gp_idx, gp_thumb from gp natural join User
 			where gp_idx=#{gp_idx}
 		</select>
 		
 		<insert id="insert" parameterType="kr.co.ezen.entity.Gp">
-			insert into Gp (gp_title,gp_content,gp_price,gp_date_start, gp_date_last, gp_thumb)
-			VALUES (#{gp_title}, #{gp_content},#{gp_price},#{gp_date_start},#{gp_date_last},#{gp_thumb})
+			insert into Gp (gp_title,gp_content,gp_price,gp_date_start, gp_date_last, gp_thumb, user_idx)
+			VALUES (#{gp_title}, #{gp_content},#{gp_price},#{gp_date_start},#{gp_date_last},#{gp_thumb}, #{user_idx})
 		</insert>
 		
 		
@@ -52,7 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		
 		<insert id="request" parameterType="kr.co.ezen.entity.GpUser">
 			insert into GpUser (gp_idx, user_idx, gp_addr, gp_name, gp_email, gp_total, gp_num)
-			VALUES (#{gp_idx}, #{user_idx},#{gp_addr},#{gp_name},#{gp_email},#{gp_total}, #{gp_num})
+			VALUES (#{gp_idx},#{user_idx},#{gp_addr},#{gp_name},#{gp_email},#{gp_total}, #{gp_num})
 		</insert>
 
 	</mapper>

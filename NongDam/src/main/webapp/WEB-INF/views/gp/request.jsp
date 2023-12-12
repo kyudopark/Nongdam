@@ -32,6 +32,7 @@
     <link rel="stylesheet" href="${contextPath }/resources/common/css/style.css">
     <!-- 기본js -->
     <script type="text/javascript" src="${contextPath }/resources/common/js/common.js"></script>
+    <!-- gp/* js파일 -->
     <script type="text/javascript" src="${contextPath }/resources/gp/js/script.js"></script>
     
     <meta name="농담" content="안녕하세요, 농업 정보 커뮤니티 농담입니다."/>
@@ -51,6 +52,7 @@
     <title>농담 | 농업 정보 커뮤니티</title>
 	
 	<script type="text/javascript">
+	$(document).ready(function () {
 	 $("#gp_num").on('input', function() {
 			var num = $("#gp_num").val();
 			var price = ${vo.gp_price};
@@ -62,9 +64,23 @@
 		        $("#gp_total_output").val(0);
 		    }
 		});
-	</script>
+	 
+		 $("#gp_zipcode, #gp_zipcode2, #gp_zipcode3").on('input', function() {
+		        var addr = $("#gp_zipcode").val();
+		        var addr2 = $("#gp_zipcode2").val();
+		        var addr3 = $("#gp_zipcode3").val();
+		        
+		        var fullAddress = addr + ' ' + addr2 + ' ' + addr3;
+		        
+		        $("#gp_addr").val(fullAddress);
+		});
+		 
+		
+		
+	});
 	
-    
+	
+	</script>
 </head>
 <body>
 
@@ -84,7 +100,7 @@
                 <!--오른쪽-->
                 <div class="border-start col-lg-5 col-12 p-3">
                     <!-- 세줄까지 출력하고 싶다면 클래스명을 ...-3 으로 바꾸세요.-->
-                    <h4 class="title-overflow-2">${vo.gp_title}</h4>
+                    <h4 class="title-overflow-2" id = "gp_title">${vo.gp_title}</h4>
                     <p class="pt-0">
                         <div>
                             <span class="fw-bolder">신청 시작일 </span>
@@ -107,9 +123,11 @@
     <!-- 신청 폼 블럭 -->
     <div class="container mt-4 mb-5">
         <div class="border rounded-2 ">
-        <form method="post">
             <h4 class="p-4 border-bottom">신청 폼</h4>
-            
+            <form id="submitForm">
+            	<input type="hidden" id="gp_idx" name="gp_idx" value="${vo.gp_idx }"/>
+				<input type="hidden" id="user_idx" name="user_idx" value="${uvo.user_idx }"/>
+				<input type="hidden" id="gp_addr" name="gp_addr" value=""/>
             <div class="container pt-5 pb-5 col-lg-10 ">
             
                 
@@ -119,7 +137,7 @@
                         수령자명
                     </label>
                     <input type="text" class="form-control" 
-                        id="gp_name" placeholder="이름">
+                        id="gp_name" name="gp_name" placeholder="이름">
                 </div>
                 <!-- 수령자 연락처 -->
                 <div class="mb-4 col-12 col-md-6 col-lg-5">
@@ -211,10 +229,6 @@
         </div>
     </div>
     <!-- 신청 폼 블럭 끝 -->
-	<form id="fr" method="get">
-		<input type="hidden" id="gp_idx" name="gp_idx" value="${vo.gp_idx }"/>
-		<input type="hidden" id="user_idx" name="user_idx" value="1"/>
-	</form>
 	
 	
 	<jsp:include page="../common/footer.jsp"/>

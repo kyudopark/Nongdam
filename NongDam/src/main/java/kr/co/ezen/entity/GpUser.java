@@ -8,7 +8,7 @@ import lombok.Data;
 public class GpUser {
 	
 	private int gp_idx;
-	private int user_idx;
+	private String user_idx;
 	
 	private String gp_addr;
 	private String gp_name;

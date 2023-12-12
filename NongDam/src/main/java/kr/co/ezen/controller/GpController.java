@@ -51,8 +51,8 @@ public class GpController {
 		m.addAttribute("cri", cri);
 		
 		PageCre pageCre = new PageCre();
-	      pageCre.setCri(cri); //PageCre의 Criteria cri 필드에 매개변수 cri 넣음
-	      pageCre.setTotalCount(gpService.totalCount(cri)); //int 총 게시글 수
+	      pageCre.setCri(cri);
+	      pageCre.setTotalCount(gpService.totalCount(cri));
 
 	      m.addAttribute("pageCre", pageCre);
 		return "gp/main";
@@ -79,12 +79,22 @@ public class GpController {
 	}
 	
 	@PostMapping("/write")
-	public String write(Gp vo, HttpSession session, HttpServletRequest request, RedirectAttributes rttr) throws IOException {
+	public String write(Gp vo, HttpSession session, HttpServletRequest request, RedirectAttributes rttr) throws IOException, ParseException {
 		
 		MultipartRequest multi = null;
 		int fileSize = 40 * 1024 * 1024;
 		String sPath = request.getRealPath("resources/image/gp"); 
 		multi = new MultipartRequest(request, sPath, fileSize, "UTF-8", new DefaultFileRenamePolicy());
+		
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		
+		String gp_title = multi.getParameter("gp_title");
+		String gp_price = multi.getParameter("gp_price");
+		String gp_content = multi.getParameter("gp_content");
+		String user_idx = multi.getParameter("user_idx");
+		
+		Date gp_date_start = formatter.parse(multi.getParameter("gp_date_start"));
+		Date gp_date_last = formatter.parse(multi.getParameter("gp_date_last"));
 		
 		
 		String thumb="";
@@ -103,6 +113,13 @@ public class GpController {
 				return "redirect:/gp/write";
 			}
 		}
+		
+		vo.setUser_idx(user_idx);
+		vo.setGp_title(gp_title);
+		vo.setGp_date_start(gp_date_start);
+		vo.setGp_date_last(gp_date_last);
+		vo.setGp_content(gp_content);
+		vo.setGp_price(gp_price);
 		vo.setGp_thumb(thumb);
 		gpService.insert(vo);
 		return "redirect:/gp/main";
@@ -141,6 +158,7 @@ public class GpController {
 		String gp_title = multi.getParameter("gp_title");
 		String gp_price = multi.getParameter("gp_price");
 		String gp_content = multi.getParameter("gp_content");
+		
 		
 		Date gp_date_start = formatter.parse(multi.getParameter("gp_date_start"));
 		Date gp_date_last = formatter.parse(multi.getParameter("gp_date_last"));

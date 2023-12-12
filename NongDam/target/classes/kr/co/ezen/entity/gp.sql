@@ -1,24 +1,3 @@
-create table User(
-user_idx int auto_increment,
-user_id varchar(30),
-user_pw varchar(30),
-user_zipcode varchar(30),
-user_addr varchar(200),
-user_gender char(1),
-user_nickname varchar(50),
-user_name varchar(30),
-user_email varchar(50),
-primary key(user_idx)
-
-);
-
-insert into User (user_id,user_pw,user_nickname,user_name) 
-values("admin","admin","nickname","name");
-
-select * from user;
-
-----------------------------------------------------------------------------
-
 create table gp (
 gp_idx int auto_increment,
 gp_title varchar(90),
@@ -35,8 +14,8 @@ primary key(gp_idx)
 
 drop table gp;
 
-insert into Gp (gp_title, gp_date_start, gp_date_last) 
-values('테스트용 제목입니다','2023-12-06','2023-12-07');
+insert into Gp (gp_title, gp_date_start, gp_date_last, user_idx) 
+values('테스트용 제목입니다','2023-12-06','2023-12-07',1);
 
 select * from gp;
 
@@ -47,9 +26,10 @@ gp_addr varchar(50),
 gp_name	varchar(20),
 gp_email varchar(20),
 gp_total varchar(20),
-gp_num varchar(20),
-FOREIGN KEY (user_idx) REFERENCES User (user_idx)
+gp_num varchar(20)
 )
 
 drop table gpUser;
+
+select * from gpUser;
 
