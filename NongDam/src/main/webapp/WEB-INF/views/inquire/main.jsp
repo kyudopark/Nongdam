@@ -34,6 +34,7 @@
     <link rel="stylesheet" href="${contextPath }/resources/common/css/style.css">
     <!-- 기본js -->
     <script type="text/javascript" src="${contextPath }/resources/common/js/common.js"></script>
+    <script type="text/javascript" src="${contextPath }/resources/inquire/js/script.js"></script>
     
     <meta name="농담" content="안녕하세요, 농업 정보 커뮤니티 농담입니다."/>
     
@@ -45,30 +46,37 @@
     
 <script>
  $(document).ready(function() {
-     $("#submitBtn").click(function() {
-        var formData = {
-            category: $("#inquire_category").val(),
-            title: $("#inquire_title").val(),
-            content: $("#inquire_content").val(),
-            email: $("#inquire_email").val()
-        };
+	        $("#submitBtn").click(function() {
+	        
+				// 입력된 데이터 가져오기
+	            var inquire_category = $("#inquire_category").val();
+	            var inquire_title = $("#inquire_title").val();
+	            var inquire_content = $("#inquire_content").val();
+	            var inquire_email = $("#inquire_email").val();
 
-        $.ajax({
-            type: "POST",
-            url: "${contextPath}/inquire/submitEmailForm",
-            data: formData,
-            success: function(response) {
-                console.log("Email sent successfully", response);
-                alert("성공");
-                // 성공한 경우 사용자에게 알림 등을 추가할 수 있습니다.
-            },
-            error: function(error) {
-                 console.error("Failed to send email", error);
-                // 실패한 경우 사용자에게 알림 등을 추가할 수 있습니다.
-                alert("실패");  
-            }
-        });
-    }); 
+	            // Ajax 요청
+	            $.ajax({
+	                type: "POST",
+	                url: "${contextPath}/inquire/submitEmailForm", // 컨트롤러 엔드포인트 경로
+	                data: {
+	                    'inquire_category': inquire_category,
+	                    'inquire_title': inquire_title,
+	                    'inquire_content': inquire_content,
+	                    'inquire_email': inquire_email
+	                },
+	                success: function(response) {
+	                    // 성공적으로 요청을 처리한 후 실행되는 코드
+	                    alert("문의가 성공적으로 접수되었습니다.");
+	                    // 추가로 실행해야 하는 코드 작성
+	                    window.location.href = "${contextPath}/inquire/main"; 
+	                },
+	                error: function(error) {
+	                    // 요청이 실패한 경우 실행되는 코드
+	                    alert("문의 접수 중 오류가 발생했습니다. 다시 시도해주세요.");
+	                    // 추가로 실행해야 하는 코드 작성
+	                }
+	            });
+	        }); 
     
     $("form[name='submitEmailForm'] :input").on("input", function() {
         // 입력값이 하나라도 비어있으면 버튼 비활성화
@@ -79,7 +87,8 @@
         $("#submitBtn").prop("disabled", isDisabled);
     });
     
-}); 
+
+});
 </script>
     
 </head>
@@ -91,7 +100,7 @@
 	
 	
     <!-- 문의하기 -->
-    <form name="submitEmailForm" method="post" action="${contextPath }/inquire/submitEmailForm">
+    <form name="submitEmailForm" method="post" >
     <div class="container mt-5 mb-5">
         <div class="mt-5 mb-5">
             <div class="mb-4 d-flex flex-wrap justify-content-between">
@@ -140,9 +149,9 @@
             <div class="mt-5 mb-5 d-flex flex-wrap justify-content-center align-items-end">
             
                 <div class="text-end">
-                    <a class="btn btn-outline-secondary" href="#"><i class="fa-solid fa-xmark"></i> 문의 취소</a>
+                    <a class="btn btn-outline-secondary" href="${contextPath }/"><i class="fa-solid fa-xmark"></i> 문의 취소</a>
                     
-                    <button type="submit" class="btn btn-secondary" id="submitBtn"><i class="fa-solid fa-paper-plane"></i> 문의하기</button>
+                    <button type="button" class="btn btn-secondary" id="submitBtn"><i class="fa-solid fa-paper-plane"></i> 문의하기</button>
                 </div>
             </div>
         </div>

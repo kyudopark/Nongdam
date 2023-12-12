@@ -7,6 +7,7 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 @Controller
-@RequestMapping("/inquire/**")
+@RequestMapping("/inquire/*")
 public class InquireController {
 
 	@Autowired 
@@ -27,8 +28,10 @@ public class InquireController {
 		return "inquire/main";
 	}
 	
+	//@CrossOrigin(origins = {"http://localhost:8080", "https://localhost:8080"}, allowedHeaders = "*")
 	@PostMapping("/submitEmailForm")
-    public String submitEmailForm(
+	@ResponseBody
+	public void submitEmailForm(
             @RequestParam String inquire_category,
             @RequestParam String inquire_title,
             @RequestParam String inquire_content,
@@ -47,10 +50,10 @@ public class InquireController {
             // Send the email
             javaMailSender.send(message);
             
-            return "redirect:/";
+            
         } catch (MailException e) {
             e.printStackTrace();
-            return "inquire/main";
+            
         }
     }
 	
