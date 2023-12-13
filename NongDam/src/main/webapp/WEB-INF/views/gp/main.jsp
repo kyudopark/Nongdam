@@ -128,8 +128,8 @@
 		            <c:set var="diffMillisEnd" value="${endDate.time - currentDate.time}"/>
 		            <c:set var="diffDaysEnd" value="${diffMillisEnd / (24 * 60 * 60 * 1000)}"/>
 		            
-		            <%-- <c:choose>
-        				<c:when test="${pageCre.cri.type=='all' || (pageCre.cri.type=='progress' && diffDaysEnd >= 0) || (pageCre.cri.type=='complet' && diffDaysEnd < 0)}"> --%>
+		            <c:choose>
+        				<c:when test="${pageCre.cri.type==null || pageCre.cri.type=='all' || (pageCre.cri.type=='progress' && diffDaysEnd >= 0) || (pageCre.cri.type=='complet' && diffDaysEnd < 0)}">
 			                <div class="col pb-4">
 			                    <a class="text-decoration-none" href="${contextPath}/gp/detail?gp_idx=${li.gp_idx}">
 			                        <div class="card">
@@ -147,7 +147,7 @@
 					                        <c:choose>
 						                        <c:when test="${diffDays > 0}">
 						                        	<div class="text-end fst-italic">
-						                        		<span class="badge text-bg-secondary">
+						                        		<span class="badge text-bg-primary">
 							                                시작까지 D-${fn:substringBefore(diffDays, '.')}
 							                        	</span>
 							                        </div>
@@ -157,14 +157,14 @@
 						                        	<c:choose>
 							                            <c:when test="${diffDaysEnd > 0}">
 							                            	<div class="text-end fst-italic">
-							                            		<span class="badge text-bg-warning">
+							                            		<span class="badge text-bg-danger">
 								                                    마감까지 D-${fn:substringBefore(diffDaysEnd, '.')}
 								                           		</span>
 								                           	</div>
 							                            </c:when>
 							                            <c:when test="${diffDaysEnd < 0}">
 								                            <div class="text-end fst-italic">
-								                                <span class="badge text-bg-danger">
+								                                <span class="badge text-bg-secondary bg-gradient">
 								                                    종료되었습니다.
 								                                </span>
 								                            </div>
@@ -176,8 +176,8 @@
 			                        </div>
 			                    </a>
 			                </div>
-						<%-- </c:when>
-					</c:choose> --%>
+						</c:when>
+					</c:choose>
                 </c:forEach>
                 <!-- 카드 하나 끝 -->
                 <!-- 주석 -->
@@ -191,33 +191,30 @@
 				<nav class="d-flex justify-content-center">
 					<ul class="pagination">
 						<c:if test="${pageCre.prev }">
-							<li class="page-item disabled"><a
-								class="page-link text-secondary" href="${pageCre.startPage-1}">&laquo;
-							</a></li>
+							<li class="page-item disabled">
+								<a class="page-link text-secondary" href="${pageCre.startPage-1}">&laquo;</a>
+							</li>
 						</c:if>
-						<c:forEach var="pageNum" begin="${pageCre.startPage }"
-							end="${pageCre.endPage }">
+						<c:forEach var="pageNum" begin="${pageCre.startPage }" end="${pageCre.endPage }">
 							<li class="page-item  ${pageCre.cri.page==pageNum? 'active text-secondary' :'' }">
-								<a class="page-link   ${pageCre.cri.page==pageNum? 'bg-secondary border-secondary':'' }" href="${pageNum}">${pageNum }</a>
+								<a class="page-link  ${pageCre.cri.page==pageNum? 'bg-secondary border-secondary':' text-body' }" href="${pageNum}">${pageNum }</a>
 							</li>
 						</c:forEach>
-
-
 						<c:if test="${pageCre.next }">
 							<li class="page-item">
-							<a class="page-link text-secondary" href="${pageCre.endPage+1}">&raquo;</a></li>
+								<a class="page-link text-secondary" href="${pageCre.endPage+1}">&raquo;</a>
+							</li>
 						</c:if>
-
-
 					</ul>
 				</nav>
-				
 			</div>
 			<form id="pageFrm" action="${contextPath}/gp/main" method="get">
 				<input type="hidden" id="page" name="page" value="${pageCre.cri.page }"/>
 				<input type="hidden" id="perPageNum" name="perPageNum" value="${pageCre.cri.perPageNum }"/>
-               	<input type="hidden" name="type" value="${ pageCre.cri.type}"/>
-               	<input type="hidden" name="keyword" value="${pageCre.cri.keyword}"/>
+				<c:if test="${!empty pageCre.cri.keyword}">
+					<input type="hidden" name="type" value="${ pageCre.cri.type}"/>
+					<input type="hidden" name="keyword" value="${ pageCre.cri.keyword}"/>
+                </c:if>
 			</form>
             <!-- 페이징 끝 -->
         </div>

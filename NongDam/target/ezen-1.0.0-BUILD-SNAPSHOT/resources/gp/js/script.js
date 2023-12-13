@@ -16,28 +16,30 @@ function kakaoPay() {
 			pg: 'kakaopay', // PG사 코드표에서 선택
 			pay_method: 'card', // 결제 방식
 			merchant_uid: 'IMP' + new Date().getTime(), // 결제 고유 번호
-			name: '상품명', // 제품명
-			amount: 100, // 가격
+			name: $('#gp_title').text(), // 제품명
+			amount: $('#gp_total_output').val(), // 가격
 			//구매자 정보 ↓
-			buyer_email: 'www@www.com',
-			buyer_name: 'wwwwww',
-			buyer_tel: '010-1234-5678',
-			buyer_addr: '서울특별시 강남구 삼성동',
-			buyer_postcode: '123-456'
+			buyer_email: $('#gp_email').val(),
+			buyer_name: $('#gp_name').val(),
+			buyer_addr: $('#gp_addr').val(),
+			buyer_postcode: $('#gp_zipcode').val()
 		}, function(rsp) { // callback
 			if (rsp.success) { //결제 성공시
 				console.log(rsp);
-				if (response.status == 200) { // DB저장 성공시
-					alert('결제 완료!')
-					window.location.reload();
+				if (rsp.status === 'paid') { // DB저장 성공시
+					alert('결제 완료!');
+					pageFrm.attr("action","${contextPath }/gp/request");
+					pageFrm.attr("method", "post");
+					$("#submitForm").submit();
 				} else { // 결제완료 후 DB저장 실패시
-					alert('error:[${response.status}]\n결제요청이 승인된 경우 관리자에게 문의바랍니다.');
+					 alert('error:[' + response.status + ']\n결제요청이 승인된 경우 관리자에게 문의바랍니다.');
 					// DB저장 실패시 status에 따라 추가적인 작업 가능성
 				}
-			} else if (rsp.success == false) { // 결제 실패시
+			} else if (rsp.success === false) { // 결제 실패시
 				alert(rsp.error_msg)
 			}
 		});
+		return false;
 	} else {
 		return false;
 	}
@@ -46,14 +48,14 @@ function kakaoPay() {
 function execDaumPostcode() {
         new daum.Postcode( {
           oncomplete: function( data ) {
-            document.getElementById( 'user_zipcode' ).value = data.zonecode;
-            document.getElementById( 'user_zipcode2' ).value = data.address;
-            document.getElementById( 'user_zipcode3' ).focus();
+            document.getElementById( 'gp_zipcode' ).value = data.zonecode;
+            document.getElementById( 'gp_zipcode2' ).value = data.address;
+            document.getElementById( 'gp_zipcode3' ).focus();
           }
         } ).open();
       }
       function execDaumPostcodeReset() {
-        document.getElementById( 'user_zipcode' ).value = null;
-        document.getElementById( 'user_zipcode2' ).value = null;
-        document.getElementById( 'user_zipcode3' ).value = null;
+        document.getElementById( 'gp_zipcode' ).value = null;
+        document.getElementById( 'gp_zipcode2' ).value = null;
+        document.getElementById( 'gp_zipcode3' ).value = null;
       }

@@ -30,8 +30,10 @@
     
     <!-- 스타일시트 -->
     <link rel="stylesheet" href="${contextPath }/resources/common/css/style.css">
+    
     <!-- 기본js -->
     <script type="text/javascript" src="${contextPath }/resources/common/js/common.js"></script>
+    
     <!-- gp/* js파일 -->
     <script type="text/javascript" src="${contextPath }/resources/gp/js/script.js"></script>
     
@@ -44,7 +46,7 @@
     <!-- 카카오페이 결제 -->
 	<!-- iamport.payment.js -->
 	<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
-	
+
 	<!-- 다음(카카오) 우편번호 -->
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
@@ -53,7 +55,12 @@
 	
 	<script type="text/javascript">
 	$(document).ready(function () {
-	 $("#gp_num").on('input', function() {
+		$(".page-link").on("click", function (e) {
+            e.preventDefault();  // 기본 이벤트 막기
+		});
+        
+		// 개수 * 가격 = 총 가격 구하는 function
+	 	$("#gp_num").on('input', function() {
 			var num = $("#gp_num").val();
 			var price = ${vo.gp_price};
 					
@@ -64,20 +71,80 @@
 		        $("#gp_total_output").val(0);
 		    }
 		});
-	 
-		 $("#gp_zipcode, #gp_zipcode2, #gp_zipcode3").on('input', function() {
-		        var addr = $("#gp_zipcode").val();
-		        var addr2 = $("#gp_zipcode2").val();
-		        var addr3 = $("#gp_zipcode3").val();
+	 	
+		// 기존 주소지 사용 function
+	 	$('input[name="radio"]').change(function () {
+	        if ($('#inlineRadio1').is(':checked')) {
+	            $('#gp_zipcode').val($("#user_zipcode").val());
+	            var userAddr = $("#user_addr").val();
+	            var addrParts = userAddr.split(',');
+
+	            if (addrParts.length === 2) {
+	                $('#gp_zipcode2').val(addrParts[0].trim());
+	                $('#gp_zipcode3').val(addrParts[1].trim());
+	                
+	                var addr = $("#gp_zipcode").val();
+			        var addr2 = $("#gp_zipcode2").val();
+			        var addr3 = $("#gp_zipcode3").val();
+			        
+			        var fullAddress = addr + ' ' + addr2 + ' ' + addr3;
+			        
+			        $("#gp_addr").val(fullAddress);
+	            } else {
+	                console.error("Invalid address format");
+	            }
+	        } else {
+	            $('#gp_zipcode').val("");
+	            $('#gp_zipcode2').val("");
+	            $('#gp_zipcode3').val("");
+	        }
+	    });
+	 	
+		// 신규 배송지 입력 function
+		$("#gp_zipcode, #gp_zipcode2, #gp_zipcode3").on('input', function() {
+			var addr = $("#gp_zipcode").val();
+			var addr2 = $("#gp_zipcode2").val();
+			var addr3 = $("#gp_zipcode3").val();
 		        
-		        var fullAddress = addr + ' ' + addr2 + ' ' + addr3;
+		    var fullAddress = addr + ' ' + addr2 + ' ' + addr3;
 		        
-		        $("#gp_addr").val(fullAddress);
+		    $("#gp_addr").val(fullAddress);
 		});
-		 
-		
-		
 	});
+	
+	// 카카오페이 결제 API function
+	function kakaoPay() {
+		if (confirm("구매 하시겠습니까?")) { // 구매 클릭시 한번 더 확인하기
+			IMP.init("imp01003550"); // 가맹점 식별코드
+			IMP.request_pay({
+				pg: 'kakaopay', // PG사 코드표에서 선택
+				pay_method: 'card', // 결제 방식
+				merchant_uid: 'IMP' + new Date().getTime(), // 결제 고유 번호
+				name: $('#gp_title').text(), // 제품명
+				amount: $('#gp_total_output').val(), // 가격
+				//구매자 정보 ↓
+				buyer_email: $('#gp_email').val(),
+				buyer_name: $('#gp_name').val(),
+				buyer_addr: $('#gp_addr').val(),
+				buyer_postcode: $('#gp_zipcode').val()
+			}, function(rsp) { // callback
+				if (rsp.success) { //결제 성공시
+					console.log(rsp);
+					$('#submitForm').submit();
+					if (response.status == 200) { // DB저장 성공시
+						alert('결제 완료!')
+					} else { // 결제완료 후 DB저장 실패시
+						alert('error:[${response.status}]\n결제요청이 승인된 경우 관리자에게 문의바랍니다.');
+						// DB저장 실패시 status에 따라 추가적인 작업 가능성
+					}
+				} else if (rsp.success == false) { // 결제 실패시
+					alert(rsp.error_msg)
+				}
+			});
+		} else {
+			return false;
+		}
+	};
 	
 	
 	</script>
@@ -94,7 +161,7 @@
         <div class="border rounded-2 container">
             <div class="row">
                 <!--썸네일-->
-                <div class="col-lg-7 col-12 p-0 bg-light" style="min-height: 280px;">
+                <div class="col-lg-7 col-12 p-0 bg-light" style="height: 280px;">
                     <img src="${contextPath }/resources/image/gp/${vo.gp_thumb }" style="width: 100%; height: 100%;">
                 </div>
                 <!--오른쪽-->
@@ -124,20 +191,19 @@
     <div class="container mt-4 mb-5">
         <div class="border rounded-2 ">
             <h4 class="p-4 border-bottom">신청 폼</h4>
-            <form id="submitForm">
-            	<input type="hidden" id="gp_idx" name="gp_idx" value="${vo.gp_idx }"/>
-				<input type="hidden" id="user_idx" name="user_idx" value="${uvo.user_idx }"/>
-				<input type="hidden" id="gp_addr" name="gp_addr" value=""/>
-            <div class="container pt-5 pb-5 col-lg-10 ">
             
-                
+            <div class="container pt-5 pb-5 col-lg-10 ">
+            	<form method="post" action="${contextPath}/gp/request" id ="submitForm">  
+	            	<input type="hidden" id="gp_idx" name="gp_idx" value="${vo.gp_idx}"/>
+					<input type="hidden" id="user_idx" name="user_idx" value="${uvo.user_idx}"/>
+					<input type="hidden" id="gp_addr" name="gp_addr" value=""/>
                 <!-- 수령자명 -->
                 <div class="mb-4 col-12 col-md-6 col-lg-5">
                     <label for="gp_name" class="form-label">
                         수령자명
                     </label>
                     <input type="text" class="form-control" 
-                        id="gp_name" name="gp_name" placeholder="이름">
+                        id="gp_name" name="gp_name" placeholder="이름" value = "${uvo.user_name }">
                 </div>
                 <!-- 수령자 연락처 -->
                 <div class="mb-4 col-12 col-md-6 col-lg-5">
@@ -145,7 +211,7 @@
                         수령자 연락처
                     </label>
                     <input type="eamil" class="form-control" 
-                        id="gp_email" name = "gp_email" placeholder="이메일">
+                        id="gp_email" name = "gp_email" placeholder="이메일" value = "${uvo.user_email }">
                 </div>
                 <!-- 수량 -->
                 <div class="mb-4 col-4 col-md-3 col-lg-2">
@@ -173,6 +239,8 @@
                 <div class="mb-4">
                     <!-- 배송지 상단 라벨과 버튼 -->
                     <div class="d-flex flex-row flex-wrap justify-content-between">
+                    	<input type="hidden" id="user_zipcode" value="${uvo.user_zipcode}" />
+						<input type="hidden" id="user_addr" value="${uvo.user_addr}" />
                         <label class="form-label">배송지 입력</label>
                         <div class="d-inline-block">
                             <!-- 기존 배송지 사용 radio -->
@@ -209,7 +277,7 @@
                                 </div>
                             </div>
                         </div>
-                        <input type="text" class="form-control mb-2" id="gp_zipcode2" placeholder="주소">
+                        <input type="text" class="form-control mb-2" id="gp_zipcode2" placeholder="주소" readonly>
                         <input type="text" class="form-control" id="gp_zipcode3" placeholder="상세 주소">
                         <div class="mt-2 form-check d-flex justify-content-end gap-1">
                             <input class="form-check-input" type="checkbox" value="updateAddr" id="updateAddr" name="updateAddr">
@@ -217,20 +285,19 @@
                           </div>
                     </div>
                 </div>
-
             </div>
-            
+            </form>
             <!-- 신청하기 버튼 -->
             <div class="container pt-5 pb-4 text-center">
                 <button class="btn btn-secondary" onclick="kakaoPay()">즉시결제</button>
                 <a class="btn btn-outline-secondary">취소</a>
             </div>
-            </form>
+            
         </div>
     </div>
     <!-- 신청 폼 블럭 끝 -->
 	
-	
+
 	<jsp:include page="../common/footer.jsp"/>
 </body>
 </html>

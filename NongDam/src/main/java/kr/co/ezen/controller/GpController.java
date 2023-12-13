@@ -162,7 +162,6 @@ public class GpController {
 		
 		Date gp_date_start = formatter.parse(multi.getParameter("gp_date_start"));
 		Date gp_date_last = formatter.parse(multi.getParameter("gp_date_last"));
-		
 		String thumb="";
 		File file = multi.getFile("thumbImg");
 		if (file != null) {

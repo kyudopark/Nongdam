@@ -6,47 +6,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
-<head>
-	<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-	<script type="text/javascript">
-	
-	function saveDarkModePreference(mode) {
-	    localStorage.setItem('darkMode', mode);
-		}
-		
-		function loadDarkModePreference() {
-		    return localStorage.getItem('darkMode');
-		}
-
-	//다크모드 버튼
-	function darkMode() {
-    let mode = $('html').attr("data-bs-theme");
-
-    if (mode == 'dark') {
-        $('html').attr("data-bs-theme", "light");
-        $('.mode-change-btn').html('다크 모드');
-        saveDarkModePreference('light');
-    } else {
-        $('html').attr("data-bs-theme", "dark");
-        $('.mode-change-btn').html('라이트 모드');
-        saveDarkModePreference('dark');
-    }            
-	} //다크모드 버튼 끝
-	
-	
-	$(document).ready(function(){
-		//다크 모드
-	    let savedMode = loadDarkModePreference();
-        if (savedMode === 'dark') {
-            $('html').attr("data-bs-theme", "dark");
-            $('.mode-change-btn').html('라이트 모드');
-        } else {
-            $('html').attr("data-bs-theme", "light");
-            $('.mode-change-btn').html('다크 모드');
-        }
-	});
-	</script>
-</head>
+<script type="text/javascript" src="${contextPath }/resources/common/js/darkmode.js"></script>
 
 	<header class="border-bottom bg-body-tertiary">
 	    <div class="container pt-2 fw-bolder">

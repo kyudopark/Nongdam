@@ -7,6 +7,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<mapper namespace="kr.co.ezen.mapper.GpMapper">
 	
 		<sql id="search">
+			<if test="type == 'all'">
+				where gp_title like concat('%',#{keyword},'%')
+			</if>
 			<if test="type == 'progress'">
 				where gp_title like concat('%',#{keyword},'%')
 			</if>

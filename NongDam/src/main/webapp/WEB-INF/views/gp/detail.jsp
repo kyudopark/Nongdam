@@ -143,7 +143,7 @@
     
     <form id="fr" method="get">
 		<input type="hidden" id="gp_idx" name="gp_idx" value="${vo.gp_idx }"/>
-		<input type="hidden" id="user_idx" name="user_idx" value="1"/>
+		<input type="hidden" id="user_idx" name="user_idx" value="${uvo.user_idx }"/>
 	</form>
 
 	
