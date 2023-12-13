@@ -40,14 +40,37 @@
     <link rel="shortcut icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
     
     <title>농담 | 농업 정보 커뮤니티</title>
+    
+    <script type="text/javascript">
+
+$(document).ready(function() {
+	  $('#modify').submit(function(event) {
+    // title과 content 값 가져오기
+    var titleValue = $('#title').val();
+    var contentValue = $('#editor').val();
+
+    // title과 content 유효성 검사
+    if (titleValue.trim() === '') {
+      alert('제목을 입력해주세요.');
+      event.preventDefault();
+    }
+
+    if (contentValue.trim() === '') {
+      alert('내용을 입력해주세요.');
+      event.preventDefault();
+    }
+  });
+});
+</script>
 </head>
 <body>
 <jsp:include page="../common/header.jsp"/>
 	<jsp:include page="../common/banner.jsp"/>
+	
 	    <!-- 글 작성 div container-->
     <div class="container mt-5 mb-5">
         <h4 class="mt-5 mb-5"> 게시글 작성</h4>
-        <form method="post" enctype="multipart/form-data" >
+        <form id="modify"method="post" enctype="multipart/form-data" >
             <input type="hidden" name="tr_idx" value="${vo.tr_idx }">
 
             <!--제목-->
@@ -123,15 +146,21 @@
                     
                 
                 <!-- 스크립트문. 항상 에디터 박스 바로 뒤에 놓을 것-->
-                <script>
-                    ClassicEditor
-                        .create( document.querySelector( '#editor' ) )
-                        .catch( error => {
-                            console.error( error );
-                    });
-                </script>
-            </div>
-
+       <script>
+        ClassicEditor
+            .create(document.querySelector('#editor'), {
+                ckfinder: {
+                    uploadUrl: 'fileupload.do' 
+                }
+            })
+            .then(editor => {
+                console.log('Editor was initialized', editor);
+            })
+            .catch(error => {
+                console.error('There was an error initializing the editor', error);
+            });
+    </script>
+	 </div>
             <!-- 글 작성하기 버튼-->
             <div class="text-center">
                 <button type="submit" class="btn btn-secondary">글 작성하기</button>
@@ -139,6 +168,7 @@
             </div>
         </form>
     </div>
+   
     <!-- ============================================== -->
 	
 	<jsp:include page="../common/footer.jsp"/>
