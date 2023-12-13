@@ -6,7 +6,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
-
+    
 	<header class="border-bottom bg-body-tertiary">
 	    <div class="container pt-2 fw-bolder">
 	        <!--첫번째 줄-->
@@ -31,7 +31,7 @@
 	            	href="${contextPath }/">
 	                <img src="${contextPath }/resources/image/common/logo.svg"
 	                style="width: 28px;" alt="logo">
-	                <span class="d-inline-block">농담</span>
+	                <span class="d-inline-block text-body-secondary">농담</span>
 	            </a>
 	            <!-- 두번째줄 오른편 -->
 	            <div class="navbar navbar-expand-sm bg-body-tertiary text-end justify-content-end" id="navbarSupportedContent">
