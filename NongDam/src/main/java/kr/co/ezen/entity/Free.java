@@ -12,8 +12,14 @@ public class Free {
 	private String free_title;
 	private String free_content;
 	private Date free_date;
-	private int user_idx;
+	private String user_idx;
 	private String free_tag;
 	private int free_count;
+	
+	//natural 조인
+	
+	private String user_nickname;
 
 }
+
+

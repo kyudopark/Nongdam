@@ -26,7 +26,4 @@ public class Criteria {
 		// 1~10 1 / 11~20 2 / 21~30 3
 		return (page-1)*perPageNum; 
 	}
-	
-	
-	
 }

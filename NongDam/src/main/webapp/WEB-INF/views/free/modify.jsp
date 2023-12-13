@@ -41,63 +41,51 @@
     
     <title>농담 | 농업 정보 커뮤니티</title>
     
-    
-    
-    <script>
-    
-    
-	$(document).ready(function(){
-		$('#write').on('click',function(e){
-			e.preventDefault();
-			
-			var result = confirm("작성 하시겠습니까?")
-			
-			if(result){
-				$('#writeForm').submit();
-			}
-			
-		})
-	});
-	
-	$("select[name=form-select]").change(function(){
-		console.log($(this).val()); //value값 가져옴
-		consele.log($"select[name=form-select]option:selected").text()); //text값 가져오기
-		
-	});
-	
-	</script>
-    
 </head>
-<body>
 
-	<jsp:include page="../common/header.jsp"/>
-	<jsp:include page="../common/banner.jsp"/>
-	
-	
-	<body>
+<script>
+
+$(document).ready(function() {
+    $('#modify').click(function() {
+
+$.ajax({
+    type: 'POST',
+    url: 'modify', 
+    data:{free_idx: '${vo.free_idx}' },
+    contentType: 'application/json',
+    success: function(response) {
+    	 alert('수정하시겠습니까?');
+         location.href = '/ezen/free/main' 
+    },
+    error: function(error) {
+        console.error('글 수정 중 에러 발생:', error);
+    }
+});
+}
+</script>
+
+
+
+<body>
 
     <!-- 글 작성 div container-->
     <div class="container mt-5 mb-5">
-        <h4 class="mt-5 mb-5"> 게시글 작성</h4>
-       <form method="post" action="../free/main" id="writeForm">
+        <h4 class="mt-5 mb-5"> 게시글 수정</h4>
+        <form method="post">
             
-
-         
             <!-- 말머리 있는 버전 -->
             <div class="row">
                 <!-- 말머리 -->
                 <div class="col-12 col-md-3 mb-3">
-                    <select class="form-select">
+                    <select class="form-select" name="free_tag">
                         <option selected>말머리를 선택해주세요.</option>
-                        <option name="free_tag" id="free_tag" value="${fre.free_tag }">자유</option>
-                        <option name="free_tag" id="free_tag" value="${fre.free_tag }">질문</option>
+                        <option value="자유">자유</option>
+                        <option value="질문">질문</option>
                     </select>
                 </div>
-                
                 <!--제목-->
                 <div class="col-12 col-md-9 form-group mb-3">
-                    <input type="text" id="free_title" name="free_title" value="${fre.free_title }" 
-                    class="form-control" placeholder="제목을 입력하세요.">
+                    <input type="text" id="title" name="free_title" value="${vo.free_title }" class="form-control">
                 </div>
             </div>
 
@@ -105,8 +93,8 @@
             <div class="form-group mt-5 mb-3">
                 <!-- 실제 에디터 박스-->
                 <!-- id는 변경하지 마세요 -->
-                <textarea id="editor" name="free_content"value="${fre.free_content }">
-                    
+                <textarea id="editor" name="free_content">
+                    <p>${vo.free_content }</p>
                     <p></p>
                     <p></p>
                 </textarea>
@@ -117,25 +105,17 @@
                         .catch( error => {
                             console.error( error );
                     });
-                    
                 </script>
             </div>
-            
-            
-            
-            
 
             <!-- 글 작성하기 버튼-->
             <div class="text-center">
-                <button type="submit" class="btn btn-secondary" >글 작성하기</button>
-                <a href="#" class="btn btn-outline-secondary">취소</a>
+                <button type="sumbit" class="btn btn-secondary" id="modify">글 수정하기</button>
+                <a href="javascript:history.go(-1)" class="btn btn-outline-secondary">취소</a>
             </div>
         </form>
     </div>
     <!-- ============================================== -->
 
-</body>
-	
-	<jsp:include page="../common/footer.jsp"/>
 </body>
 </html>

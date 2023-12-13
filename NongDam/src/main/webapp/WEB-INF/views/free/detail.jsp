@@ -41,6 +41,30 @@
     
     <title>농담 | 농업 정보 커뮤니티</title>
     
+    <script>
+    
+    
+    $(document).ready(function() {
+        $('#delete').click(function() {
+           
+            $.ajax({
+                type: 'GET',
+                url: 'deleteByIdx',
+                data: {free_idx: '${vo.free_idx}' }, 
+                success: function(response) {
+                    alert('삭제하겠습니까?');
+                    location.href = '/ezen/free/main' 
+                },
+                error: function(error) {
+                    console.error('Error:', error);
+                   
+                }
+            });
+        });
+    });
+    
+    </script>
+    
 </head>
 <body>
 
@@ -51,16 +75,16 @@
 	<!-- 글 조회 div container-->
     <div class="container mt-5 mb-5">
         <div class="pt-3 pb-3">
-            <a class="text-muted "> &lt; 목록으로 </a>
+            <a class="text-muted " href="${contextPath}/free/main"> 목록으로 </a>
         </div>
         <!-- 글 제목 -->
         <div class="border-bottom">
-            <h4 class="fw-4"> ${fre.free_title}</h4>
+            <h4 class="fw-4"> ${vo.free_title}</h4>
             <p class="d-flex flex-wrap align-items-center gap-2">
-                <span class="d-block me-auto fst-italic text-muted">${fre.free_date}</span>
+                <span class="d-block me-auto fst-italic text-muted"><fmt:formatDate value="${vo.free_date}" pattern="yyyy-MM-dd"/></span>
 
-                <span class="d-inline-block">${fre.user_nickname}</span>
-                <button class="btn btn-sm btn-outline-secondary">
+                <span class="d-inline-block"></span>
+                <button class="btn bxtn-sm btn-outline-secondary">
                     <i class="fa-regular fa-comment"></i>
                     1:1 채팅
                 </button>
@@ -69,16 +93,16 @@
             <!-- 글 본문(ckEditor) -->
             <div class="pt-3 pb-3 ck-content">
                 <!-- 이 안에서 출력-->
-                ${fre.free_content}
+                ${vo.free_content}
             </div>
 
             
-            <!-- 기타 버튼 -->
-            <div class="border-bottom text-end pb-3">
-                <button class="btn btn-secondary">수정</button>
-                <button class="btn btn-danger">삭제</button>
-                <button class="btn btn-secondary">리스트</button>
-            </div>
+	            <!-- 기타 버튼 -->
+	            <div class="border-bottom text-end pb-3">
+	                <a class="btn btn-secondary" href="${contextPath}/free/modify?free_idx=${vo.free_idx}"> 수정하기 </a>
+            		<button class="btn btn-secondary" id="delete" type="button" >삭제</button>
+	                <a href="javascript:history.go(-1)" class="btn btn-secondary">리스트</a>
+	            </div>
 
         <!-- 댓글 -->
         <div class="mt-3 text-end">
@@ -113,15 +137,15 @@
                 <!-- 댓글 필수 컨텐츠 -->
                 <div class="w-100">
                     <div>
-                        <h6 class="d-inline-block">${fre.user_name}</h6>
+                        <h6 class="d-inline-block"></h6>
                         <small class="text-secondary">
-                            ${fre.free_date}
+                         
                         </small>
                     </div>
                     <div class="pb-2">
                         <!-- 조회 -->
                         <div class="text-break pb-1">
-                            {댓글내용}
+                          
                         </div>
                         <!-- 수정시 -->
                         <!-- <textarea class="form-control pb-1">{댓글내용}</textarea> -->
@@ -129,7 +153,8 @@
                     <small class="d-flex flex-nowrap gap-2">
                         <a href="#" class="text-secondary text-decoration-none">답글</a>
                         <a href="#" class="text-secondary text-decoration-none">수정</a>
-                        <a href="#" class="text-secondary text-decoration-none">삭제</a>
+                       	<a href="#" class="text-secondary text-decoration-none">삭제</button>
+            			
                     </small>
                 </div>
             </div>

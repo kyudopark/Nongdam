@@ -41,25 +41,25 @@
     
     <title>농담 | 농업 정보 커뮤니티</title>
     
-    
-    <!-- 페이지 이동(글쓰기)  -->
-    <script>
-    function clickinsert() {
-    	 window.location.href ="../free/detail";
-    	}
- 
-</script>
-
-	<!-- 페이지 이동 자세히보기  -->
-
 	<script>
-    function checkinsert() {
-    	 window.location.href ="../free/modify";
-    	}
- 
-</script>
+		
 
+		var triggerTabList = [].slice.call(document.querySelectorAll('#nav-tab div'))
+		triggerTabList.forEach(function (triggerEl) {
+		var tabTrigger = new bootstrap.Tab(triggerEl)
+		
+		var triggerEl = document.querySelector('#myTab div[href="#profile"]')
+		bootstrap.Tab.getInstance(triggerEl).show() 
 
+	  triggerEl.addEventListener('click', function (event) {
+	    event.preventDefault()
+	    tabTrigger.show()
+	  })
+	})
+	
+	
+	</script>
+	
 </head>
 <body>
 
@@ -77,9 +77,9 @@
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
                 <!--  class="nav-link(기본) active(선택된 값) text-body(텍스트 색 지정)"-->
                 <!-- 필요한 경우 button을 a 태그로 바꾸어도 괜찮습니다. (단, a태그로 바꾸는 경우 type=button 삭제하세요 )-->
-                <button class="nav-link text-body active" data-bs-toggle="tab" type="button" role="tab" aria-controls="nav-home" aria-selected="true">전체</button>
-                <button class="nav-link text-body" data-bs-toggle="tab" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">질문</button>
-                <button class="nav-link text-body" data-bs-toggle="tab" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">자유</button>
+                <button class="nav-link text-body active" data-bs-toggle="tab" type="button" role="tab" aria-controls="nav-home" aria-selected="true" value="전체" id="all">전체</button>
+                <button class="nav-link text-body" data-bs-toggle="tab" type="button" role="tab" aria-controls="nav-profile" aria-selected="false" value="질문" id="qu">질문</button>
+                <button class="nav-link text-body" data-bs-toggle="tab" type="button" role="tab" aria-controls="nav-contact" aria-selected="false" value="자유" id="fr">자유</button>
             </div>
         </nav>
         
@@ -103,21 +103,19 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>${fre.free_idx}</td>
-                    <td class="text-start">
-                        <a href="javascript:void(0)" class="text-decoration-none text-body" id="a4button" onclick="clickinsert()" >
-                            <span class="text-muted">${fre.free_tag }</span>
-                            ${fre.free_title}
-                        </a>
-                    </td>
-                    <td class="text-muted d-none d-md-table-cell">${fre.free_date}</td>
-                    <td class=" d-none d-md-table-cell">${fre.user_nickname}</td>
-                    <td class=" d-none d-md-table-cell">${fre.free_idx}</td>
-                </tr>
-                <tr>
-                
-                
+	               
+	            <c:forEach var="li" items="${li}">
+				    <tr>
+				        <td><span class="text-muted">${li.free_idx}</span></td>
+				        <td><a class="text-decoration-none tr-list-click" href="${contextPath}/free/detail?free_idx=${li.free_idx}">[${li.free_tag}] ${li.free_title }</span></td>
+				        <td class="d-none d-md-table-cell"><fmt:formatDate value="${li.free_date}" pattern="yyyy-MM-dd"/></td>
+				        <td class="d-none d-md-table-cell">토깽이</td>
+				        <td class="d-none d-md-table-cell">${li.free_count}</td>
+				        <td>test</td>
+				    </tr>
+				    
+				</c:forEach>
+	                
                     <td colspan="6">
                         <div class="d-flex flex-wrap justify-content-between">
                             <!-- 정렬용 더미 -->
@@ -130,39 +128,46 @@
                                         <option class="dropdown-item" value="title">작성자</option>
                                     </select >
                                     <input type="text" class="form-control" placeholder="검색">
-                                    <button class="btn btn-secondary" type="button">검색</button>
+                                    <button class="btn btn-secondary" type="button" value="${cre.keyword }">검색</button>
                                 </div>
                             </div>
                             <!-- 글쓰기 버튼(2) -->
-                            <button class="btn btn-outline-secondary" id="a3button" onclick="checkinsert()"> 글쓰기</button>
+                            <a class="text-decoration-none" href="${contextPath}/free/write">
+                            <button class="btn btn-outline-secondary" id="a3button"> 글쓰기</button>
                         </div>
                     </td>    
                 </tr>
             </tbody>
+            
+            
         </table>
         
         <!-- 페이징 -->
         <div class="mt-4">
             <nav class="d-flex justify-content-center">
-                <ul class="pagination">
-                    <!-- 이전 버튼 -->
-                    <li class="page-item">
-                        <a class="page-link text-secondary" href="#">&laquo;</a>
-                    </li>
-                    <!-- 현재 페이지 -->
-                    <li class="page-item active " aria-current="page">
-                        <a class="page-link bg-secondary border-secondary">1</a>
-                    </li>
-                    <!-- 일반 번호 -->
-                    <li class="page-item"><a class="page-link text-secondary" href="#">2</a></li>
-                    
-                    <!-- 다음 버튼 -->
-                    <li class="page-item">
-                        <a class="page-link text-secondary" href="#">&raquo;</a>
-                    </li>
-                </ul>
+			    <ul class="pagination"> 
+			        <c:if test="${pageMaker.prev}"> 
+			            <li class="paginate_button previous">
+			                <a class="page-link" href="#">Prev</a>
+			            </li> 
+			        </c:if> 
+			        <c:forEach var="num" begin="${pageMaker.startPage }" end="${pageMaker.endPage }"> 
+			            <li class="paginate_button">
+			                <a class="page-link" href="">${cre.page}</a> 
+			            </li>
+			        </c:forEach>
+			        <c:if test="${pageMaker.next}"> 
+			            <li class="paginate_button next">
+			                <a class="page-link" href="#">Next</a>
+			            </li>
+			        </c:if> 
+			    </ul> 
+
+					<!-- /.page -->
             </nav>
-        </div>
+        </div>	
+
+        
     </div>
     <!-- ============================================== -->
 </div>
