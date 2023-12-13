@@ -22,8 +22,10 @@
     <!--제이쿼리-->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     
-    <!-- ckEditor 5 -->
+   
+    <!-- ck에디터4 -->
     <script src="https://cdn.ckeditor.com/ckeditor5/40.1.0/classic/ckeditor.js"></script>
+    
 
     <!-- fontAwesome -->
     <script src="https://kit.fontawesome.com/f34a67d667.js" crossorigin="anonymous"></script>
@@ -40,13 +42,29 @@
     <link rel="shortcut icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
     
     <title>농담 | 농업 정보 커뮤니티</title>
+	
+<script type="text/javascript">
 
+$(document).ready(function() {
+	  $('#write').submit(function(event) {
+    // title과 content 값 가져오기
+    var titleValue = $('#title').val();
+    var contentValue = $('#editor').val();
 
+    // title과 content 유효성 검사
+    if (titleValue.trim() === '') {
+      alert('제목을 입력해주세요.');
+      event.preventDefault();
+    }
 
+    if (contentValue.trim() === '') {
+      alert('내용을 입력해주세요.');
+      event.preventDefault();
+    }
+  });
+});
 
-
-
-
+</script>
 
 </head>
 <body>
@@ -57,7 +75,7 @@
     <div class="container mt-5 mb-5">
         <h4 class="mt-5 mb-5"> 게시글 작성</h4>
 
-        <form method="post" action="${contextPath }/tr/write" enctype="multipart/form-data" >
+        <form  id="write"method="post" action="${contextPath }/tr/write" enctype="multipart/form-data" >
             <input type="hidden" name="user_idx" value="${uvo.user_idx }">
 
             <!--제목-->
@@ -96,57 +114,65 @@
 <!-- 미리보기 -->
 <script>
     // 파일 선택 시 썸네일 미리보기 함수
-    document.getElementById('tr_imgpath').addEventListener('change', function(event) {
-        var input = event.target;
-        var thumbnail = document.getElementById('thumbnail');
-        var thumbnailPlaceholder = document.getElementById('thumbnailPlaceholder');
+   document.getElementById('tr_imgpath').addEventListener('change', function(event) {
+    var input = event.target;
+    var thumbnail = document.getElementById('thumbnail');
+    var thumbnailPlaceholder = document.getElementById('thumbnailPlaceholder');
 
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
 
-            reader.onload = function(e) {
-                thumbnail.src = e.target.result;
-                thumbnailPlaceholder.classList.add('d-none');
-                thumbnail.classList.remove('d-none');
-            };
+        reader.onload = function(e) {
+            thumbnail.src = e.target.result;
+            thumbnailPlaceholder.classList.add('d-none');
+            thumbnail.classList.remove('d-none');
+        };
 
-            reader.readAsDataURL(input.files[0]);
-        } else {
-            thumbnail.src = '#';
-            thumbnail.classList.add('d-none');
-            thumbnailPlaceholder.classList.remove('d-none');
-        }
-    });
+        reader.readAsDataURL(input.files[0]);
+    } else {
+        thumbnail.src = '#';
+        thumbnail.classList.add('d-none');
+        thumbnailPlaceholder.classList.remove('d-none');
+    }
+});
 </script>
 
-            <!-- ckEditor -->
             <div class="form-group mt-5 mb-3">
-                <!-- 실제 에디터 박스-->
-                <!-- id는 변경하지 마세요 -->
-                <textarea id="editor" name="tr_content">
-                    <p>내용을 입력해주세요.</p>
-                    <p></p>
-                    <p></p>
-                </textarea>
-                <!-- 스크립트문. 항상 에디터 박스 바로 뒤에 놓을 것-->
-                <script>
-                    ClassicEditor
-                        .create( document.querySelector( '#editor' ) )
-                        .catch( error => {
-                            console.error( error );
-                    });
-                </script>
-            </div>
+    <!-- 실제 에디터 박스 -->
+    <!-- id는 변경하지 마세요 -->
+    <textarea id="editor" name="tr_content">
+        <p>내용을 입력해주세요.</p>
+      
+    </textarea>
+    <!-- 스크립트문. 항상 에디터 박스 바로 뒤에 놓을 것-->
+</div>
+
+ <script>
+        ClassicEditor
+            .create(document.querySelector('#editor'), {
+                ckfinder: {
+                    uploadUrl: 'fileupload.do' 
+                }
+            })
+            .then(editor => {
+                console.log('Editor was initialized', editor);
+            })
+            .catch(error => {
+                console.error('There was an error initializing the editor', error);
+            });
+    </script>
+	</div>
+ 
 
             <!-- 글 작성하기 버튼-->
             <div class="text-center">
-                <button type="submit" class="btn btn-secondary">글 작성하기</button>
+                <button type="submit" class="btn btn-secondary" id="hk">글 작성하기</button>
                 <a href="javascript:history.go(-1)" class="btn btn-outline-secondary">취소</a>
             </div>
         </form>
     </div>
     <!-- ============================================== -->
-	
+	 
 	<jsp:include page="../common/footer.jsp"/>
 </body>
 </html>
