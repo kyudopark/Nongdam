@@ -41,22 +41,37 @@
     
     <title>농담 | 농업 정보 커뮤니티</title>
     
+<script>  
+
+$('a[href="#settings"]').tab('show');
+
+</script>
+
+    
 	<script>
 		
-
-		var triggerTabList = [].slice.call(document.querySelectorAll('#nav-tab div'))
-		triggerTabList.forEach(function (triggerEl) {
-		var tabTrigger = new bootstrap.Tab(triggerEl)
-		
-		var triggerEl = document.querySelector('#myTab div[href="#profile"]')
-		bootstrap.Tab.getInstance(triggerEl).show() 
-
-	  triggerEl.addEventListener('click', function (event) {
-	    event.preventDefault()
-	    tabTrigger.show()
-	  })
-	})
-	
+	$(document).ready(function(){
+	    $('#qu').click(function(){
+	        var findfrValue = $(this).val;
+	        
+	        $.ajax({
+	            type: 'GET',
+	            url: 'freemain', 
+	            data: { findfr: findfrValue },
+	            contentType: 'application/json',
+	            success: function(response) {
+	                if (findfrValue === '자유') {
+	                	console.log('자유태그를 찾았습니다');
+	                } else {
+	                    console.log('자유 태그를 찾을 수 없습니다.');
+	                }
+	            },
+	            error: function(error) {
+	                console.error('에러:', error);
+	            }
+	        });
+	    });
+	});
 	
 	</script>
 	
@@ -77,9 +92,9 @@
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
                 <!--  class="nav-link(기본) active(선택된 값) text-body(텍스트 색 지정)"-->
                 <!-- 필요한 경우 button을 a 태그로 바꾸어도 괜찮습니다. (단, a태그로 바꾸는 경우 type=button 삭제하세요 )-->
-                <button class="nav-link text-body active" data-bs-toggle="tab" type="button" role="tab" aria-controls="nav-home" aria-selected="true" value="전체" id="all">전체</button>
-                <button class="nav-link text-body" data-bs-toggle="tab" type="button" role="tab" aria-controls="nav-profile" aria-selected="false" value="질문" id="qu">질문</button>
-                <button class="nav-link text-body" data-bs-toggle="tab" type="button" role="tab" aria-controls="nav-contact" aria-selected="false" value="자유" id="fr">자유</button>
+                <a href="#all" class="nav-link text-body active" data-bs-toggle="tab" role="tab" aria-controls="nav-home" aria-selected="true" value="전체" id="all">전체</a>>
+                <a href="#question" class="nav-link text-body" data-bs-toggle="tab" role="tab" aria-controls="nav-profile" aria-selected="false" value="질문" id="qu">질문</a>>
+                <a href="#free"class="nav-link text-body" data-bs-toggle="tab" role="tab" aria-controls="nav-contact" aria-selected="false" value="자유" id="fr">자유</a>>
             </div>
         </nav>
         
