@@ -1,6 +1,8 @@
 package kr.co.ezen.mapper;
 
 
+import java.util.HashMap;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.ibatis.annotations.Param;
@@ -32,5 +34,12 @@ public interface UserMapper {
     //public int sendEmailVerification(String user_email);
     
     //public boolean verifyCode(String user_email, String verificationCode);
+    
+    //카카오 추가 KakaoMapper 삭제하고 여기다 추가함
+    public void kakaoInsert(HashMap<String, Object> userInfo);
+    public User findKakao(HashMap<String, Object> userInfo);
+    public User kakaoNumber(User userInfo);
+    public String getAccessToken(String authorize_code);
+    public User getUserInfo (String access_Token);
 
 }

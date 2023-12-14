@@ -58,74 +58,24 @@
 <!-- fontAwesome -->
 <script src="https://kit.fontawesome.com/f34a67d667.js"
 	crossorigin="anonymous"></script>
+	
+
 
 <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
 <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.5.0/kakao.min.js"
 	integrity="sha384-kYPsUbBPlktXsY6/oNHSUDZoTX6+YI51f63jCPEIPFP09ttByAdxd2mEjKuhdqn4"
 	crossorigin="anonymous"></script>
 
+
 <script type="text/javascript">
-Kakao.init('819931a4141f19a20657c39a78e4e297');
+/* Kakao.init('819931a4141f19a20657c39a78e4e297');
+Kakao.isInitialized();
+console.log(Kakao.isInitialized()); */
 </script>
 
-<script>
-  function loginWithKakao() {
-	 
-	  
-	  
-    Kakao.Auth.authorize({
-    	 $.ajax({
- 		    type : "POST"
- 		    , url : 'https://kauth.kakao.com/oauth/token'
- 		    , data : {
- 		        grant_type : 'authorization_code',
- 		        client_id : '41c36dcb7aca960f26e11b76d0f2416c',
- 		        redirect_uri : 'http://localhost:8080/ezen/user/login',
- 		        code : kakaoCode
- 		    }
- 		    , contentType:'application/x-www-form-urlencoded;charset=utf-8'
- 		    , dataType: null
- 		    , success : function(response) {
- 		        Kakao.Auth.setAccessToken(response.access_token);
- 		        document.querySelector('button.api-btn').style.visibility = 'visible';
- 		    }
- 		    ,error : function(jqXHR, error) {
 
- 		    }
- 		});
-    });
-  }
-  
-  function requestUserInfo() {
-	    Kakao.API.request({
-	      url: '/v2/user/me',
-	    })
-	      .then(function(res) {
-	        alert(JSON.stringify(res));
-	      })
-	      .catch(function(err) {
-	        alert(
-	          'failed to request user information: ' + JSON.stringify(err)
-	        );
-	      });
-	  }
 
-  displayToken()
-  function displayToken() {
-    var token = getCookie('authorize-access-token');
 
-    if(token) {
-      Kakao.Auth.setAccessToken(token);
-      document.querySelector('#token-result').innerText = 'login success, ready to request API';
-      document.querySelector('button.api-btn').style.visibility = 'visible';
-    }
-  }
-
-  function getCookie(name) {
-    var parts = document.cookie.split(name + '=');
-    if (parts.length === 2) { return parts[1].split(';')[0]; }
-  }
-</script>
 <script type="text/javascript">
   $(document).ready(function(){
     if(${!empty msgType}){
@@ -191,15 +141,16 @@ Kakao.init('819931a4141f19a20657c39a78e4e297');
 					<!-- 버튼 영역 -->
 					<div class="mt-4 mb-4">
 
-						<a id="kakao-login-btn" href="javascript:loginWithKakao()"> <img
+						
+						<a class="p-2"href=${kakaoLoginUrl }>
+							<img
 							src="${contextPath }/resources/image/user/kakao_login_medium_narrow.png"
 							width="222" alt="카카오 로그인 버튼" />
 						</a>
 
 
 
-						<p id="token-result"></p>
-						
+
 					</div>
 				</div>
 				<!-- SNS 로그인 파트 끝-->
@@ -229,7 +180,7 @@ Kakao.init('819931a4141f19a20657c39a78e4e297');
 
 
 	
-</script>
+
 
 </body>
 </html>

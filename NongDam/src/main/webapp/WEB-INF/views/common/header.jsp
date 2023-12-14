@@ -6,7 +6,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
-<script type="text/javascript" src="${contextPath }/resources/common/js/test.js"></script>
+<!--<script type="text/javascript" src="${contextPath }/resources/common/js/test.js"></script>  -->
 
 	<header class="border-bottom bg-body-tertiary">
 	    <div class="container pt-2 fw-bolder">

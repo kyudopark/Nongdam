@@ -1,15 +1,30 @@
 package kr.co.ezen.controller;
 
+import java.awt.List;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Random;
+import java.util.UUID;
 
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +32,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,10 +48,14 @@ import org.slf4j.LoggerFactory;
 import kr.co.ezen.entity.User;
 import kr.co.ezen.mapper.UserMapper;
 import kr.co.ezen.service.UserService;
+import lombok.AllArgsConstructor;
 
 @Controller
 @RequestMapping("/user")
+@AllArgsConstructor
 public class UserController {
+	
+	
 	
 	private static final Logger log = LoggerFactory.getLogger(UserController.class);
 	
@@ -36,11 +63,15 @@ public class UserController {
     private UserService userService;
 	
 	@Autowired
-	JavaMailSenderImpl mailSender ; 
+	JavaMailSenderImpl mailSender;
+	
+	@Autowired
+	KakaoLoginBO kakaoLoginBO;
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String userLogin() {
-       
+    public String userLogin(HttpSession session, Model model) throws Exception{
+    	String kakaoLoginUrl = kakaoLoginBO.requestCode(session);
+    	model.addAttribute("kakaoLoginUrl",kakaoLoginUrl);
         return "user/login";
     }
 
@@ -66,6 +97,28 @@ public class UserController {
     public void findPwPOST(@ModelAttribute User user, HttpServletResponse response) throws Exception{
     	userService.findPw(response, user);
     }
+    
+    @RequestMapping("/kakaocallback")
+    public String kakaoCallBack(HttpSession session, @RequestParam("code") String code,@RequestParam(value = "state", required = false) String state, Model model) {
+        try {
+            
+            
+            
+            String token = kakaoLoginBO.requestToken(session, code, state);
+            
+            // 토큰을 사용하여 사용자 프로필 정보를 가져옵니다.
+            String profile = kakaoLoginBO.requestProfile(token);
+            
+            model.addAttribute("token", token);
+            model.addAttribute("profile", profile);
+
+            return "user/kakaocallback"; 
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "user/errorView"; 
+        }
+    }
+    
     
     
     @RequestMapping("/userRegisterCheck")
@@ -134,6 +187,7 @@ public class UserController {
         }
 
         User uvo = userService.userLogin(user); // 로그인이 될 경우 -> id와 pw가 일치
+        
 
         if (uvo != null) {
             rttr.addFlashAttribute("msgType", "성공");
@@ -150,6 +204,8 @@ public class UserController {
     @RequestMapping("/logout")
     public String userLogout(HttpSession session) {
         session.invalidate();
+       
+
         return "redirect:/";
     }
     
@@ -204,7 +260,38 @@ public class UserController {
   		return checkNum;
   	}
 
-    
+  	
+  	/*@RequestMapping(value="/kakaoLogin", method=RequestMethod.GET)
+    public String kakaoLogin(@RequestParam(value = "code", required = false) String code, HttpSession session) throws Exception{
+         System.out.println("######### " + code);
+         String access_Token = userService.getAccessToken(code);
+         User userInfo = userService.getUserInfo(access_Token);
+         
+         User number = userService.kakaoNumber(userInfo);
+         System.out.println("######### number : " + number);
+         
+			/*
+			 * session.setAttribute("mem", number);
+			 * 
+			 * session.invalidate(); session.setAttribute("kakaoN", userInfo.getK_name());
+			 * session.setAttribute("kakaoE", userInfo.getK_email());
+			 * session.setAttribute("kakaoNumber", number.getK_number());
+			 
+         
+       return "redirect:/";
+     }*/
 
+
+  	
+  	
+
+	
+
+	
+    
+  	
+  	
+  	
+  
     
 }
