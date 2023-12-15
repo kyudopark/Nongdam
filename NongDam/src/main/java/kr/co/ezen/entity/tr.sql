@@ -11,6 +11,9 @@ create table tr(
 	primary key(tr_idx)
 )
 
+
+select * from User
+
 insert into tr (tr_title,tr_content,user_idx)
 values ('예시 제목','<p>예시 내용입니다</p><button>버튼</button> ',1)
 
@@ -18,7 +21,11 @@ values ('예시 제목','<p>예시 내용입니다</p><button>버튼</button> ',
 insert into Tr (tr_title,tr_content,user_idx,tr_imgpath)
 			    VALUES ('123','123',1,null)
 			    
-			    
+
+<<<<<<< HEAD
+			    delete * table tr
+=======
+>>>>>>> branch 'main' of https://github.com/YJY1129/Nongdam.git
 ---------------------------------------------------------------------
 drop table trComment
 select * from trComment
@@ -58,4 +65,8 @@ values (1,1,1,'댓글4',1)
 
 
 -----------------------------
+
+
+
+drop table User;
 

@@ -30,13 +30,5 @@ public class User {
     private String user_kakaologin;
     private boolean user_admin;
     
-    public User(String user_id,  String user_nickname,  String user_email, String user_kakaologin) {
-        this.user_id = user_id;
-        
-        this.user_nickname = user_nickname;
-        
-        this.user_email = user_email;
-        this.user_kakaologin = user_kakaologin;
-        
-    }
+    
 }

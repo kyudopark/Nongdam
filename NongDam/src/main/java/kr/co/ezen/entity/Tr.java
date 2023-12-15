@@ -17,5 +17,5 @@ public class Tr {
 	private String user_nickname;
 	private Date tr_time;
 
-
+	
 }
