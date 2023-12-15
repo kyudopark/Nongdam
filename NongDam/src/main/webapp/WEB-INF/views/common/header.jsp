@@ -6,7 +6,11 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
+
+<!--<script type="text/javascript" src="${contextPath }/resources/common/js/test.js"></script>  -->
+
 <script type="text/javascript" src="${contextPath }/resources/common/js/darkmode.js"></script>
+
 
 
 <header class="border-bottom bg-body-tertiary">

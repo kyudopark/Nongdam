@@ -207,23 +207,7 @@
 					</ul>
 				</nav>
 			</div>
-		          <div class="mt-3">			
-		    <nav class="d-flex justify-content-center">
-		        <ul class="pagination">
-		            <c:if test="${pageCre.prev }">
-		                <li class="page-item disabled"><a class="page-link text-secondary" href="${pageCre.startPage - 1}">&laquo;</a></li>
-		            </c:if>
-		            <c:forEach var="pageNum" begin="${pageCre.startPage }" end="${pageCre.endPage }">
-		                <li class="page-item ${pageCre.cri.page == pageNum ? 'active text-secondary' : ''}">
-		                    <a class="page-link ${pageCre.cri.page == pageNum ? 'bg-secondary border-secondary' : ''}" href="${pageNum}">${pageNum }</a>
-		                </li>
-		            </c:forEach>
-		            <c:if test="${pageCre.next }">
-		                <li class="page-item"><a class="page-link text-secondary" href="${pageCre.endPage + 1}">&raquo;</a></li>
-		            </c:if>
-		        </ul>
-		    </nav>			
-		</div>
+		         
 			<form id="pageFrm" action="${contextPath}/gp/main" method="get">
 				<input type="hidden" id="page" name="page" value="${pageCre.cri.page }"/>
 				<input type="hidden" id="perPageNum" name="perPageNum" value="${pageCre.cri.perPageNum }"/>
