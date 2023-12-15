@@ -61,4 +61,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="readUser" parameterType="string" resultType="kr.co.ezen.entity.User">
 		SELECT * FROM User WHERE user_id = #{user_id}
 	</select>
+	
+	
+   <!-- <select id="findKakao" parameterType="java.util.HashMap" resultType="kr.co.ezen.entity.User">
+      select * from User where user_nickname=#{user_nickname} and user_email=#{user_email}
+   </select>
+   
+   <insert id="kakaoInsert" parameterType="java.util.HashMap">
+      insert into User(user_id, user_nickname, user_email) values(#{user_id}, #{user_nickname}, #{user_email})
+   </insert>
+   
+   <select id="kakaoNumber" parameterType="kr.co.ezen.entity.User" resultType="kr.co.ezen.entity.User">
+      select * from User where user_nickname=#{user_nickname} and user_email=#{user_email}
+   </select> -->
+   
+   <select id="selectUserByKakaoLogin" resultType="kr.co.ezen.entity.User" parameterType="String">
+        SELECT * FROM User WHERE user_kakaologin = #{user_kakaologin}
+    </select>
+	
+	
+	
 </mapper>

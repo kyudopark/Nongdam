@@ -221,7 +221,6 @@
 			<version>2.8.9</version>
 		</dependency>
 
-
 		<!-- 231207 메일 관련 -->
 		<!-- https://mvnrepository.com/artifact/javax.mail/javax.mail-api -->
 		<dependency>
@@ -247,8 +246,23 @@
 			<artifactId>javax.mail</artifactId>
 			<version>1.6.2</version> <!-- 최신 버전 사용 -->
 		</dependency>
+		
+		<!-- 231211 회원가입 유효성검사 -->
+		<!-- https://mvnrepository.com/artifact/javax.validation/validation-api -->
+      <dependency>
+         <groupId>javax.validation</groupId>
+         <artifactId>validation-api</artifactId>
+         <version>2.0.1.Final</version>
+      </dependency>
 
-		<dependency>
+      <!-- https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator -->
+      <dependency>
+         <groupId>org.hibernate.validator</groupId>
+         <artifactId>hibernate-validator</artifactId>
+         <version>6.2.0.Final</version>
+      </dependency>
+      
+      <dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.4</version>
@@ -266,7 +280,6 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.11.0</version>
 		</dependency>
-
 
 		<!-- Test -->
 		<dependency>
