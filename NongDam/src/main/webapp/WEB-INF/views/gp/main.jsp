@@ -32,6 +32,7 @@
     <link rel="stylesheet" href="${contextPath }/resources/common/css/style.css">
     <!-- 기본js -->
     <script type="text/javascript" src="${contextPath }/resources/common/js/common.js"></script>
+    <!-- gp/* js파일 -->
     <script type="text/javascript" src="${contextPath }/resources/gp/js/script.js"></script>
     <meta name="농담" content="안녕하세요, 농업 정보 커뮤니티 농담입니다."/>
     
@@ -42,8 +43,6 @@
     <title>농담 | 농업 정보 커뮤니티</title>
     
     <script type="text/javascript">
-	    
-	    //페이지 번호 클릭 할때 이동하기
 	  $(document).ready(function () {
 	        $(".page-link").on("click", function (e) {
 	            e.preventDefault();  // 기본 이벤트 막기
@@ -51,6 +50,7 @@
 	            var page = $(this).attr("href");  // 페이지 번호 가져오기
 	            $("#page").val(page);  // 페이지 값 폼에 설정
 	            $("#pageFrm").submit();  // 폼 서브밋
+	            
 	        });
 	        
 	        $("#moving").on("click",function(e){
@@ -61,7 +61,6 @@
 		     });
 	  
 	    });
-	
 	</script>
     
 </head>
@@ -77,9 +76,9 @@
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
             <!--  class="nav-link(기본) active(선택된 값) text-body(텍스트 색 지정)"-->
             <!-- 필요한 경우 button을 a 태그로 바꾸어도 괜찮습니다. (단, a태그로 바꾸는 경우 type=button 삭제하세요 )-->
-            <button class="nav-link text-body active" data-bs-toggle="tab" type="button" role="tab" aria-controls="nav-all" aria-selected="true">전체</button>
-            <button class="nav-link text-body" data-bs-toggle="tab" type="button" role="tab" aria-controls="nav-progress" aria-selected="false">진행</button>
-            <button class="nav-link text-body" data-bs-toggle="tab" type="button" role="tab" aria-controls="nav-complet" aria-selected="false">완료</button>
+            <button class="nav-link text-body ${pageCre.cri.type=='all' ? 'active':''}" data-bs-toggle="tab" type="button" role="tab" data-tab-type="all" aria-controls="nav-all" aria-selected="${pageCre.cri.type=='all' ? 'true':'false'}">전체</button>
+			<button class="nav-link text-body ${pageCre.cri.type=='progress' ? 'active':''}" data-bs-toggle="tab" type="button" role="tab" data-tab-type="progress" aria-controls="nav-progress" aria-selected="${pageCre.cri.type=='progress' ? 'true':'false'}">진행</button>
+			<button class="nav-link text-body ${pageCre.cri.type=='complet' ? 'active':''}" data-bs-toggle="tab" type="button" role="tab" data-tab-type="complet" aria-controls="nav-complet" aria-selected="${pageCre.cri.type=='complet' ? 'true':'false'}">완료</button>
         </div>
     </nav>
     <!--카드형식 div container-->
@@ -87,8 +86,10 @@
     <div class="container mt-5 mb-3 d-flex flex-wrap justify-content-between">
     	
         <div>
-        	<a class="text-decoration-none" href="${contextPath}/gp/write">
-            <button class="btn btn-secondary">글쓰기</button>
+        	<c:if test="${uvo.user_id eq 'admin' }">
+        		<a class="text-decoration-none" href="${contextPath}/gp/write?user_idx=${uvo.user_idx}">
+            	<button class="btn btn-secondary">글쓰기</button>
+            </c:if>
             </a>
         </div>
         <div style="width: 20rem;">
@@ -97,6 +98,7 @@
 
 					<select class="btn btn-outline-secondary dropdown-toggle"
 						name="type">
+						<option class="dropdown-item" value="all">전체</option>
 						<option class="dropdown-item" value="progress">진행</option>
 						<option class="dropdown-item" value="complet">완료</option>
 					</select> <input type="text" name="keyword" class="form-control"
@@ -116,24 +118,66 @@
             <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 ">
                 <!-- 카드 하나 시작 -->
                 <c:forEach var="li" items="${li }">
-                <div class="col pb-4">
-                    <a class="text-decoration-none" href="${contextPath}/gp/detail?gp_idx=${li.gp_idx}">
-                        <div class="card">
-                            <img src="${contextPath }/resources/image/gp/${li.gp_thumb }" class="border-bottom rounded-2 bg-light w-100 object-fit-cover" height="200">
-                            <div class="card-body">
-                                <h5 class="card-title title-overflow-3">
-                                    ${li.gp_title}
-                                </h5>
-                                <p class="card-text">
-                                    <span class="title-overflow-1">시작일 <fmt:formatDate value="${li.gp_date_start }" pattern="YYYY-MM-dd "/></span>
-                                    <span class="title-overflow-1">마감일 <fmt:formatDate value="${li.gp_date_last }" pattern="YYYY-MM-dd "/></span>
-                                </p>
-                                <!-- 아래 div 태그는 공동구매에서만 사용-->
-                                <div class="text-end fst-italic">{타이머위치}</div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                	<c:set var="currentDate" value="<%= new java.util.Date() %>"/>
+		            <c:set var="startDate" value="${li.gp_date_start }"/>
+		            <c:set var="endDate" value="${li.gp_date_last }"/>
+		
+		            <c:set var="diffMillis" value="${startDate.time - currentDate.time}"/>
+		            <c:set var="diffDays" value="${diffMillis / (24 * 60 * 60 * 1000)}"/>
+		                        
+		            <c:set var="diffMillisEnd" value="${endDate.time - currentDate.time}"/>
+		            <c:set var="diffDaysEnd" value="${diffMillisEnd / (24 * 60 * 60 * 1000)}"/>
+		            
+		            <c:choose>
+        				<c:when test="${pageCre.cri.type==null || pageCre.cri.type=='all' || (pageCre.cri.type=='progress' && diffDaysEnd >= 0) || (pageCre.cri.type=='complet' && diffDaysEnd < 0)}">
+			                <div class="col pb-4">
+			                    <a class="text-decoration-none" href="${contextPath}/gp/detail?gp_idx=${li.gp_idx}">
+			                        <div class="card">
+			                            <img src="${contextPath }/resources/image/gp/${li.gp_thumb }" class="border-bottom rounded-2 bg-light w-100 object-fit-cover" height="200">
+			                            <div class="card-body">
+			                                <h5 class="card-title title-overflow-3">
+			                                    ${li.gp_title}
+			                                </h5>
+			                                <p class="card-text">
+			                                    <span class="title-overflow-1">시작일 <fmt:formatDate value="${li.gp_date_start }" pattern="YYYY-MM-dd "/></span>
+			                                    <span class="title-overflow-1">마감일 <fmt:formatDate value="${li.gp_date_last }" pattern="YYYY-MM-dd "/></span>
+			                                </p>
+			
+					                        <!-- 시작일까지 남은 일수 표시 -->
+					                        <c:choose>
+						                        <c:when test="${diffDays > 0}">
+						                        	<div class="text-end fst-italic">
+						                        		<span class="badge text-bg-primary">
+							                                시작까지 D-${fn:substringBefore(diffDays, '.')}
+							                        	</span>
+							                        </div>
+						                        </c:when>
+						                        <c:when test="${diffDays <= 0}">
+						                        <!-- 마감일까지 남은 일수 표시 -->
+						                        	<c:choose>
+							                            <c:when test="${diffDaysEnd > 0}">
+							                            	<div class="text-end fst-italic">
+							                            		<span class="badge text-bg-danger">
+								                                    마감까지 D-${fn:substringBefore(diffDaysEnd, '.')}
+								                           		</span>
+								                           	</div>
+							                            </c:when>
+							                            <c:when test="${diffDaysEnd < 0}">
+								                            <div class="text-end fst-italic">
+								                                <span class="badge text-bg-secondary bg-gradient">
+								                                    종료되었습니다.
+								                                </span>
+								                            </div>
+							                            </c:when>
+							                        </c:choose>
+						                        </c:when>
+					                        </c:choose>
+			                            </div>
+			                        </div>
+			                    </a>
+			                </div>
+						</c:when>
+					</c:choose>
                 </c:forEach>
                 <!-- 카드 하나 끝 -->
                 <!-- 주석 -->
@@ -142,6 +186,29 @@
             <!-- 카드 게시판 영역 끝 -->
             
             <!-- 페이징 -->
+<<<<<<< HEAD
+            <div class="mt-3">			
+				<nav class="d-flex justify-content-center">
+					<ul class="pagination">
+						<c:if test="${pageCre.prev }">
+							<li class="page-item disabled">
+								<a class="page-link text-secondary" href="${pageCre.startPage-1}">&laquo;</a>
+							</li>
+						</c:if>
+						<c:forEach var="pageNum" begin="${pageCre.startPage }" end="${pageCre.endPage }">
+							<li class="page-item  ${pageCre.cri.page==pageNum? 'active text-secondary' :'' }">
+								<a class="page-link  ${pageCre.cri.page==pageNum? 'bg-secondary border-secondary':' text-body' }" href="${pageNum}">${pageNum }</a>
+							</li>
+						</c:forEach>
+						<c:if test="${pageCre.next }">
+							<li class="page-item">
+								<a class="page-link text-secondary" href="${pageCre.endPage+1}">&raquo;</a>
+							</li>
+						</c:if>
+					</ul>
+				</nav>
+			</div>
+=======
 		          <div class="mt-3">			
 		    <nav class="d-flex justify-content-center">
 		        <ul class="pagination">
@@ -159,12 +226,14 @@
 		        </ul>
 		    </nav>			
 		</div>
+>>>>>>> branch 'main' of https://github.com/YJY1129/Nongdam.git
 			<form id="pageFrm" action="${contextPath}/gp/main" method="get">
-				<input type="hidden" id="user_idx" name="user_idx" value="1"/>
 				<input type="hidden" id="page" name="page" value="${pageCre.cri.page }"/>
 				<input type="hidden" id="perPageNum" name="perPageNum" value="${pageCre.cri.perPageNum }"/>
-               	<input type="hidden" name="type" value="${ pageCre.cri.type}"/>
-               	<input type="hidden" name="keyword" value="${pageCre.cri.keyword}"/>
+				<c:if test="${!empty pageCre.cri.keyword}">
+					<input type="hidden" name="type" value="${ pageCre.cri.type}"/>
+					<input type="hidden" name="keyword" value="${ pageCre.cri.keyword}"/>
+                </c:if>
 			</form>
             <!-- 페이징 끝 -->
         </div>

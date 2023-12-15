@@ -6,6 +6,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
+<script type="text/javascript" src="${contextPath }/resources/common/js/darkmode.js"></script>
 
 	<header class="border-bottom bg-body-tertiary">
 	    <div class="container pt-2 fw-bolder">
@@ -57,9 +58,9 @@
 	                            <a class="nav-link" href="${contextPath }/user/logout">로그아웃</a>
 	                        </li>
 	                        <li class="nav-item">
-	                            <a class="nav-link" href="${contextPath }/myPage/main" id="a5button">마이페이지</a>
+	                            <a class="nav-link" href="${contextPath }/myPage/gplist" id="a5button">마이페이지</a>
 	                        </li>
-	                       </c:if>
+	                    </c:if>
 	                    </ul>
 	                </div>
 	            </div>

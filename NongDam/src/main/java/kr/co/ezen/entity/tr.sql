@@ -18,7 +18,7 @@ values ('예시 제목','<p>예시 내용입니다</p><button>버튼</button> ',
 insert into Tr (tr_title,tr_content,user_idx,tr_imgpath)
 			    VALUES ('123','123',1,null)
 			    
-			    
+
 ---------------------------------------------------------------------
 drop table trComment
 select * from trComment

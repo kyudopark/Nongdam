@@ -12,11 +12,13 @@ public interface GpService {
 	public int totalCount(Criteria cri);
 	
 	public Gp findByIdx(int gp_idx);
-	public List<GpUser> findByUser(int gp_idx);
+	public GpUser findGpUserbyIdx(int user_idx);
 	
 	public void insert(Gp vo);
 	
 	public void updateByIdx(Gp vo);
 	public void deleteByIdx(int gp_idx);
+	
+	public void request(GpUser gp);
 	
 }

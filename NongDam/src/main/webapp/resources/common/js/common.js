@@ -4,21 +4,6 @@
 	    window.open("${contextPath}/chat/list","채팅하기","width=400, height=500, left=100, top=50");
 	}
 	
-	//다크모드 버튼
-	function darkMode(){
-	    let mode = $('html').attr("data-bs-theme");
-	
-	    if( mode == 'dark' ){
-	        $('html').attr("data-bs-theme", "light");
-	        $('.mode-change-btn').html(' 다크 모드');
-	        
-	    }else{
-	        $('html').attr("data-bs-theme", "dark");
-	        $('.mode-change-btn').html('라이트모드');
-	        
-	    }            
-	} //다크모드 버튼 끝
-	
 	$(document).ready(function(){
 	    //문서 준비 완료되었을때 ckEditor부분 다크모드 관련 클래스 추가
 	    //css도 따로 하나 들어가있음(바로 밑에 있는 스타일태그)
