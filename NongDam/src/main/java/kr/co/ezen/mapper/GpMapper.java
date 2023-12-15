@@ -11,7 +11,7 @@ public interface GpMapper {
 	public List<Gp> findAll(Criteria cri);
 	public int totalCount(Criteria cri);
 	public Gp findByIdx(int gp_idx);
-	public List<GpUser> findByUser(int user_idx);
+	public GpUser findGpUserbyIdx(int user_idx);
 	public void updateByIdx(Gp vo);
 	public void deleteByIdx(int gp_idx);
 	public void insert(Gp vo);

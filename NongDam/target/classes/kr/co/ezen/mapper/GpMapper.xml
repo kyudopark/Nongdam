@@ -37,6 +37,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			where gp_idx=#{gp_idx}
 		</select>
 		
+		<select resultType="kr.co.ezen.entity.GpUser" 
+		parameterType="int" id="findGpUserbyIdx">
+			select * from gpUser
+			where user_idx=#{user_idx}
+		</select>
+		
 		<insert id="insert" parameterType="kr.co.ezen.entity.Gp">
 			insert into Gp (gp_title,gp_content,gp_price,gp_date_start, gp_date_last, gp_thumb, user_idx)
 			VALUES (#{gp_title}, #{gp_content},#{gp_price},#{gp_date_start},#{gp_date_last},#{gp_thumb}, #{user_idx})
@@ -53,9 +59,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			delete from gp where gp_idx=#{gp_idx}
 		</delete>
 		
+		
+		
 		<insert id="request" parameterType="kr.co.ezen.entity.GpUser">
-			insert into GpUser (gp_idx, user_idx, gp_addr, gp_name, gp_email, gp_total, gp_num)
-			VALUES (#{gp_idx},#{user_idx},#{gp_addr},#{gp_name},#{gp_email},#{gp_total}, #{gp_num})
+			insert into GpUser (gp_idx, user_idx,gp_uid, gp_zipcode, gp_addr, gp_name, gp_email, gp_total, gp_num)
+			VALUES (#{gp_idx},#{user_idx},#{gp_uid},#{gp_zipcode},#{gp_addr},#{gp_name},#{gp_email},#{gp_total}, #{gp_num})
 		</insert>
 
 	</mapper>

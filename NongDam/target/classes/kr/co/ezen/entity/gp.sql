@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-=======
-
-
-----------------------------------------------------------------------------
-
->>>>>>> branch 'main' of https://github.com/YJY1129/Nongdam.git
 create table gp (
 gp_idx int auto_increment,
 gp_title varchar(90),
@@ -28,6 +21,8 @@ values('테스트용 제목입니다','2023-12-06','2023-12-07',1);
 create table gpUser (
 gp_idx int,
 user_idx int,
+gp_uid varchar(20),
+gp_zipcode varchar(20),
 gp_addr varchar(50),
 gp_name	varchar(20),
 gp_email varchar(20),

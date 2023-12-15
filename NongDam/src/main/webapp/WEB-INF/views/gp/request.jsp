@@ -83,13 +83,12 @@
 	                $('#gp_zipcode2').val(addrParts[0].trim());
 	                $('#gp_zipcode3').val(addrParts[1].trim());
 	                
-	                var addr = $("#gp_zipcode").val();
 			        var addr2 = $("#gp_zipcode2").val();
 			        var addr3 = $("#gp_zipcode3").val();
 			        
-			        var fullAddress = addr + ' ' + addr2 + ' ' + addr3;
+			        var fullAddress = addr2 + ',' + addr3;
 			        
-			        $("#gp_addr").val(fullAddress);
+			        $("#gp_fulladdr").val(fullAddress);
 	            } else {
 	                console.error("Invalid address format");
 	            }
@@ -101,14 +100,13 @@
 	    });
 	 	
 		// 신규 배송지 입력 function
-		$("#gp_zipcode, #gp_zipcode2, #gp_zipcode3").on('input', function() {
-			var addr = $("#gp_zipcode").val();
-			var addr2 = $("#gp_zipcode2").val();
-			var addr3 = $("#gp_zipcode3").val();
+		$("#gp_zipcode2, #gp_zipcode3").on('input', function() {
+			var addr = $("#gp_zipcode2").val();
+			var addr2 = $("#gp_zipcode3").val();
 		        
-		    var fullAddress = addr + ' ' + addr2 + ' ' + addr3;
+		    var fullAddress = addr + ',' + addr2;
 		        
-		    $("#gp_addr").val(fullAddress);
+		    $("#gp_fulladdr").val(fullAddress);
 		});
 	});
 	
@@ -116,10 +114,12 @@
 	function kakaoPay() {
 		if (confirm("구매 하시겠습니까?")) { // 구매 클릭시 한번 더 확인하기
 			IMP.init("imp01003550"); // 가맹점 식별코드
+			const randomNum = Math.random() * 1000
+			const randomNumFloor = Math.floor(randomNum)
 			IMP.request_pay({
 				pg: 'kakaopay', // PG사 코드표에서 선택
 				pay_method: 'card', // 결제 방식
-				merchant_uid: 'IMP' + new Date().getTime(), // 결제 고유 번호
+				merchant_uid: randomNumFloor, // 결제 고유 번호
 				name: $('#gp_title').text(), // 제품명
 				amount: $('#gp_total_output').val(), // 가격
 				//구매자 정보 ↓
@@ -130,9 +130,11 @@
 			}, function(rsp) { // callback
 				if (rsp.success) { //결제 성공시
 					console.log(rsp);
+					$("#gp_uid").val(rsp.merchant_uid);
 					$('#submitForm').submit();
 					if (response.status == 200) { // DB저장 성공시
 						alert('결제 완료!')
+						
 					} else { // 결제완료 후 DB저장 실패시
 						alert('error:[${response.status}]\n결제요청이 승인된 경우 관리자에게 문의바랍니다.');
 						// DB저장 실패시 status에 따라 추가적인 작업 가능성
@@ -196,7 +198,8 @@
             	<form method="post" action="${contextPath}/gp/request" id ="submitForm">  
 	            	<input type="hidden" id="gp_idx" name="gp_idx" value="${vo.gp_idx}"/>
 					<input type="hidden" id="user_idx" name="user_idx" value="${uvo.user_idx}"/>
-					<input type="hidden" id="gp_addr" name="gp_addr" value=""/>
+					<input type="hidden" id="gp_fulladdr" name="gp_addr" value=""/>
+					<input type="hidden" id="gp_uid" name="gp_uid" value=""/>
                 <!-- 수령자명 -->
                 <div class="mb-4 col-12 col-md-6 col-lg-5">
                     <label for="gp_name" class="form-label">
@@ -267,7 +270,7 @@
                             <div class="row g-2">
                                 <div class="col-auto">
                                     <!-- 우편번호. readonly로 되어있으나 풀어도 됩니다 -->
-                                    <input type="text" class="form-control" id="gp_zipcode" readonly>
+                                    <input type="text" class="form-control" id="gp_zipcode" name="gp_zipcode" readonly>
                                 </div>
                                 <div class="col-auto">
                                     <!-- 우편번호 찾기 버튼-->
@@ -289,7 +292,7 @@
             </form>
             <!-- 신청하기 버튼 -->
             <div class="container pt-5 pb-4 text-center">
-                <button class="btn btn-secondary" onclick="kakaoPay()">즉시결제</button>
+                <button class="btn btn-secondary" onclick="kakaoPay()"><i class="fa-solid fa-credit-card"></i> 결제</button>
                 <a class="btn btn-outline-secondary">취소</a>
             </div>
             

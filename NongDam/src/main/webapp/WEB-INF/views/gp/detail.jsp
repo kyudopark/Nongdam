@@ -35,6 +35,8 @@
     <!-- gp/* js파일 -->
     <script type="text/javascript" src="${contextPath }/resources/gp/js/script.js"></script>
     
+    
+    
     <meta name="농담" content="안녕하세요, 농업 정보 커뮤니티 농담입니다."/>
     
     <!-- 파비콘 -->
@@ -103,7 +105,7 @@
                     </p>
                     <p class="pt-3 fs-5">
                         <span class="fw-bolder">가격 </span>
-                        <span>${vo.gp_price}원</span>
+                        <span><fmt:formatNumber type="number" maxFractionDigits="3" value="${vo.gp_price}" />원</span>
                     </p>
                 </div>
             </div>

@@ -58,9 +58,9 @@
 	                            <a class="nav-link" href="${contextPath }/user/logout">로그아웃</a>
 	                        </li>
 	                        <li class="nav-item">
-	                            <a class="nav-link" href="${contextPath }/myPage/main" id="a5button">마이페이지</a>
+	                            <a class="nav-link" href="${contextPath }/myPage/gplist" id="a5button">마이페이지</a>
 	                        </li>
-	                       </c:if>
+	                    </c:if>
 	                    </ul>
 	                </div>
 	            </div>
