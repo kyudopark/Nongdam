@@ -14,7 +14,7 @@ CREATE TABLE User (
 );
 select*from User;
 
-delete from User where user_idx=5;
+delete from User where user_idx=4;
 delete from User where user_idx=6;
 
 
