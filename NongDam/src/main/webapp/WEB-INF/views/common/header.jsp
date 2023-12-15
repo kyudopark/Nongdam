@@ -32,7 +32,7 @@
 	                <img src="${contextPath }/resources/image/common/logo.svg"
 	                style="width: 28px;" alt="logo">
 	                <span class="d-inline-block text-body-secondary">농담</span>
-	            </a>
+	            </a
 			<!-- 두번째줄 오른편 -->
 			<div
 				class="navbar navbar-expand-sm bg-body-tertiary text-end justify-content-end"
@@ -89,4 +89,4 @@
 		<!-- 마지막 줄 끝-->
 	</div>
 </header>
-
+  <!-- ============================================== -->
