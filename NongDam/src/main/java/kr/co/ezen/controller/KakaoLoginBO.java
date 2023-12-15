@@ -10,7 +10,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -36,6 +36,8 @@ public class KakaoLoginBO {
 	private final String SESSION_STATE = "kakao_state";
 
 	RestTemplate restTemplate = new RestTemplate();
+	
+	
 
 	public String requestCode(HttpSession session) throws Exception {
 		String state = generateRandomString();

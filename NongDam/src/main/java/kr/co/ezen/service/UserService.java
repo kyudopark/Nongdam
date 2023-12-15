@@ -35,7 +35,7 @@ public interface UserService {
     public void kakaoInsert(HashMap<String, Object> userInfo);
     public User findKakao(HashMap<String, Object> userInfo);
     public User kakaoNumber(User userInfo);
-    public String getAccessToken(String authorize_code);
-    public User getUserInfo (String access_Token);
+    
+    public User selectUserByKakaoUserId(String user_kakaologin);
     
 }

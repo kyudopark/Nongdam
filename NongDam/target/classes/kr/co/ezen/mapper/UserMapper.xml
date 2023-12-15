@@ -62,8 +62,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT * FROM User WHERE user_id = #{user_id}
 	</select>
 	
-	<!-- 카카오 로그인  member-mapper.xml 에서 추가함 -->
-   <select id="findKakao" parameterType="java.util.HashMap" resultType="kr.co.ezen.entity.User">
+	
+   <!-- <select id="findKakao" parameterType="java.util.HashMap" resultType="kr.co.ezen.entity.User">
       select * from User where user_nickname=#{user_nickname} and user_email=#{user_email}
    </select>
    
@@ -73,7 +73,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    
    <select id="kakaoNumber" parameterType="kr.co.ezen.entity.User" resultType="kr.co.ezen.entity.User">
       select * from User where user_nickname=#{user_nickname} and user_email=#{user_email}
-   </select>
+   </select> -->
+   
+   <select id="selectUserByKakaoLogin" resultType="kr.co.ezen.entity.User" parameterType="String">
+        SELECT * FROM User WHERE user_kakaologin = #{user_kakaologin}
+    </select>
 	
 	
 	

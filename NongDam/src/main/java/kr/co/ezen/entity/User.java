@@ -5,6 +5,7 @@ package kr.co.ezen.entity;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 
@@ -28,4 +29,14 @@ public class User {
     private String user_email;
     private String user_kakaologin;
     private boolean user_admin;
+    
+    public User(String user_id,  String user_nickname,  String user_email, String user_kakaologin) {
+        this.user_id = user_id;
+        
+        this.user_nickname = user_nickname;
+        
+        this.user_email = user_email;
+        this.user_kakaologin = user_kakaologin;
+        
+    }
 }

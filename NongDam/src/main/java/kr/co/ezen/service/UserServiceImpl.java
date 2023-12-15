@@ -286,6 +286,12 @@ public class UserServiceImpl implements UserService {
 	public User findKakao(HashMap<String, Object> userInfo) {
 		
 		return userMapper.findKakao(userInfo);
+	}
+
+	@Override
+	public User selectUserByKakaoUserId(String user_kakaologin) {
+		
+		return userMapper.selectUserByKakaoUserId(user_kakaologin);
 	} 
 
 	

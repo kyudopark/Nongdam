@@ -111,8 +111,12 @@ public class UserController {
             
             model.addAttribute("token", token);
             model.addAttribute("profile", profile);
+            
+            //User kakaoUser = parseKakaoProfile(profile);
+            
+            //handleKakaoUser(session, kakaoUser);
 
-            return "user/kakaocallback"; 
+            return "redirect:/"; 
         } catch (Exception e) {
             e.printStackTrace();
             return "user/errorView"; 
@@ -281,7 +285,35 @@ public class UserController {
        return "redirect:/";
      }*/
 
+  	
+  	/*
+  	private User parseKakaoProfile(String profile) {
+  		JsonObject jsonObject = JsonParser.parseString(profile).getAsJsonObject();
 
+  	    String user_id = jsonObject.get("id").getAsString();
+  	    
+  	    JsonObject properties = jsonObject.getAsJsonObject("properties");
+  	    String user_nickname = properties.get("nickname").getAsString();
+  	    String user_profile = properties.get("profile_image").getAsString();
+
+  	    
+  	    String user_email = properties.get("email").getAsString();
+
+  	    return new User(user_id, user_nickname,  user_email);
+  	}
+    private void handleKakaoUser(HttpSession session, User kakaoUser) {
+        // user_kakaologin을 기준으로 사용자 조회
+        User existingUser = userService.getUserByKakaoLogin(kakaoUser.getUserKakaoLogin());
+
+        if (existingUser == null) {
+            // 등록되지 않은 사용자일 경우, 새로 등록
+            userService.insertUser(kakaoUser);
+            session.setAttribute("uvo", kakaoUser);
+        } else {
+            // 이미 등록된 사용자일 경우, 로그인 처리
+            session.setAttribute("uvo", existingUser);
+        }
+    }*/
   	
   	
 
