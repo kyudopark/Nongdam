@@ -119,9 +119,16 @@
 					<div class="col  pb-4">
 						<a class="text-decoration-none tr-list-click" href="${li.tr_idx}">
 							<div class="card">
-								<img src="${contextPath }/resources/image/tr/${li.tr_imgpath }" 
+								<c:if test="${!empty li.tr_imgpath }">
+									<img src="${contextPath }/resources/image/tr/${li.tr_imgpath }" 
 								class="border-bottom rounded-2 bg-light w-100 object-fit-cover" 
 									height="200">
+								</c:if>
+								<c:if test="${empty li.tr_imgpath }">
+									<img src="${contextPath }/resources/image/common/thumbnail.svg" 
+								class="border-bottom rounded-2 bg-light w-100 object-fit-cover" 
+									height="200">
+								</c:if>
 								<div class="card-body">
 									<h5 class="card-title title-overflow-3">${li.tr_title }</h5>
 									<p class="card-text">
