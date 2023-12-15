@@ -25,13 +25,14 @@
 		</div>
 		<!-- 두번째 줄 -->
 		<div class="pt-2 fs-5 d-flex justify-content-between">
-			<!-- 두번째 줄 왼편(로고) -->
-			<a
-				class="navbar-brand mb-auto d-flex flex-nowarp align-items-center gap-1"
-				style="margin-left: 8px;" href="${contextPath }/"> <img
-				src="${contextPath }/resources/image/common/logo.svg"
-				style="width: 28px;" alt="logo"> <span class="d-inline-block">농담</span>
-			</a>
+	            <!-- 두번째 줄 왼편(로고) -->
+	            <a class="navbar-brand mb-auto d-flex flex-nowarp align-items-center gap-1"
+	            	style="margin-left:8px;"
+	            	href="${contextPath }/">
+	                <img src="${contextPath }/resources/image/common/logo.svg"
+	                style="width: 28px;" alt="logo">
+	                <span class="d-inline-block text-body-secondary">농담</span>
+	            </a>
 			<!-- 두번째줄 오른편 -->
 			<div
 				class="navbar navbar-expand-sm bg-body-tertiary text-end justify-content-end"
@@ -88,5 +89,4 @@
 		<!-- 마지막 줄 끝-->
 	</div>
 </header>
-<!-- ============================================== -->
 
