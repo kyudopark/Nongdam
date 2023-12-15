@@ -1,9 +1,5 @@
 Manifest-Version: 1.0
-<<<<<<< HEAD
 Built-By: wmekw
-=======
-Built-By: USER
->>>>>>> branch 'main' of https://github.com/YJY1129/Nongdam.git
 Build-Jdk: 11.0.5
 Created-By: Maven Integration for Eclipse
 

@@ -88,7 +88,7 @@
 			        
 			        var fullAddress = addr2 + ',' + addr3;
 			        
-			        $("#gp_fulladdr").val(fullAddress);
+			        $("#gp_addr").val(fullAddress);
 	            } else {
 	                console.error("Invalid address format");
 	            }
