@@ -36,6 +36,6 @@ public interface UserService {
     public User findKakao(HashMap<String, Object> userInfo);
     public User kakaoNumber(User userInfo);
     
-    public User selectUserByKakaoUserId(String user_kakaologin);
+    public User selectUserByKakaoLogin(String userKakaoLogin);
     
 }

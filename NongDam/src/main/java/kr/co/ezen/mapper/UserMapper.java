@@ -41,6 +41,6 @@ public interface UserMapper {
     public User kakaoNumber(User userInfo);
     
     
-    public User selectUserByKakaoUserId(String user_kakaologin);
+    public User selectUserByKakaoLogin(String userKakaoLogin);
 
 }

@@ -44,7 +44,7 @@ import com.google.gson.JsonParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+import kr.co.ezen.entity.KakaoDTO;
 import kr.co.ezen.entity.User;
 import kr.co.ezen.mapper.UserMapper;
 import kr.co.ezen.service.UserService;
@@ -112,15 +112,79 @@ public class UserController {
             model.addAttribute("token", token);
             model.addAttribute("profile", profile);
             
-            //User kakaoUser = parseKakaoProfile(profile);
             
-            //handleKakaoUser(session, kakaoUser);
+            KakaoDTO kakaoDTO = parseKakaoProfile(profile);
+            
+            handleKakaoUser(session, kakaoDTO, model);
 
-            return "redirect:/"; 
+            return "redirect:/"; // 성공 시 메인 페이지로 리다이렉트
+            
+
+            
+
+            
         } catch (Exception e) {
             e.printStackTrace();
-            return "user/errorView"; 
+            return "errorView"; // 에러 발생 시 에러 페이지로 이동
         }
+    }
+    
+    private KakaoDTO parseKakaoProfile(String profile) {
+        JsonObject jsonObject = JsonParser.parseString(profile).getAsJsonObject();
+
+        String kuser_id = jsonObject.get("id").getAsString();
+        
+        JsonObject properties = jsonObject.getAsJsonObject("properties");
+        String kuser_nickname = properties.get("nickname").getAsString();
+        String kuser_name = properties.get("nickname").getAsString();  // 이 부분을 카카오에서 받아오는 값에 맞게 수정
+        String kuser_email = jsonObject.getAsJsonObject("kakao_account").get("email").getAsString();
+
+        KakaoDTO kakaoDTO = new KakaoDTO();
+        kakaoDTO.setKuser_id(kuser_id);
+        kakaoDTO.setKuser_nickname(kuser_nickname);
+        kakaoDTO.setKuser_name(kuser_name);
+        kakaoDTO.setKuser_email(kuser_email);
+        
+
+        return kakaoDTO;
+    }
+    
+   
+    
+    private String handleKakaoUser(HttpSession session, KakaoDTO kakaoDTO, Model model) {
+        // kuser_id를 기준으로 사용자 조회
+        User existingUser = userService.selectUserByKakaoLogin(kakaoDTO.getKuser_id());
+
+        if (existingUser == null) {
+            // 등록되지 않은 사용자일 경우, 새로 등록
+            User newUser = convertToUser(kakaoDTO);
+            
+            
+            session.setAttribute("uvo", newUser);
+
+            // 회원가입 페이지에 Kakao 정보를 모델에 추가
+            model.addAttribute("kakaoUser", newUser);
+
+            // 회원가입 페이지로 리다이렉트
+            return "redirect:/user/signup";
+        } else {
+            // 이미 등록된 사용자일 경우, 로그인 처리
+            session.setAttribute("uvo", existingUser);
+            return "redirect:/"; // 또는 리다이렉트할 다른 페이지
+        }
+    }
+
+
+    private User convertToUser(KakaoDTO kakaoDTO) {
+        User user = new User();
+        // User 객체에 필요한 정보를 KakaoDTO에서 가져와서 설정
+        user.setUser_id(kakaoDTO.getKuser_id());
+        user.setUser_nickname(kakaoDTO.getKuser_nickname());
+        user.setUser_name(kakaoDTO.getKuser_name());
+        user.setUser_email(kakaoDTO.getKuser_email());
+        // 나머지 필요한 정보들을 설정
+
+        return user;
     }
     
     
@@ -286,34 +350,8 @@ public class UserController {
      }*/
 
   	
-  	/*
-  	private User parseKakaoProfile(String profile) {
-  		JsonObject jsonObject = JsonParser.parseString(profile).getAsJsonObject();
-
-  	    String user_id = jsonObject.get("id").getAsString();
-  	    
-  	    JsonObject properties = jsonObject.getAsJsonObject("properties");
-  	    String user_nickname = properties.get("nickname").getAsString();
-  	    String user_profile = properties.get("profile_image").getAsString();
-
-  	    
-  	    String user_email = properties.get("email").getAsString();
-
-  	    return new User(user_id, user_nickname,  user_email);
-  	}
-    private void handleKakaoUser(HttpSession session, User kakaoUser) {
-        // user_kakaologin을 기준으로 사용자 조회
-        User existingUser = userService.getUserByKakaoLogin(kakaoUser.getUserKakaoLogin());
-
-        if (existingUser == null) {
-            // 등록되지 않은 사용자일 경우, 새로 등록
-            userService.insertUser(kakaoUser);
-            session.setAttribute("uvo", kakaoUser);
-        } else {
-            // 이미 등록된 사용자일 경우, 로그인 처리
-            session.setAttribute("uvo", existingUser);
-        }
-    }*/
+  	
+  	
   	
   	
 

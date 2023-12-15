@@ -289,11 +289,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User selectUserByKakaoUserId(String user_kakaologin) {
+	public User selectUserByKakaoLogin(String userKakaoLogin) {
 		
-		return userMapper.selectUserByKakaoUserId(user_kakaologin);
-	} 
+		return userMapper.selectUserByKakaoLogin(userKakaoLogin);
+	}
 
+	
 	
 	
 	
