@@ -34,27 +34,59 @@ public class FreeController {
 	@Autowired
 	FreeService freeservice;
 
-	@RequestMapping("main")
-	public String free(Model m, Criteria cre) {
+	@GetMapping("main")
+    public String free(String type, Model m, Criteria cri) {
+			
+        if(cri.getKeyword()==null) {
+            cri.setKeyword("");
+        } 
+        String url ="free/main?type="+type;
+        System.out.println(url);
+        if(type==null||type==""){
+        	
+        	 List<Free> li = freeservice.findAll(cri);
+
+             m.addAttribute("li", li);
+             m.addAttribute("cri", cri);
+
+             PageCre pageCre = new PageCre();
+             pageCre.setCri(cri); //매개변수 cre
+             pageCre.setTotalCount(freeservice.totalCount(cri)); //총 게시글
+
+             m.addAttribute("pageCre", pageCre);
+             return "free/main";
+        }
+
+        else if(type.equals("free")) {
+            List<Free> fr = freeservice.findfr(cri);
+            m.addAttribute("cri", cri);
+            m.addAttribute("li", fr);
+
+            PageCre pageCre = new PageCre();
+            pageCre.setCri(cri); //매개변수 cre
+            pageCre.setTotalCount(freeservice.totalCount(cri)); //총 게시글
+
+            m.addAttribute("pageCre", pageCre);
+            
+            return "free/main";
+           
+        } else if(type.equals("question")) {
+            List<Free> qu = freeservice.findqu(cri);
+            m.addAttribute("cri", cri);
+            m.addAttribute("li", qu);
+
+            PageCre pageCre = new PageCre();
+            pageCre.setCri(cri); //매개변수 cre
+            pageCre.setTotalCount(freeservice.totalCount(cri)); //총 게시글
+
+            m.addAttribute("pageCre", pageCre);
+            
+            return "free/main";
+        }
+        return "";
+    }
 		
-		if(cre.getKeyword()==null) {
-			cre.setKeyword("");
-		}
-		
-		List<Free> li = freeservice.findAll(cre);
-		
-		
-		m.addAttribute("li", li);
-		m.addAttribute("cre", cre);
-		
-		 PageCre pageCre = new PageCre();
-	     pageCre.setCri(cre); //매개변수 cre
-	     pageCre.setTotalCount(freeservice.totalCount(cre)); //총 게시글
-		
-	     m.addAttribute("pageCre", pageCre);
-		
-		return "free/main";
-	}
+	
 	//게시글조회
 		@GetMapping("detail")
 	public String detail(@RequestParam("free_idx") int free_idx, Model m, Criteria cre) {
@@ -107,25 +139,5 @@ public class FreeController {
 		return "redirect:/free/main";
 
 	}
-	@GetMapping("freemain")
-	public String findfr(Model m, Criteria cre) {
-		
-		List<Free> fr = freeservice.findfr(cre);
-		
-		m.addAttribute("fr", fr);
-		
-		return "fr";
-	}
-	
-	@GetMapping("qumain")
-	public String findqu(Model m, Criteria cre) {
-		
-		List<Free> qu = freeservice.findqu(cre);
-		
-		m.addAttribute("qu", qu);
-		
-		return "qu"; 
-	
-	}
-	
 }
+	

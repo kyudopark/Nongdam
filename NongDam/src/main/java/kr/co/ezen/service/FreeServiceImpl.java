@@ -19,8 +19,8 @@ public class FreeServiceImpl implements FreeService {
 
 	@Override
 	
-	public List<Free> findAll(Criteria cre) {
-		List<Free> li=freemapper.findAll(cre);
+	public List<Free> findAll(Criteria cri) {
+		List<Free> li=freemapper.findAll(cri);
 		return li;
 	}
 
@@ -38,8 +38,8 @@ public class FreeServiceImpl implements FreeService {
 	}
 
 	@Override
-	public int totalCount(Criteria cre) {
-		int Counet= freemapper.totalCount(cre);
+	public int totalCount(Criteria cri) {
+		int Counet= freemapper.totalCount(cri);
 		return Counet;
 }
 	
@@ -54,25 +54,26 @@ public class FreeServiceImpl implements FreeService {
 	}
 	
 	@Override
-	public List<Free> findfr(Criteria cre) {
-		List<Free> fr=freemapper.findfr(cre);
+	public List<Free> findfr(Criteria cri) {
+		List<Free> fr=freemapper.findfr(cri);
 		return fr;
 	}
 
-
 	@Override
-	public List<Free> findqu(Criteria cre) {
-		List<Free> qu=freemapper.findqu(cre);
+	public List<Free> findqu(Criteria cri) {
+		List<Free> qu=freemapper.findqu(cri);
 		return qu;
 	}
-
 	
-
+	
 	@Override
 	public List<FreeComment> findAllComment(int free_idx) {
 		List<FreeComment> dev=freemapper.findAllComment(free_idx);
 		return dev;
 	}
+
+
+
 
 
 	@Override
@@ -108,6 +109,7 @@ public class FreeServiceImpl implements FreeService {
 		// TODO Auto-generated method stub
 		
 	}
+
 
 
 

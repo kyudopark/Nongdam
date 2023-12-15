@@ -96,7 +96,7 @@
                 <!-- 실제 에디터 박스-->
                 <!-- id는 변경하지 마세요 -->
                 <textarea id="editor" name="free_content">
-                    
+                    <p></p>
                     <p></p>
                     <p></p>
                     <p></p>

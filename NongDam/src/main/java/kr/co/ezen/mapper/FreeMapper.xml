@@ -9,26 +9,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<mapper namespace="kr.co.ezen.mapper.FreeMapper">
 	
 	<sql id="search">
-			<!--  <if test="type == 'user_nickname'">
+		<!--  <if test="type == 'user_nickname'">
 				where user_nickname like concat('%',#{keyword},'%')
 			
 			<if test="type == 'free_title'">
 				where free_title like concat('%',#{keyword},'%')
 			</if>
-			
-			</if>-->
+			</if> -->	
 	</sql>
 		
 	<select id="findAll" resultType="kr.co.ezen.entity.Free" parameterType="kr.co.ezen.entity.Criteria">
 	
-		select free_idx, free_title, free_content, free_date,free_tag, free_count from free
+		select free_idx, free_title, free_content, free_date, user_idx, free_tag, free_count from free
 			<include refid="search"/>
 			 order by free_idx desc
+			 limit #{pageStart}, #{perPageNum}	
 	
 	</select>
 	
+		<select id="findfr" resultType="kr.co.ezen.entity.Free" parameterType="kr.co.ezen.entity.Criteria">
+        select * from free where free_tag="자유" order by free_idx desc
+        limit #{pageStart}, #{perPageNum}	
+	</select>
+
+	<select id="findqu" resultType="kr.co.ezen.entity.Free" parameterType="kr.co.ezen.entity.Criteria">
+        select * from free where free_tag="질문" order by free_idx desc
+        limit #{pageStart}, #{perPageNum}	
+	</select>
+	
 	<select id="findByidx" resultType="kr.co.ezen.entity.Free" parameterType="int">
-		select * from free where free_idx=#{free_idx}
+		select * from free where free_idx=#{free_idx} 
+		
 	</select>
 	
 	<insert id="insert" parameterType="kr.co.ezen.entity.Free">
@@ -38,7 +49,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	
 	<select id="totalCount" resultType="int" parameterType="kr.co.ezen.entity.Criteria">
-		   select count(*) from free natural join User 
+		   select count(*) from free natural join User
+		   <include refid="search"/>
 	</select>
 	
 	<!-- <update id="updateByIdx">
@@ -59,14 +71,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			where free_idx=#{free_idx}
 	</update>
 	
-	<select id="findfr" resultType="kr.co.ezen.entity.Free" parameterType="kr.co.ezen.entity.Criteria">
-        select * from free where free_tag="자유"  order by free_idx desc
-	</select>
 
-	<select id="findqu" resultType="kr.co.ezen.entity.Free" parameterType="kr.co.ezen.entity.Criteria">
-        select * from free where free_tag="질문"  order by free_idx desc
-	</select>
-	
 	<select id="findAllComment" resultType="kr.co.ezen.entity.FreeComment" parameterType="int">
 	
 		select free_parent_idx, free_comment_idx, free_comment_time, free_comment_content, free_comment_useable from freeComment 

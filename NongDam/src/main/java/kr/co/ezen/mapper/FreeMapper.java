@@ -9,7 +9,7 @@ import kr.co.ezen.entity.FreeComment;
 
 public interface FreeMapper {
 	
-	public List<Free> findAll(Criteria cre);
+	public List<Free> findAll(Criteria cri);
 	public void insert(Free fr);
 	public Free findByidx(int free_idx);
 	public int totalCount(Criteria cre);
@@ -18,9 +18,9 @@ public interface FreeMapper {
 	public void updaetByIdx(Free fr);
 	public Free read(int free_idx);
 	public void Modify(Free fr);
-	public List<Free> findfr(Criteria cre);
-	public List<Free> findqu(Criteria cre);
-	
+	public List<Free> findfr(Criteria cri);
+	public List<Free> findqu(Criteria cri);
+
 	
 	public List<FreeComment> findAllComment(int free_idx);
 

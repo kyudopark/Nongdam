@@ -20,16 +20,15 @@ public interface FreeService {
 	//글쓰기
 	public void insert(Free fr);
 	//조회수
-	public int totalCount(Criteria cre);
+	public int totalCount(Criteria cri);
 	//삭제
 	public void deleteByIdx(int free_idx);
 	//수정
 	public void Modify(Free fr);
 	//태그
-	public List<Free> findfr(Criteria cre);
-	public List<Free> findqu(Criteria cre);
-	
-	
+	public List<Free> findfr(Criteria cri);
+	public List<Free> findqu(Criteria cri);
+
 	
 	public List<FreeComment> findAllComment(int free_idx);
 	public void insertComment(FreeComment dev);

@@ -40,63 +40,52 @@
     <link rel="shortcut icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
     
     <title>농담 | 농업 정보 커뮤니티</title>
+   		<script>
+   		
+   	 
+  	  $(document).ready(function () {
+  	        $(".page-link").on("click", function (e) {
+  	            e.preventDefault();  // 기본 이벤트 막기
+  	            
+  	            var page = $(this).attr("href");  //페이지 번호
+  	            $("#page").val(page);  // 페이지 폼 설정
+  	            $("#pageFrm").submit();  // 폼 서브밋
+  	        });
+  	        
+  	        $("#moving").on("click",function(e){
+  		         e.preventDefault();
+  		         pageFrm.attr("action","${contextPath}/free/write");
+  		         pageFrm.attr("method","get");
+  		         pageFrm.submit();
+  		     });
+  	  
+  	    });
+   		
+    	</script>
     
-<script>  
-
-$('a[href="#settings"]').tab('show');
-
-</script>
-
     
-	<script>
-		
-	$(document).ready(function(){
-	    $('#qu').click(function(){
-	        var findfrValue = $(this).val;
-	        
-	        $.ajax({
-	            type: 'GET',
-	            url: 'freemain', 
-	            data: { findfr: findfrValue },
-	            contentType: 'application/json',
-	            success: function(response) {
-	                if (findfrValue === '자유') {
-	                	console.log('자유태그를 찾았습니다');
-	                } else {
-	                    console.log('자유 태그를 찾을 수 없습니다.');
-	                }
-	            },
-	            error: function(error) {
-	                console.error('에러:', error);
-	            }
-	        });
-	    });
-	});
-	
-	</script>
-	
 </head>
 <body>
 
 	<jsp:include page="../common/header.jsp"/>
 	<jsp:include page="../common/banner.jsp"/>
-	
-	
+
+
 <!-- 게시판 조회 -->
 <div id="a1">
 
     <!-- 게시판 tab+table div container-->
     <div class="container mt-5 mb-5">
         <!-- 태그 탭 -->
-        <nav>
-            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <!--  class="nav-link(기본) active(선택된 값) text-body(텍스트 색 지정)"-->
-                <!-- 필요한 경우 button을 a 태그로 바꾸어도 괜찮습니다. (단, a태그로 바꾸는 경우 type=button 삭제하세요 )-->
-                <a href="#all" class="nav-link text-body active" data-bs-toggle="tab" role="tab" aria-controls="nav-home" aria-selected="true" value="전체" id="all">전체</a>>
-                <a href="#question" class="nav-link text-body" data-bs-toggle="tab" role="tab" aria-controls="nav-profile" aria-selected="false" value="질문" id="qu">질문</a>>
-                <a href="#free"class="nav-link text-body" data-bs-toggle="tab" role="tab" aria-controls="nav-contact" aria-selected="false" value="자유" id="fr">자유</a>>
-            </div>
-        </nav>
+      <nav id="main">
+          <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <!--  class="nav-link(기본) active(선택된 값) text-body(텍스트 색 지정)"-->
+                        <!-- 필요한 경우 button을 a 태그로 바꾸어도 괜찮습니다. (단, a태그로 바꾸는 경우 type=button 삭제하세요 )-->
+               <a href= "../free/main?type=" class="nav-link text-body active" role="tab" aria-controls="nav-home" aria-selected="true">전체</a>
+               <a href="../free/main?type=free" class="nav-link text-body" role="tab" aria-controls="nav-profile" aria-selected="true">자유</a>
+               <a href="../free/main?type=question" class="nav-link text-body" role="tab" aria-controls="nav-contact" aria-selected="true">질문</a>
+          </div>
+      </nav>
         
         <!-- 게시글 테이블 -->
         <div class="d-flex justify-content-end mt-4">
@@ -123,8 +112,8 @@ $('a[href="#settings"]').tab('show');
 				    <tr>
 				        <td><span class="text-muted">${li.free_idx}</span></td>
 				        <td><a class="text-decoration-none tr-list-click" href="${contextPath}/free/detail?free_idx=${li.free_idx}">[${li.free_tag}] ${li.free_title }</span></td>
-				        <td class="d-none d-md-table-cell"><fmt:formatDate value="${li.free_date}" pattern="yyyy-MM-dd"/></td>
-				        <td class="d-none d-md-table-cell">토깽이</td>
+				        <td class="d-none d-md-table-cell"><fmt:formatDate value="${li.free_date}" pattern="yyyy-MM-dd [E]"/></td>
+				        <td class="d-none d-md-table-cell">토깽</td>
 				        <td class="d-none d-md-table-cell">${li.free_count}</td>
 				        <td>test</td>
 				    </tr>
@@ -143,7 +132,7 @@ $('a[href="#settings"]').tab('show');
                                         <option class="dropdown-item" value="title">작성자</option>
                                     </select >
                                     <input type="text" class="form-control" placeholder="검색">
-                                    <button class="btn btn-secondary" type="button" value="${cre.keyword }">검색</button>
+                                    <button class="btn btn-secondary" type="button" value="${cri.keyword }">검색</button>
                                 </div>
                             </div>
                             <!-- 글쓰기 버튼(2) -->
@@ -157,30 +146,47 @@ $('a[href="#settings"]').tab('show');
             
         </table>
         
+          
+        
+       
+        
         <!-- 페이징 -->
         <div class="mt-4">
             <nav class="d-flex justify-content-center">
 			    <ul class="pagination"> 
-			        <c:if test="${pageMaker.prev}"> 
-			            <li class="paginate_button previous">
-			                <a class="page-link" href="#">Prev</a>
+			        <c:if test="${pageCre.prev}"> 
+			        <!-- 이전버튼 -->
+			            <li class="paginate-item">
+			                <a class="page-link text-secondary" href="${pageCre.startPage-1}">prev</a>
 			            </li> 
 			        </c:if> 
-			        <c:forEach var="num" begin="${pageMaker.startPage }" end="${pageMaker.endPage }"> 
-			            <li class="paginate_button">
-			                <a class="page-link" href="">${cre.page}</a> 
-			            </li>
-			        </c:forEach>
-			        <c:if test="${pageMaker.next}"> 
-			            <li class="paginate_button next">
-			                <a class="page-link" href="#">Next</a>
+			        <!-- 현재버튼 -->
+				        <c:forEach var="pageNum" begin="${pageCre.startPage}" end="${pageCre.endPage}">
+					    <li class="page-item ${pageCre.cri.page == pageNum ? 'active' : ''}">
+					        <a class="page-link ${pageCre.cri.page == pageNum ? 'bg-secondary border-secondary' : ''}" href="${pageNum}">${pageNum}</a>
+					    </li>
+					</c:forEach>
+			        
+			        <!-- 다음페이지 -->
+			        <c:if test="${pageCre.next}"> 
+			            <li class="page-item">
+			                <a class="page-link text-secondary" href="${pageCre.endPage+1}">next</a>
 			            </li>
 			        </c:if> 
 			    </ul> 
-
+			    
 					<!-- /.page -->
             </nav>
         </div>	
+        
+        	<form id="pageFrm" action="${contextPath}/free/main" method="get">
+				<input type="hidden" id="user_idx" name="user_idx" value="1"/>
+				<input type="hidden" id="page" name="page" value="${pageCre.cri.page }"/>
+				<input type="hidden" name="type" value="${ pageCre.cri.type}"/>
+               	<input type="hidden" name="keyword" value="${pageCre.cri.keyword}"/>
+				<input type="hidden" id="perPageNum" name="perPageNum" value="${pageCre.cri.perPageNum }"/>
+               	
+			</form>	
 
         
     </div>
@@ -188,5 +194,6 @@ $('a[href="#settings"]').tab('show');
 </div>
 
 	<jsp:include page="../common/footer.jsp"/>
+</div>
 </body>
 </html>
