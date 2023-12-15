@@ -26,6 +26,14 @@
 	<!-- 빈등록 -->
 	<context:component-scan base-package="kr.co.ezen.controller" />
 	
+<<<<<<< HEAD
+=======
+
+		
+		
+	
+	</beans:bean>
+>>>>>>> branch 'free' of https://github.com/YJY1129/Nongdam.git
 	
 	
 
