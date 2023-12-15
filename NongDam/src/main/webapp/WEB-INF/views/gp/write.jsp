@@ -32,6 +32,7 @@
     <link rel="stylesheet" href="${contextPath }/resources/common/css/style.css">
     <!-- 기본js -->
     <script type="text/javascript" src="${contextPath }/resources/common/js/common.js"></script>
+    <!-- gp/* js파일 -->
     <script type="text/javascript" src="${contextPath }/resources/gp/js/script.js"></script>
     <meta name="농담" content="안녕하세요, 농업 정보 커뮤니티 농담입니다."/>
     
@@ -73,18 +74,6 @@
 	              }
 	            
 	        });
-
-	        /* $("input[name=start]").on("change", function(e){
-	        	var valS = $("input[name=start]").val();
-	        	var tagS = "<input type='hidden' name='gp_date_start' value='"+valS+"'/>";
-	        	$("#writeForm").append(tagS);
-	        });
-	        
-	        $("input[name=last]").on("change", function(e){
-	        	var valL = $("input[name=last]").val();
-	        	var tagL = "<input type='hidden' name='gp_date_last' value='"+valL+"'/>";
-	        	$("#writeForm").append(tagL);
-	        }) */
 	  
 	    });
 	

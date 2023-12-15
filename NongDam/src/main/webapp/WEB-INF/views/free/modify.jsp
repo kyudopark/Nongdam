@@ -32,7 +32,6 @@
     <link rel="stylesheet" href="${contextPath }/resources/common/css/style.css">
     <!-- 기본js -->
     <script type="text/javascript" src="${contextPath }/resources/common/js/common.js"></script>
-    <script type="text/javascript" src="${contextPath }/resources/gp/js/script.js"></script>
     
     <meta name="농담" content="안녕하세요, 농업 정보 커뮤니티 농담입니다."/>
     
@@ -43,82 +42,61 @@
     <title>농담 | 농업 정보 커뮤니티</title>
     
 </head>
+
+<script>
+
+$(document).ready(function() {
+    $('#modify').click(function() {
+
+$.ajax({
+    type: 'POST',
+    url: 'modify', 
+    data:{free_idx: '${vo.free_idx}' },
+    contentType: 'application/json',
+    success: function(response) {
+    	 alert('수정하시겠습니까?');
+         location.href = '/ezen/free/main' 
+    },
+    error: function(error) {
+        console.error('글 수정 중 에러 발생:', error);
+    }
+});
+}
+</script>
+
+
+
 <body>
 
-	<jsp:include page="../common/header.jsp"/>
-	<jsp:include page="../common/banner.jsp"/>
-	
-	
-	<!-- 여기에 컨텐츠를 추가 -->
-	<!-- 글 작성 div container-->
+    <!-- 글 작성 div container-->
     <div class="container mt-5 mb-5">
-        <h4 class="mt-5 mb-5">공동구매 게시글 작성</h4>
-        <form method="post" enctype="multipart/form-data">
+        <h4 class="mt-5 mb-5"> 게시글 수정</h4>
+        <form method="post">
             
-            <!--제목-->
-            <div class="form-group mb-3">
-                <input type="text" id="gp_title" name="gp_title" value="${vo.gp_title}" 
-                class="form-control" placeholder="제목을 입력하세요.">
-            </div>
-            
-            <!-- 썸네일 -->
-            <div  class="row g-3 mb-3" >
-                <div class="col-12 col-md-5">
-                    <div class="rounded bg-light 
-                    d-flex justify-content-center align-items-center" 
-                    style="height: 200px;">
-                        <!-- 이미지 존재시 아래 img태그에 src추가 -->
-                        <img class="object-fit-cover w-100 h-100" 
-                        src="${contextPath }/resources/image/gp/${vo.gp_thumb }">    
-                        <!-- 이미지 없을 때 아래 div 태그 보이게 -->
-                        <div class="d-none"> 
-                            썸네일을 등록해주세요. 
-                        </div>
-                    </div>
+            <!-- 말머리 있는 버전 -->
+            <div class="row">
+                <!-- 말머리 -->
+                <div class="col-12 col-md-3 mb-3">
+                    <select class="form-select" name="free_tag">
+                        <option selected>말머리를 선택해주세요.</option>
+                        <option value="자유">자유</option>
+                        <option value="질문">질문</option>
+                    </select>
                 </div>
-				
-                <div class="col-12 col-md-7">
-                    <!-- 공동구매 라인 -->
-                    <label class="form-label">공동구매 시간 설정</label>
-                    <div class="row g-3 mb-3">
-                        <div class="col-12 col-lg-3">
-                            <input type="date"
-                            class="form-control"
-                            name="gp_date_start"
-                            data-placeholder="시작일 선택"
-                            required
-                            aria-required="true" >
-                        </div>
-                        <div class="col-12 col-lg-3">
-                            <input type="date" 
-                            class="form-control"
-                            name="gp_date_last"
-                            data-placeholder="마감일 선택"
-                            required
-                            aria-required="true" >
-                        </div>
-                    </div>
-                    <!-- 파일 업로드 input태그 -->
-                    <div class="mb-3">
-                        <label for="thumbImg" class="form-label">썸네일 올리기</label>
-                        <input class="form-control" type="file" id="thumbImg" name="thumbImg">
-                    </div>
-                    
-                    <div class="md-3">
-                    	<input type="text" id="gp_price" name="gp_price" value="${vo.gp_price}"
-                		class="form-control" placeholder="가격을 입력하세요.">
-                	</div>
-                	
+                <!--제목-->
+                <div class="col-12 col-md-9 form-group mb-3">
+                    <input type="text" id="title" name="free_title" value="${vo.free_title }" class="form-control">
                 </div>
             </div>
-
 
             <!-- ckEditor -->
             <div class="form-group mt-5 mb-3">
                 <!-- 실제 에디터 박스-->
                 <!-- id는 변경하지 마세요 -->
-                <textarea id="editor" name="gp_content">
-                    <p>${vo.gp_content }</p>
+                <textarea id="editor" name="free_content">
+                    <p>${vo.free_content }</p>
+                    <p></p>
+                    <p></p>
                 </textarea>
                 <!-- 스크립트문. 항상 에디터 박스 바로 뒤에 놓을 것-->
                 <script>
@@ -132,13 +110,12 @@
 
             <!-- 글 작성하기 버튼-->
             <div class="text-center">
-                <button type="submit" class="btn btn-secondary">글 수정하기</button>
+                <button type="sumbit" class="btn btn-secondary" id="modify">글 수정하기</button>
                 <a href="javascript:history.go(-1)" class="btn btn-outline-secondary">취소</a>
             </div>
         </form>
     </div>
     <!-- ============================================== -->
-	
-	<jsp:include page="../common/footer.jsp"/>
+
 </body>
 </html>

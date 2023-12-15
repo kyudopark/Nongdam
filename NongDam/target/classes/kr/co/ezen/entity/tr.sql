@@ -22,7 +22,10 @@ insert into Tr (tr_title,tr_content,user_idx,tr_imgpath)
 			    VALUES ('123','123',1,null)
 			    
 
+<<<<<<< HEAD
 			    delete * table tr
+=======
+>>>>>>> branch 'main' of https://github.com/YJY1129/Nongdam.git
 ---------------------------------------------------------------------
 drop table trComment
 select * from trComment
