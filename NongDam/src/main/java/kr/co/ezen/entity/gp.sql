@@ -21,7 +21,7 @@ drop table gp;
 insert into Gp (gp_title, gp_date_start, gp_date_last) 
 values('테스트용 제목입니다','2023-12-06','2023-12-07');
 
-select * from gp;
+select * from gpUser;
 
 create table gpUser (
 gp_idx int,
