@@ -13,8 +13,7 @@ public interface UserService {
 	public User registerCheck(String user_id);
 	public User userLogin(User uvo);
 	
-	public boolean isNameExists(String user_name);
-    public boolean isEmailExists(String user_email);
+	
     public User findUserId(String user_name, String user_email);
     
     //이메일발송
@@ -27,15 +26,10 @@ public interface UserService {
     
     public  User readUser(String user_id);
     
-    //public int sendEmailVerification(String user_email);
+     public User selectUserByKakaoLogin(String userKakaoLogin);
+     
+    public void kakaoUser(User user);
     
-    //public boolean verifyCode(String user_email, String verificationCode);
-    
-  //카카오 추가 KakaoMapper 삭제하고 여기다 추가함
-    public void kakaoInsert(HashMap<String, Object> userInfo);
-    public User findKakao(HashMap<String, Object> userInfo);
-    public User kakaoNumber(User userInfo);
-    
-    public User selectUserByKakaoLogin(String userKakaoLogin);
+    public void updateUserProfile(User user);
     
 }

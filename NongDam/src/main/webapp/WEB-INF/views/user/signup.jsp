@@ -268,7 +268,7 @@ function passwordCheck(){
 
 
 
-/* function mailCheck() {
+ function mailCheck() {
     var user_email = $("#user_email").val();
 
     $.ajax({
@@ -287,7 +287,7 @@ function passwordCheck(){
             alert("error");
         }
     });
-} */
+} 
 
 
 

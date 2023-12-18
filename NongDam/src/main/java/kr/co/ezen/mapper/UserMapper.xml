@@ -19,6 +19,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		#{user_nickname},#{user_gender}, #{user_email}, #{user_zipcode},
 		#{user_addr})
 	</insert>
+	
+	<select id="nickUser" parameterType="string" resultType="kr.co.ezen.entity.User">
+		SELECT * FROM User where user_nickname=#{user_nickname} 
+	</select>
 
 
 
@@ -66,9 +70,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    
    
    <select id="selectUserByKakaoLogin" parameterType="String" resultType="kr.co.ezen.entity.User">
-        SELECT * FROM User WHERE user_kakaologin = #{userKakaoLogin}
+        SELECT * FROM User WHERE user_id = #{user_id}
     </select>
+    
+    <insert id="kakaoUser" parameterType="kr.co.ezen.entity.User">
+		INSERT INTO User
+		(user_id, user_pw, user_name, user_nickname, user_email,user_kakaologin)VALUES (#{user_id}, #{user_id},  #{user_name},#{user_nickname}, #{user_email}, 'Y')
+	</insert>
 	
+	
+	
+	<update id="updateUserProfile" parameterType="kr.co.ezen.entity.User">
+ 		update User set user_profile =#{user_profile}
+ 		where user_nickname =#{user_nickname}
+ 	</update>
 	
 	
 </mapper>

@@ -51,7 +51,7 @@ import kr.co.ezen.service.UserService;
 import lombok.AllArgsConstructor;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/user/*")
 @AllArgsConstructor
 public class UserController {
 	
@@ -125,7 +125,7 @@ public class UserController {
             
         } catch (Exception e) {
             e.printStackTrace();
-            return "errorView"; // 에러 발생 시 에러 페이지로 이동
+            return "redirect:/user/login"; // 에러 발생 시 에러 페이지로 이동
         }
     }
     
@@ -160,13 +160,16 @@ public class UserController {
             User newUser = convertToUser(kakaoDTO);
             
             
+            
+            
+            
+            userService.kakaoUser(newUser); // 새로운 사용자 DB에 저장
+
+            // 로그인 처리
             session.setAttribute("uvo", newUser);
 
-            // 회원가입 페이지에 Kakao 정보를 모델에 추가
-            model.addAttribute("kakaoUser", newUser);
-
             // 회원가입 페이지로 리다이렉트
-            return "redirect:/user/signup";
+            return "redirect:/";
         } else {
             // 이미 등록된 사용자일 경우, 로그인 처리
             session.setAttribute("uvo", existingUser);
@@ -329,25 +332,7 @@ public class UserController {
   	}
 
   	
-  	/*@RequestMapping(value="/kakaoLogin", method=RequestMethod.GET)
-    public String kakaoLogin(@RequestParam(value = "code", required = false) String code, HttpSession session) throws Exception{
-         System.out.println("######### " + code);
-         String access_Token = userService.getAccessToken(code);
-         User userInfo = userService.getUserInfo(access_Token);
-         
-         User number = userService.kakaoNumber(userInfo);
-         System.out.println("######### number : " + number);
-         
-			/*
-			 * session.setAttribute("mem", number);
-			 * 
-			 * session.invalidate(); session.setAttribute("kakaoN", userInfo.getK_name());
-			 * session.setAttribute("kakaoE", userInfo.getK_email());
-			 * session.setAttribute("kakaoNumber", number.getK_number());
-			 
-         
-       return "redirect:/";
-     }*/
+  	
 
   	
   	
