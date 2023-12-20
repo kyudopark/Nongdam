@@ -65,18 +65,20 @@
                         <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
                             <div class="accordion-body p-0">
                                 <ul class="list-group list-group-flush rounded-bottom-2">
-                                    <li class="list-group-item  bg-body-secondary">
-                                        <a class="text-decoration-none text-body" href="${contextPath }/myPage/gplist">공동구매 참여내역</a>
-                                    </li>
-                                    <li class="list-group-item">
+                                    <li class="list-group-item ">
                                         <a class="text-decoration-none text-body" href="${contextPath }/myPage/main">마이페이지 메인</a>
                                     </li>
-                                    <li class="list-group-item">
+                                    <li class="list-group-item ">
                                         <a class="text-decoration-none text-body" href="${contextPath }/myPage/modify">회원정보 수정</a>
+                                    </li>
+                                    
+                                    <li class="list-group-item bg-body-secondary">
+                                        <a class="text-decoration-none text-body" href="${contextPath }/myPage/gplist">공동구매 참여내역</a>
                                     </li>
                                     <li class="list-group-item">
                                         <a class="text-decoration-none text-body" href="${contextPath }/myPage/quit">회원 탈퇴</a>
                                     </li>
+                                    
                                 </ul>
                             </div>
                         </div>

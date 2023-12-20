@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
-	private Long user_idx;
+	private int user_idx;
 	
     private String user_id;
 	

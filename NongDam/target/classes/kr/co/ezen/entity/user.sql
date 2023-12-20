@@ -13,12 +13,14 @@ CREATE TABLE User (
     user_admin BOOLEAN NOT NULL DEFAULT false
 );
 select*from User;
+select*from tr;
+
 
 ALTER TABLE User
 MODIFY COLUMN user_id VARCHAR(20) NOT NULL UNIQUE;
 
 drop table User;
-delete from User where user_idx=6;
+delete from User where user_idx=14;
 
 
 

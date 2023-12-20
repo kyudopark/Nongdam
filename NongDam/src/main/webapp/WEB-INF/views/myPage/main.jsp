@@ -59,24 +59,7 @@
 
 <title>농담 | 농업 정보 커뮤니티</title>
 
-<script>
 
-function previewThumbnail(event) {
-    var input = event.target;
-
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-
-        reader.onload = function (e) {
-            var imagePreview = document.getElementById('userProfilePreview');
-            imagePreview.src = e.target.result;
-        };
-
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-
-</script>
 </head>
 <body>
 
@@ -107,11 +90,12 @@ function previewThumbnail(event) {
                                     <li class="list-group-item">
                                         <a class="text-decoration-none text-body" href="${contextPath }/myPage/modify">회원정보 수정</a>
                                     </li>
-                                    <li class="list-group-item">
-                                        <a class="text-decoration-none text-body" href="${contextPath }/myPage/quit">회원 탈퇴</a>
-                                    </li>
+                                    
                                     <li class="list-group-item">
                                         <a class="text-decoration-none text-body" href="${contextPath }/myPage/gplist">공동구매 참여내역</a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <a class="text-decoration-none text-body" href="${contextPath }/myPage/quit">회원 탈퇴</a>
                                     </li>
                                     
                                 </ul>
@@ -132,12 +116,12 @@ function previewThumbnail(event) {
                             <div class="d-flex flex-row gap-3 flex-wrap justify-content-center align-items-center">
 								<!-- img -->
 								<c:if test="${empty uvo.user_profile }">
-											<img id="userProfilePreview" style="height: 100px; width: 100px; border-radius: 50%; margin-top:20px; margin-bottom: 20px;"
+											<img  style="height: 100px; width: 100px; border-radius: 50%; margin-top:20px; margin-bottom: 20px;"
                                			 	class="object-fit-cover bg-body-secondary border" src="${contextPath }/resources/image/common/thumbnail-profile-seed.svg" alt="프로필 이미지x">
 											
         								</c:if>
 										<c:if test="${!empty uvo.user_profile }">
-											<img style="height: 100px; width: 100px; border-radius: 50%; margin-top:20px; margin-bottom: 20px;"
+											<img id="userProfilePreview" style="height: 100px; width: 100px; border-radius: 50%; margin-top:20px; margin-bottom: 20px;"
                                				 class="object-fit-cover bg-body-secondary border" src="${contextPath}/resources/image/myPage/${uvo.user_profile }" alt="프로필 이미지"/>
 										 	
         		
@@ -150,15 +134,22 @@ function previewThumbnail(event) {
                                 <div class="d-flex flex-column flex-wrap title-overflow-1">
                                     <h6 class="title-overflow-1">
                                     	
-                                    	
-                                        <!-- <span class="badge text-bg-secondary">자체 회원</span> -->
-                                        <span class="badge text-bg-warning">카카오</span>
-                                        <!-- <span class="badge text-bg-primary bg-gradient">구글</span> -->
+                                    	<c:if test="${uvo.user_kakaologin == 'Y' }">
+                                    		<span class="badge text-bg-warning">카카오</span>
+                                    	</c:if>
+                                    	<c:if test="${empty uvo.user_kakaologin  }">
+                                    		<span class="badge text-bg-secondary">자체 회원</span>
+                                    	</c:if>
+                                        <c:if test="${uvo.user_kakaologin == 'G'  }">
+                                    		<span class="badge text-bg-primary bg-gradient">구글</span>
+                                    	</c:if>
+                                        
+                                        
 										<span>${uvo.user_nickname }님</span>
                                     </h6>
                                     <div class="input-group input-group-sm">
                                         <label class="input-group-text d-none d-sm-block " for="user_profile">프로필 사진</label>
-                                        <input type="file" class="form-control" id="user_profile" name="user_profile" onchange="previewThumbnail(event)">
+                                        <input type="file" class="form-control" id="user_profile" name="user_profile" onchange="readURL(this);">
                                     </div>
                                     <button type="submit" class="btn btn-sm btn-outline-secondary" value="사진 수정">사진 수정</button>
                                 </div>
@@ -181,16 +172,20 @@ function previewThumbnail(event) {
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    	<c:forEach var="li" items="${li}">
                                         <tr>
-                                            <td>{자유/1:1}</td>
+                                            <td>1:1 거래</td>
                                             <td class="text-start">
                                                 <a href="javascript:void(0)" class="text-decoration-none text-body" id="a4button">
-                                                    <span class="text-muted">[{태그명}]</span>
-                                                    {title이 들어갈 공간입니다.}
+                                                    <!-- <span class="text-muted">[{태그명}]</span> -->
+                                                   ${li.tr_title}
                                                 </a>
                                             </td>
-                                            <td class="text-muted d-none d-md-table-cell">{YYYY-MM-DD}</td>
+                                            
+                                            
+                                            <td class="text-muted d-none d-md-table-cell"><fmt:formatDate value="${li.tr_time }" pattern="YYYY-MM-dd "/></td> 
                                         </tr>
+                                        </c:forEach>
                                     </tbody>
                                 </table>
                             </div>
@@ -218,5 +213,24 @@ function previewThumbnail(event) {
 
 
 	<jsp:include page="../common/footer.jsp" />
+	
+
+
+<script type="text/javascript">
+    
+    
+    function readURL(input) {
+    	  if (input.files && input.files[0]) {
+    	    var reader = new FileReader();
+    	    reader.onload = function(e) {
+    	      document.getElementById('userProfilePreview').src = e.target.result;
+    	    };
+    	    reader.readAsDataURL(input.files[0]);
+    	  } else {
+    	    document.getElementById('userProfilePreview').src = "${contextPath }/resources/image/common/thumbnail-profile-seed.svg";
+    	  }
+    	}
+</script>
+
 </body>
 </html>

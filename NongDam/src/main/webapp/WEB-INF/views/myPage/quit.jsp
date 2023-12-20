@@ -40,7 +40,11 @@
     <link rel="shortcut icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
     
     <title>농담 | 농업 정보 커뮤니티</title>
-    
+ 
+<script>
+   
+</script>
+
 </head>
 <body>
 
@@ -64,18 +68,20 @@
                         <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
                             <div class="accordion-body p-0">
                                 <ul class="list-group list-group-flush rounded-bottom-2">
-                                    <li class="list-group-item  bg-body-secondary">
-                                        <a class="text-decoration-none text-body" href="${contextPath }/myPage/quit">회원 탈퇴</a>
-                                    </li>
-                                    <li class="list-group-item">
+                                    <li class="list-group-item ">
                                         <a class="text-decoration-none text-body" href="${contextPath }/myPage/main">마이페이지 메인</a>
                                     </li>
-                                    <li class="list-group-item">
+                                    <li class="list-group-item ">
                                         <a class="text-decoration-none text-body" href="${contextPath }/myPage/modify">회원정보 수정</a>
                                     </li>
-                                    <li class="list-group-item">
+                                    
+                                    <li class="list-group-item ">
                                         <a class="text-decoration-none text-body" href="${contextPath }/myPage/gplist">공동구매 참여내역</a>
                                     </li>
+                                    <li class="list-group-item bg-body-secondary">
+                                        <a class="text-decoration-none text-body" href="${contextPath }/myPage/quit">회원 탈퇴</a>
+                                    </li>
+                                    
                                 </ul>
                             </div>
                         </div>
@@ -97,8 +103,10 @@
                                     <p>SNS 연동 계정 탈퇴 시에 해당 연동은 끊어지며,</p>
                                     <p>작성한 게시글과 댓글은 모두 숨김처리됩니다.</p>
                                     <p><b>회원 탈퇴 처리</b>를 위해 <b>비밀번호를 다시 한번 입력</b>해 주시기 바랍니다.</p>
-                                    <input type="password" class="form-control ms-auto me-auto mb-2 mt-4" style="max-width: 18rem;" placeholder="비밀번호 입력">
-                                    <button type="button" class="btn btn-danger" style="width:100%;max-width: 18rem; margin-bottom:3rem;">탈퇴하기 </button>
+                                    <form action="${contextPath}/myPage/quit" method="post">
+                                    <input type="password" class="form-control ms-auto me-auto mb-2 mt-4" style="max-width: 18rem;" id="user_pw" name="user_pw" placeholder="비밀번호 입력">
+                                    <button type="submit" id="quitBtn" class="btn btn-danger" style="width:100%;max-width: 18rem; margin-bottom:3rem;">탈퇴하기 </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>

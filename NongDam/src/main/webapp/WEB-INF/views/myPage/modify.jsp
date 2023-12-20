@@ -5,6 +5,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
 
 <html lang="ko" data-bs-theme="light">
@@ -40,7 +41,91 @@
     <link rel="shortcut icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
     
     <title>농담 | 농업 정보 커뮤니티</title>
-    
+<script
+	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+
+function sample6_execDaumPostcode() {
+    new daum.Postcode({
+        oncomplete: function(data) {
+            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+            // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+            // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+            var addr = ''; // 주소 변수
+
+            // 사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+            if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                addr = data.roadAddress;
+            } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                addr = data.jibunAddress;
+            }
+
+            // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+            if (data.userSelectedType === 'R') {
+                // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                var extraAddr = ''; // 추가 주소 변수
+                if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                    extraAddr += data.bname;
+                }
+                // 건물명이 있고, 공동주택일 경우 추가한다.
+                if (data.buildingName !== '' && data.apartment === 'Y') {
+                    extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                }
+
+                // 참고항목 문자열이 있을 경우 해당 필드에 넣는다.
+                if (extraAddr !== '') {
+                    extraAddr = ' (' + extraAddr + ')';
+                }
+            }
+
+            // 우편번호와 주소 정보를 해당 필드에 넣는다.
+            document.getElementById('user_zipcode').value = data.zonecode;
+            document.getElementById("sample6_address").value = addr;
+
+            // 커서를 상세주소 필드로 이동한다.
+            document.getElementById("sample6_detailAddress").focus();
+        }
+    }).open();
+}
+
+function passwordCheck(){
+	var userPass1=$("#user_pw").val();
+	var userPass2=$("#user_pw2").val();
+	if(userPass1!=userPass2){
+		$("#passMessage").html("! 비밀번호가 일치하지 않습니다");
+	}
+	else{
+		$("#passMessage").html("");
+		$("#user_pw1").val(userPass1);	
+	}
+} 
+
+$(document).ready(function(){
+	if(${!empty msgType}){
+		$("#messageType").attr("class", "modal-content panel-warning");
+		$("#myMessage").modal("show");
+	}
+	
+	$("#modifyBtn").click(function(e) {
+        // 필수 필드의 값 확인
+        var userId = $("#user_id").val();
+        var userPw = $("#user_pw").val();
+        var userPw2 = $("#user_pw2").val();
+        var userName = $("#user_name").val();
+        var userNickname = $("#user_nickname").val();
+        
+
+        if (userId === "" || userPw === "" || userPw2 === "" || userName === "" || userNickname === "" ) {
+            e.preventDefault(); // 폼 제출 막기
+
+            // 필수 필드가 비어 있을 때 알림 메시지 표시
+            alert("모든 필수 항목을 입력하세요.");
+        }
+    });
+});
+</script>
 </head>
 <body>
 
@@ -65,18 +150,20 @@
                         <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
                             <div class="accordion-body p-0">
                                 <ul class="list-group list-group-flush rounded-bottom-2">
-                                    <li class="list-group-item  bg-body-secondary">
+                                    <li class="list-group-item ">
+                                        <a class="text-decoration-none text-body" href="${contextPath }/myPage/main">마이페이지 메인</a>
+                                    </li>
+                                    <li class="list-group-item bg-body-secondary">
                                         <a class="text-decoration-none text-body" href="${contextPath }/myPage/modify">회원정보 수정</a>
                                     </li>
+                                    
                                     <li class="list-group-item">
-                                        <a class="text-decoration-none text-body" href="${contextPath }/myPage/main">마이페이지 메인</a>
+                                        <a class="text-decoration-none text-body" href="${contextPath }/myPage/gplist">공동구매 참여내역</a>
                                     </li>
                                     <li class="list-group-item">
                                         <a class="text-decoration-none text-body" href="${contextPath }/myPage/quit">회원 탈퇴</a>
                                     </li>
-                                    <li class="list-group-item">
-                                        <a class="text-decoration-none text-body" href="${contextPath }/myPage/gplist">공동구매 참여내역</a>
-                                    </li>
+                                    
                                 </ul>
                             </div>
                         </div>
@@ -90,16 +177,15 @@
                     <div>
                         <!-- 여기부터 필요없는 부분만 지우고 사용하세요. -->
                         <!-- =============================================== -->
-					<form name="frm" method="post" action="${contextPath }/user/signup">
-						
-						<div class="d-flex justify-content-center mt-5 mb-5">
+					<form name="frm" method="post" action="${contextPath }/myPage/modify">
+					
+						<input type="hidden" id="user_pw1" name="user_pw1" value="" />
+						<input type="hidden" id="user_id" name="user_id" value="${uvo.user_id }" />
+						<div class=" mt-5 mb-5">
 							<div>
-								<h4 class="mb-4">회원가입</h4>
+								<h4 class="mb-4">회원정보 수정</h4>
 								<hr />
-								<!-- 회원가입 -->
-								<!-- 여기에 없는 것들은 비밀번호쪽 div 영역을 복사해서 사용-->
-								<!-- 안에 텍스트 추가하고 싶으면 -->
-								<!-- input 태그에 placeholder 속성을 추가해서 사용하시면 됩니다. -->
+								
 								<div class="mb-3 row">
 									<label for="user_id" class="col-sm-3 col-md-2 col-form-label">아이디<span
 										class="text-danger">*</span></label>
@@ -109,7 +195,8 @@
 											<div>
 												<!-- 아이디 input -->
 												<input type="text" class="form-control" id="user_id"
-													name="user_id" placeholder="4~20자" maxlength="20" readonly/>
+													name="user_id"  value="${uvo.user_id}" readonly disabled>
+													
 											</div>
 												
 										</div>
@@ -140,7 +227,7 @@
 										class="text-danger">*</span></label>
 									<div class="col-sm-9 col-md-10">
 										<input type="text" class="form-control" id="user_name"
-											name="user_name" placeholder="이름을 입력하세요" /> <span
+											name="user_name" value="${uvo.user_name }" /> <span
 											id="passMessagename" class="text-danger"></span>
 									</div>
 			
@@ -152,7 +239,7 @@
 										class="text-danger">*</span></label>
 									<div class="col-sm-9 col-md-10">
 										<input type="text" class="form-control" id="user_nickname"
-											name="user_nickname" placeholder="닉네임을 입력하세요" /> <span
+											name="user_nickname" value="${uvo.user_nickname }" /> <span
 											id="passMessagenickname" class="text-danger"></span>
 									</div>
 			
@@ -181,31 +268,17 @@
 										class="text-danger">*</span></label>
 									<div class="col-sm-9 col-md-10">
 										<div class="form-group mb-2">
-											<div class="row g-2">
-												<div class="col-auto mb-2">
+											<div class="row">
+												<div class="col-6 mb-2">
 			
 													<input type="email" class="form-control" id="user_email"
-														name="user_email" placeholder="비밀번호 찾기시 사용됩니다" />
+														name="user_email" value="${uvo.user_email }" readonly disabled/>
 												</div>
-												<div class="col-auto">
-			
-													<button type="button" class="btn btn-secondary" id="emailAuth">이메일
-														인증</button>
-												</div>
-												<div class="col-12">
-													<div class=" row">
-														<div class="col-12 col-md-auto">
-															<input class="form-control" placeholder="인증 코드 6자리를 입력해주세요."
-																maxlength="6" disabled="disabled" name="authCode"
-																id="authCode" type="text" autofocus> <span
-																id="emailAuthWarn"></span>
-														</div>
-														<div class="col-auto"></div>
-													</div>
-												</div>
+												
+												
 											</div>
 										</div>
-										<span id="passMessageemail" class="text-danger"></span>
+										
 									</div>
 			
 								</div>
@@ -221,7 +294,7 @@
 											<div class="col-auto">
 		
 												<input type="text" class="form-control" name="user_zipcode"
-													id="user_zipcode" placeholder="우편번호" readonly />
+													id="user_zipcode" placeholder="우편번호" readonly  value="${uvo.user_zipcode }"/>
 											</div>
 											<div class="col-auto">
 												<!-- 우편번호 찾기 버튼-->
@@ -233,12 +306,13 @@
 		
 		
 									<input type="text" class="form-control mb-2" id="sample6_address"
-										name="user_addr" placeholder="주소"> <input type="text"
-										class="form-control" id="sample6_detailAddress" name="user_addr"
-										placeholder="상세주소">
+										name="user_addr" value="${uvo.user_addr }"> <input type="text"
+										class="form-control" id="sample6_detailAddress" name="user_addr" placeholder="상세주소"
+										>
 								</div>
 							</div>
-		
+							
+							
 		
 	
 				
@@ -246,11 +320,11 @@
 							<div class="mt-5 mb-5 d-flex flex-wrap justify-content-between align-items-end">
 								<span class="fst-italic text-danger"></span>
 								<div class="text-end">
-									<button type="submit" class="btn btn-secondary"  id="registerBtn" disabled >
-										<i class="fa-solid fa-user-check"></i> 회원가입
+									<button type="submit" class="btn btn-secondary"  id="modifyBtn"  >
+										<i class="fa-solid fa-user-check"></i> 회원정보 수정
 									</button>
 									<a class="btn btn-outline-secondary"
-										href="${contextPath }/user/login"><i
+										href="${contextPath }/myPage/main"><i
 										class="fa-solid fa-user-xmark"></i> 취소</a>
 								</div>
 							</div>
@@ -274,6 +348,29 @@
         </div>
     </div>
     <!-- 마이페이지 끝 -->
+    
+    
+			
+			
+			<!-- 실패 메세지를 출력(modal) -->
+			<div id="myMessage" class="modal fade" role="dialog">
+				<div class="modal-dialog">
+					<!-- Modal content-->
+					<div id="messageType" class="modal-content panel-info">
+						<div class="modal-header panel-heading">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title">${msgType}</h4>
+						</div>
+						<div class="modal-body">
+							<p>${msg}</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default"
+								data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
 	
 	<jsp:include page="../common/footer.jsp"/>
 </body>

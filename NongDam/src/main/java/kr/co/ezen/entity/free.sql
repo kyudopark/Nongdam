@@ -3,7 +3,7 @@ create table free (
 free_idx int auto_increment,
 free_title varchar(90) not null,
 free_content text not null,
-free_date TIMESTAMP not null, 
+free_date datetime not null, 
 user_idx INT,
 free_tag varchar(15),
 free_count int,
