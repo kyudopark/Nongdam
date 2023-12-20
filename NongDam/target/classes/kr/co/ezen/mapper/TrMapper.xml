@@ -38,6 +38,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</select>
 		
 		<update id="updateByIdx" parameterType="kr.co.ezen.entity.Tr">
+<<<<<<< HEAD
 			update tr set tr_title=#{tr_title},tr_content=#{tr_content}
 			where tr_idx=#{tr_idx}
 		</update>
@@ -50,6 +51,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<insert id="insert" parameterType="kr.co.ezen.entity.Tr">
 			insert into Tr (tr_title,tr_content,user_idx,tr_imgpath)
 			    VALUES (#{tr_title}, #{tr_content},1,#{tr_imgpath})
+=======
+			update tr set tr_title=#{tr_title},tr_content=#{tr_content},tr_imgpath=#{tr_imgpath}
+			where tr_idx=#{tr_idx}
+		</update>
+		
+		
+		<delete id="deleteByIdx" parameterType="int">
+			delete from Tr where tr_idx=#{tr_idx}
+		</delete>
+		
+		<insert id="insert" parameterType="kr.co.ezen.entity.Tr">
+			insert into Tr (tr_title,tr_content,user_idx,tr_imgpath)
+			    VALUES (#{tr_title}, #{tr_content},#{user_idx},#{tr_imgpath})
+>>>>>>> branch 'main' of https://github.com/YJY1129/Nongdam.git
 		</insert>
 
 
