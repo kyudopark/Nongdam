@@ -5,6 +5,7 @@ package kr.co.ezen.entity;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 
@@ -28,4 +29,6 @@ public class User {
     private String user_email;
     private String user_kakaologin;
     private boolean user_admin;
+    
+    
 }

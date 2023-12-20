@@ -81,7 +81,7 @@ $(document).ready(function() {
             <!--제목-->
             <div class="form-group mb-3">
                 <input type="text" id="title" name="tr_title" 
-                 class="form-control" placeholder="제목을 입력하세요.">
+                 class="form-control" placeholder="제목을 입력하세요." maxlength="20">
             </div>
 
             <!-- 썸네일 -->

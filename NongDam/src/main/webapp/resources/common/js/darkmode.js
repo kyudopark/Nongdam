@@ -32,4 +32,8 @@ function saveDarkModePreference(mode) {
             $('html').attr("data-bs-theme", "light");
             $('.mode-change-btn').html('다크 모드');
         }
+<<<<<<< HEAD
 	});
+=======
+	});
+>>>>>>> branch 'tr' of https://github.com/YJY1129/Nongdam.git

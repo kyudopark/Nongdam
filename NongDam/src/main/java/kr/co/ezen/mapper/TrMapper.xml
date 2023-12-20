@@ -44,12 +44,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		
 		
 		<delete id="deleteByIdx" parameterType="int">
-			delete from Tr where tr_idx=#{tr_idx}
-		</delete>
+			delete from tr where tr_idx=#{tr_idx}
+		</delete>	
 		
 		<insert id="insert" parameterType="kr.co.ezen.entity.Tr">
-			insert into Tr (tr_title,tr_content,user_idx,tr_imgpath)
-			    VALUES (#{tr_title}, #{tr_content},#{user_idx},#{tr_imgpath})
+			insert into tr (tr_title,tr_content,user_idx,tr_imgpath,tr_time)
+			    VALUES (#{tr_title}, #{tr_content},#{user_idx},#{tr_imgpath},now())
 		</insert>
 
 

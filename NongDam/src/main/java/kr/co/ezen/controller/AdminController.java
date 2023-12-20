@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,6 +49,11 @@ public class AdminController {
 	@PostMapping("/deleteByIdx")
 	public @ResponseBody void deleteByIdx(int user_idx) {
 		adminService.deleteByIdx(user_idx);
+	}
+	
+	@PostMapping("/deleteByCheckbox")
+	public @ResponseBody void deleteByCheckbox(@RequestBody List<Integer> selectedUsers) {
+	    adminService.deleteByCheckbox(selectedUsers);
 	}
 	
 	@PostMapping("/updateAdminStatus")
