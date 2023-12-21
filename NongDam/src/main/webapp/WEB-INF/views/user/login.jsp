@@ -67,11 +67,7 @@
 	crossorigin="anonymous"></script>
 
 
-<script type="text/javascript">
-/* Kakao.init('819931a4141f19a20657c39a78e4e297');
-Kakao.isInitialized();
-console.log(Kakao.isInitialized()); */
-</script>
+
 
 
 
