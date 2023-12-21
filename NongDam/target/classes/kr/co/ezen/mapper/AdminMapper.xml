@@ -7,8 +7,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	
 	<mapper namespace="kr.co.ezen.mapper.AdminMapper">
-<<<<<<< HEAD
-=======
 	
 	<sql id="search">
 			<if test="type == 'user_nickname'">
@@ -39,5 +37,4 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	
 	
->>>>>>> branch 'main' of https://github.com/YJY1129/Nongdam.git
 	</mapper>

@@ -12,10 +12,6 @@ gp_thumb varchar(5050),
 primary key(gp_idx)
 )
 
-<<<<<<< HEAD
-drop table gp;
-select * from gp;
-=======
 drop table gp;
 
 insert into Gp (gp_title, gp_date_start, gp_date_last) 
@@ -24,7 +20,6 @@ values('테스트용 제목입니다','2023-12-06','2023-12-07');
 select * from gpUser;
 select * from gp;
 
->>>>>>> branch 'main' of https://github.com/YJY1129/Nongdam.git
 
 insert into Gp (gp_title, gp_date_start, gp_date_last, user_idx) 
 values('테스트용 제목입니다','2023-12-06','2023-12-07',1);

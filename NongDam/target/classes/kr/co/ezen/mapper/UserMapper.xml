@@ -61,8 +61,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="readUser" parameterType="string" resultType="kr.co.ezen.entity.User">
 		SELECT * FROM User WHERE user_id = #{user_id}
 	</select>
-<<<<<<< HEAD
-=======
 	
 	
    <!-- <select id="findKakao" parameterType="java.util.HashMap" resultType="kr.co.ezen.entity.User">
@@ -83,5 +81,4 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	
 	
->>>>>>> branch 'main' of https://github.com/YJY1129/Nongdam.git
 </mapper>

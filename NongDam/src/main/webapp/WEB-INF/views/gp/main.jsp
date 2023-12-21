@@ -184,12 +184,8 @@
 	
             </div>
             <!-- 카드 게시판 영역 끝 -->
-            
-<<<<<<< HEAD
+
             <!-- 페이징 -->
-=======
-            <!-- 페이징 -->
->>>>>>> branch 'main' of https://github.com/YJY1129/Nongdam.git
             <div class="mt-3">			
 				<nav class="d-flex justify-content-center">
 					<ul class="pagination">
@@ -210,12 +206,9 @@
 						</c:if>
 					</ul>
 				</nav>
-<<<<<<< HEAD
 			</div>
-=======
+
 			</div>
-		         
->>>>>>> branch 'main' of https://github.com/YJY1129/Nongdam.git
 			<form id="pageFrm" action="${contextPath}/gp/main" method="get">
 				<input type="hidden" id="page" name="page" value="${pageCre.cri.page }"/>
 				<input type="hidden" id="perPageNum" name="perPageNum" value="${pageCre.cri.perPageNum }"/>
