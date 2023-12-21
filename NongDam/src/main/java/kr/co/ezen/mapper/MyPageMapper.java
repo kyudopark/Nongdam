@@ -14,4 +14,6 @@ public interface MyPageMapper {
 	public void updateUserInfo(User user);
 	
 	public void deleteUserById(int user_idx);
+	
+	//public void deleteUserByName(int user_idx);
 }

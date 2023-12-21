@@ -115,7 +115,7 @@
                         <div class="pt-4 pb-4 mt-4 mb-4 border-top border-bottom">
                             <div class="d-flex flex-row gap-3 flex-wrap justify-content-center align-items-center">
 								<!-- img -->
-								<c:if test="${empty uvo.user_profile }">
+										<c:if test="${empty uvo.user_profile }">
 											<img  style="height: 100px; width: 100px; border-radius: 50%; margin-top:20px; margin-bottom: 20px;"
                                			 	class="object-fit-cover bg-body-secondary border" src="${contextPath }/resources/image/common/thumbnail-profile-seed.svg" alt="프로필 이미지x">
 											

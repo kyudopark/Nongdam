@@ -138,10 +138,15 @@
 					<div class="mt-4 mb-4">
 
 						
-						<a class="p-2"href=${kakaoLoginUrl }>
+						<a  href=${kakaoLoginUrl }>
 							<img
 							src="${contextPath }/resources/image/user/kakao_login_medium_narrow.png"
 							width="222" alt="카카오 로그인 버튼" />
+						</a>
+						<a href=${googleLoginUrl }>
+							<img
+							src="${contextPath }/resources/image/user/web_neutral_rd_SI.svg"
+							width="222" alt="구글 로그인 버튼" />
 						</a>
 
 
