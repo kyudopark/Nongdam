@@ -93,6 +93,7 @@
             <div class="col-12 col-md-9">
                 <div class="container">
                     <div>
+                    	<c:if test="${empty uvo.user_kakaologin }">
                         <!-- 마이페이지 회원탈퇴 -->
                         <div class="pt-4 pb-4 mt-4 mb-4">
                             <h4 class="ms-2 mb-4 text-body-secondary"><i class="fa-solid fa-wrench me-2"></i> 회원 탈퇴</h4>
@@ -110,6 +111,29 @@
                                 </div>
                             </div>
                         </div>
+                        </c:if>
+                        
+                        <c:if test="${ uvo.user_kakaologin=='Y' }">
+                        <!-- 마이페이지 회원탈퇴 -->
+                        <div class="pt-4 pb-4 mt-4 mb-4">
+                            <h4 class="ms-2 mb-4 text-body-secondary"><i class="fa-solid fa-wrench me-2"></i> 회원 탈퇴</h4>
+                            <div class="pt-2">
+                                <div class="text-center border">
+                                    <p class="fw-bolder fs-5 p-4 pt-0" style="margin-top:2.6rem; ">회원 탈퇴</p>
+                                    <p>회원 탈퇴 시 가입 정보가 모두 삭제됩니다.</p>
+                                    <p>SNS 연동 계정 탈퇴 시에 해당 연동은 끊어지며,</p>
+                                    <p>작성한 게시글과 댓글은 모두 숨김처리됩니다.</p>
+                                    <p><b>회원 탈퇴 처리</b>를 위해 <b>이름을 다시 한번 입력</b>해 주시기 바랍니다.</p>
+                                    <form action="${contextPath}/myPage/quit2" method="post">
+                                    <input type="text" class="form-control ms-auto me-auto mb-2 mt-4" style="max-width: 18rem;" id="user_name" name="user_name" placeholder="이름 입력">
+                                    <button type="submit" id="quitBtn2" class="btn btn-danger" style="width:100%;max-width: 18rem; margin-bottom:3rem;">탈퇴하기 </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        </c:if>
+                        
+                        
                         <!-- 마이페이지 회원탈퇴 끝 -->
 					</div>
              	</div>

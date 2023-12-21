@@ -43,7 +43,8 @@ public class myPageController {
 	    
 	    	User uvo = (User)session.getAttribute("uvo");
 	    	int user_idx =uvo.getUser_idx();
-	    	
+	    	//테스트용
+	    	session.setMaxInactiveInterval(900);
 	    	List<Tr> li=myPageService.findByIdx(user_idx);
 	        
 	        m.addAttribute("li", li);
@@ -52,10 +53,10 @@ public class myPageController {
 	}
 
     @RequestMapping(value = "/modify", method = RequestMethod.GET)
-    public String myPageModify(Model m, HttpSession session) {
+    public String myPageModify() {
         
-    	User uvo = (User)session.getAttribute("uvo");
-    	int user_idx =uvo.getUser_idx();
+    	
+    	
     	
     	
     	
@@ -63,22 +64,40 @@ public class myPageController {
         return "myPage/modify";
     }
     
-    @RequestMapping(value ="/modify", method=RequestMethod.POST)
+    @RequestMapping(value = "/modify", method = RequestMethod.POST)
     public String myPageModi(@ModelAttribute User user, RedirectAttributes rttr, HttpSession session) {
-    	
-    			User uvo = (User)session.getAttribute("uvo");
-    		
-    		
-    			myPageService.updateUserInfo(user);
-        	
-    	
-    			rttr.addFlashAttribute("msgType", "성공");
-    			rttr.addFlashAttribute("msg", "수정되었습니다.");
-    			
-    			session.setAttribute("uvo",user);
-    			return "redirect:/myPage/main";
-    		
-    		}		
+        try {
+            // myPageService.updateUserInfo 메서드가 예상대로 호출되고 있는지 확인
+            System.out.println("Updating user information: " + user);
+
+            // 정보 업데이트
+            myPageService.updateUserInfo(user);
+
+            // 업데이트 성공 메시지 설정
+            rttr.addFlashAttribute("msgType", "success");
+            rttr.addFlashAttribute("msg", "수정되었습니다.");
+
+            // 세션에 업데이트된 사용자 정보 저장
+            session.setAttribute("uvo", user);
+
+            // 디버그용 메시지 출력
+            System.out.println("User information updated successfully: " + user);
+
+            // 리다이렉트
+            return "redirect:/myPage/main";
+        } catch (Exception e) {
+            // 업데이트 실패 메시지 설정
+            rttr.addFlashAttribute("msgType", "error");
+            rttr.addFlashAttribute("msg", "수정 중 오류가 발생했습니다.");
+
+            // 에러 로그 출력
+            e.printStackTrace();
+
+            // 에러 페이지로 리다이렉트 또는 에러 페이지를 보여줄 뷰 이름 반환
+            return "redirect:/";
+        }
+    }
+	
     	
     	
     	
@@ -113,6 +132,38 @@ public class myPageController {
             } else {
                 // 비밀번호가 일치하지 않을 경우, 에러 메시지를 추가하고 탈퇴 페이지로 리다이렉트
                 rttr.addFlashAttribute("error", "비밀번호가 일치하지 않습니다. 다시 시도해주세요.");
+                return "redirect:/myPage/quit";
+            }
+        } else {
+            
+        	
+            return "redirect:/";
+        }
+        
+    }
+    
+    @RequestMapping(value = "/quit2", method = RequestMethod.POST)
+    public String myPageQuit2(@RequestParam("user_name") String user_name, HttpSession session, RedirectAttributes rttr) {
+    	
+    	
+    	
+    	User uvo = (User)session.getAttribute("uvo");
+    	int user_idx =uvo.getUser_idx();
+    	
+    	if (uvo != null) {
+            String storedName = uvo.getUser_name(); 
+
+            
+            if (user_name.equals(storedName)) {
+
+            	myPageService.deleteUserById(user_idx);
+            	rttr.addFlashAttribute("성공", "정상적으로 회원 탈퇴 되었습니다.");
+            	session.invalidate();
+
+                return "redirect:/";
+            } else {
+                // 비밀번호가 일치하지 않을 경우, 에러 메시지를 추가하고 탈퇴 페이지로 리다이렉트
+                rttr.addFlashAttribute("error", "이름이 일치하지 않습니다. 다시 시도해주세요.");
                 return "redirect:/myPage/quit";
             }
         } else {

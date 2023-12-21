@@ -63,6 +63,9 @@ public class UserController {
     private UserService userService;
 	
 	@Autowired
+    GoogleLoginBO googleLoginBO;
+	
+	@Autowired
 	JavaMailSenderImpl mailSender;
 	
 	@Autowired
@@ -72,6 +75,9 @@ public class UserController {
     public String userLogin(HttpSession session, Model model) throws Exception{
     	String kakaoLoginUrl = kakaoLoginBO.requestCode(session);
     	model.addAttribute("kakaoLoginUrl",kakaoLoginUrl);
+    	
+    	String googleLoginUrl = googleLoginBO.requestCode(session);
+        model.addAttribute("googleLoginUrl", googleLoginUrl);
         return "user/login";
     }
 
@@ -96,6 +102,24 @@ public class UserController {
     @RequestMapping(value = "/findpw", method = RequestMethod.POST)
     public void findPwPOST(@ModelAttribute User user, HttpServletResponse response) throws Exception{
     	userService.findPw(response, user);
+    }
+    
+    @RequestMapping("/googlecallback")
+    public String googleCallback(HttpSession session, @RequestParam(value= "code", required = false) String code,@RequestParam(value = "state", required = false) String state, Model model) {
+        try {
+            
+
+            String token = googleLoginBO.requestToken(session,code, state);
+            String profile = googleLoginBO.requestProfile(token);
+
+            model.addAttribute("token", token);
+            model.addAttribute("profile", profile);
+
+            return "redirect:/user/googlecallback"; 
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/"; 
+        }
     }
     
     @RequestMapping("/kakaocallback")
@@ -333,6 +357,10 @@ public class UserController {
 
   	
   	
+
+    
+
+   
 
   	
   	

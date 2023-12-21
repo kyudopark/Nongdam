@@ -179,8 +179,13 @@ $(document).ready(function(){
                         <!-- =============================================== -->
 					<form name="frm" method="post" action="${contextPath }/myPage/modify">
 					
-						<input type="hidden" id="user_pw1" name="user_pw1" value="" />
-						<input type="hidden" id="user_id" name="user_id" value="${uvo.user_id }" />
+						<input type="hidden" id="user_pw1" name="user_pw1" value="${uvo.user_pw }" />
+						<input type="hidden" name="user_idx" value="${uvo.user_idx}" />
+					    <input type="hidden" name="user_id" value="${uvo.user_id}" />
+					    <input type="hidden" name="user_profile" value="${uvo.user_profile}" />
+					    <input type="hidden" name="user_email" value="${uvo.user_email}" />
+					    <input type="hidden" name="user_kakaologin" value="${uvo.user_kakaologin}" />
+					    
 						<div class=" mt-5 mb-5">
 							<div>
 								<h4 class="mb-4">회원정보 수정</h4>

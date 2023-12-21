@@ -25,12 +25,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             
             user_zipcode = #{user_zipcode},
             user_addr = #{user_addr}
-        WHERE user_id = #{user_id}
+        WHERE user_idx = #{user_idx}
     </update>
     	
     	<delete id="deleteUserById" parameterType="int">
         DELETE FROM User WHERE user_idx = #{user_idx}
     </delete>
+    
+    
+    <!-- <delete id="deleteUserByName" parameterType="int">
+        DELETE FROM User WHERE user_idx = #{user_idx}
+    </delete> -->
     
     	
 	</mapper>
