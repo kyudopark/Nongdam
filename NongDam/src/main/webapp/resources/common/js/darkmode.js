@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 function saveDarkModePreference(mode) {
 	    localStorage.setItem('darkMode', mode);
 		}
@@ -34,7 +33,7 @@ function saveDarkModePreference(mode) {
             $('.mode-change-btn').html('다크 모드');
         }
 	});
-=======
+
 function saveDarkModePreference(mode) {
 	    localStorage.setItem('darkMode', mode);
 		}
@@ -70,4 +69,4 @@ function saveDarkModePreference(mode) {
             $('.mode-change-btn').html('다크 모드');
         }
 	});
->>>>>>> branch 'main' of https://github.com/YJY1129/Nongdam.git
+
