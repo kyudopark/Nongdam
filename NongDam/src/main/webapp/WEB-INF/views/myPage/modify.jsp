@@ -363,19 +363,21 @@ $(document).ready(function(){
 					<!-- Modal content-->
 					<div id="messageType" class="modal-content panel-info">
 						<div class="modal-header panel-heading">
-							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<button type="button" class="close" data-bs-dismiss="modal">&times;</button>
 							<h4 class="modal-title">${msgType}</h4>
 						</div>
 						<div class="modal-body">
 							<p>${msg}</p>
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-default"
-								data-dismiss="modal">Close</button>
+							<button type="button" class="btn"
+								data-bs-dismiss="modal">Close</button>
 						</div>
 					</div>
 				</div>
 			</div>
+			
+			
 	
 	<jsp:include page="../common/footer.jsp"/>
 </body>

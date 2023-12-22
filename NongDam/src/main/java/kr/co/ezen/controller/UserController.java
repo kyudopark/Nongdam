@@ -5,6 +5,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Random;
 import java.util.UUID;
@@ -16,37 +18,41 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.util.StringUtils;
-import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import kr.co.ezen.entity.GoogleLoginDTO;
+import kr.co.ezen.entity.GoogleLoginRequest;
+import kr.co.ezen.entity.GoogleLoginResponse;
 import kr.co.ezen.entity.KakaoDTO;
 import kr.co.ezen.entity.User;
-import kr.co.ezen.mapper.UserMapper;
+
 import kr.co.ezen.service.UserService;
 import lombok.AllArgsConstructor;
 
@@ -70,16 +76,35 @@ public class UserController {
 	
 	@Autowired
 	KakaoLoginBO kakaoLoginBO;
+	
+	
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String userLogin(HttpSession session, Model model) throws Exception{
     	String kakaoLoginUrl = kakaoLoginBO.requestCode(session);
     	model.addAttribute("kakaoLoginUrl",kakaoLoginUrl);
     	
-    	String googleLoginUrl = googleLoginBO.requestCode(session);
+    	String googleLoginUrl = googleLoginBO.getGoogleAuthUrl();
         model.addAttribute("googleLoginUrl", googleLoginUrl);
         return "user/login";
     }
+    
+    @GetMapping(value = "/login/google")
+    public ResponseEntity<Object> moveGoogleInitUrl() {
+        String authUrl = googleLoginBO.googleInitUrl();
+        URI redirectUri = null;
+        try {
+            redirectUri = new URI(authUrl);
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setLocation(redirectUri);
+            return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.badRequest().build();
+    }
+    
 
     @RequestMapping(value = "/signup", method = RequestMethod.GET)
     public String userSignup() {
@@ -104,29 +129,61 @@ public class UserController {
     	userService.findPw(response, user);
     }
     
-    @RequestMapping("/googlecallback")
-    public String googleCallback(HttpSession session, @RequestParam(value= "code", required = false) String code,@RequestParam(value = "state", required = false) String state, Model model) {
+    @RequestMapping("/googlecallback")    
+    public ResponseEntity<GoogleLoginDTO> redirectGoogleLogin(
+            @RequestParam(value = "code") String authCode
+    ) {
+        // HTTP 통신을 위해 RestTemplate 활용
+        RestTemplate restTemplate = new RestTemplate();
+        GoogleLoginRequest requestParams = GoogleLoginRequest.builder()
+                .clientId(googleLoginBO.getGoogleClientId())
+                .clientSecret(googleLoginBO.getGoogleSecret())
+                .code(authCode)
+                .redirectUri(googleLoginBO.getGoogleRedirectUri())
+                .grantType("authorization_code")
+                .build();
+
         try {
-            
+            // Http Header 설정
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<GoogleLoginRequest> httpRequestEntity = new HttpEntity<>(requestParams, headers);
+            ResponseEntity<String> apiResponseJson = restTemplate.postForEntity(googleLoginBO.getGoogleAuthUrl() + "/token", httpRequestEntity, String.class);
 
-            String token = googleLoginBO.requestToken(session,code, state);
-            String profile = googleLoginBO.requestProfile(token);
+            // ObjectMapper를 통해 String to Object로 변환
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL); // NULL이 아닌 값만 응답받기(NULL인 경우는 생략)
+            GoogleLoginResponse googleLoginResponse = objectMapper.readValue(apiResponseJson.getBody(), new TypeReference<GoogleLoginResponse>() {});
 
-            model.addAttribute("token", token);
-            model.addAttribute("profile", profile);
+            // 사용자의 정보는 JWT Token으로 저장되어 있고, Id_Token에 값을 저장한다.
+            String jwtToken = googleLoginResponse.getIdToken();
 
-            return "redirect:/user/googlecallback"; 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "redirect:/"; 
+            // JWT Token을 전달해 JWT 저장된 사용자 정보 확인
+            String requestUrl = UriComponentsBuilder.fromHttpUrl(googleLoginBO.getGoogleAuthUrl() + "/tokeninfo").queryParam("id_token", jwtToken).toUriString();
+
+            String resultJson = restTemplate.getForObject(requestUrl, String.class);
+
+            if(resultJson != null) {
+                GoogleLoginDTO userInfoDto = objectMapper.readValue(resultJson, new TypeReference<GoogleLoginDTO>() {});
+
+                return ResponseEntity.ok().body(userInfoDto);
+            }
+            else {
+                throw new Exception("Google OAuth failed!");
+            }
         }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.badRequest().body(null);
     }
     
     @RequestMapping("/kakaocallback")
     public String kakaoCallBack(HttpSession session, @RequestParam("code") String code,@RequestParam(value = "state", required = false) String state, Model model) {
-        try {
-            
-            
+        
+    	try {
             
             String token = kakaoLoginBO.requestToken(session, code, state);
             
@@ -228,16 +285,11 @@ public class UserController {
 	}
 
    
+    
+    
+    
+    
     @PostMapping("/signup")
-    public String userSignup(@ModelAttribute User user) {
-        userService.insertUser(user);
-        
-        return "redirect:/user/login";
-    }
-    
-    
-    
-    @RequestMapping("/signup")
     public String memRegister(User user, String user_pw1, String user_pw2, RedirectAttributes rttr, HttpSession session) {
         if (user.getUser_id() == null || user.getUser_id().equals("") ||
                 user_pw1 == null || user_pw1.equals("") ||

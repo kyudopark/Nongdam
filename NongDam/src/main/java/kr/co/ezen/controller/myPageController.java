@@ -55,12 +55,6 @@ public class myPageController {
     @RequestMapping(value = "/modify", method = RequestMethod.GET)
     public String myPageModify() {
         
-    	
-    	
-    	
-    	
-    	
-    	
         return "myPage/modify";
     }
     
@@ -97,13 +91,6 @@ public class myPageController {
             return "redirect:/";
         }
     }
-	
-    	
-    	
-    	
-    	
-    
-
     @RequestMapping(value = "/quit", method = RequestMethod.GET)
     public String myPageQuid() {
        
@@ -125,13 +112,15 @@ public class myPageController {
             if (user_pw.equals(storedPassword)) {
 
             	myPageService.deleteUserById(user_idx);
-            	rttr.addFlashAttribute("성공", "정상적으로 회원 탈퇴 되었습니다.");
+            	rttr.addFlashAttribute("msgType", "성공");
+                rttr.addFlashAttribute("msg", "회원탈퇴 되었습니다.");
             	session.invalidate();
 
                 return "redirect:/";
             } else {
                 // 비밀번호가 일치하지 않을 경우, 에러 메시지를 추가하고 탈퇴 페이지로 리다이렉트
-                rttr.addFlashAttribute("error", "비밀번호가 일치하지 않습니다. 다시 시도해주세요.");
+            	rttr.addFlashAttribute("msgType", "실패");
+            	rttr.addFlashAttribute("msg", "입력하신 정보가 일치하지 않습니다.");
                 return "redirect:/myPage/quit";
             }
         } else {
@@ -157,13 +146,15 @@ public class myPageController {
             if (user_name.equals(storedName)) {
 
             	myPageService.deleteUserById(user_idx);
-            	rttr.addFlashAttribute("성공", "정상적으로 회원 탈퇴 되었습니다.");
+            	rttr.addFlashAttribute("msgType", "성공");
+                rttr.addFlashAttribute("msg", "회원탈퇴 되었습니다.");
             	session.invalidate();
 
                 return "redirect:/";
             } else {
                 // 비밀번호가 일치하지 않을 경우, 에러 메시지를 추가하고 탈퇴 페이지로 리다이렉트
-                rttr.addFlashAttribute("error", "이름이 일치하지 않습니다. 다시 시도해주세요.");
+            	rttr.addFlashAttribute("msgType", "error");
+                rttr.addFlashAttribute("msg", "입력하신 정보가 일치하지 않습니다.");
                 return "redirect:/myPage/quit";
             }
         } else {
