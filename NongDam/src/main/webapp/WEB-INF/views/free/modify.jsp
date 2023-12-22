@@ -72,7 +72,7 @@ $.ajax({
     <div class="container mt-5 mb-5">
         <h4 class="mt-5 mb-5"> 게시글 수정</h4>
         <form method="post">
-            
+
             <!-- 말머리 있는 버전 -->
             <div class="row">
                 <!-- 말머리 -->

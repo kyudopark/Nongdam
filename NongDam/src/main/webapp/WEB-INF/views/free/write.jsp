@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+	<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -40,22 +40,19 @@
     <link rel="shortcut icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
     
     <title>농담 | 농업 정보 커뮤니티</title>
-    
-    
-    
+
     <script>
-	</script>
 	
-	<script>
-	
-	$("select[name=form-select]").change(function(){
-		console.log($(this).val()); //value값 가져옴
-		const selectedOptionText = $('select[name="form-select"]option:selected').text(); //text값 가져오기
-		
-	});
-	
-	</script>
+    // select 요소의 변경 이벤트 처리
+    $("select[name=form-select]").change(function(){
+        console.log($(this).val()); // value값 가져오기
+        const selectedOptionText = $('select[name="form-select"] option:selected').text(); // text값 가져오기
+    });
+
     
+</script>
+	
+
 </head>
 <body>
 
@@ -73,16 +70,15 @@
 
          
             <!-- 말머리 있는 버전 -->
-            <div class="row">
-                <!-- 말머리 -->
-                <div class="col-12 col-md-3 mb-3">
-                    <select class="form-select" name="free_tag">
-                        <option selected>말머리를 선택해주세요.</option>
-                        <option value="자유" id="free_tag">자유</option>
-                        <option value="질문" id="free_tag">질문</option>
-                    </select>
-                </div>
-                	
+           <div class="row">
+    <!-- 말머리 -->
+			    <div class="col-12 col-md-3 mb-3">
+			        <select class="form-select" name="free_tag" id="free_tag">
+			            <option value="">말머리를 선택.</option>
+			            <option value="자유">자유</option>
+			            <option value="질문">질문</option>
+			        </select>
+			    </div>
                 <!--제목-->
                 <div class="col-12 col-md-9 form-group mb-3">
                     <input type="text" id="free_title" name="free_title"
@@ -112,14 +108,28 @@
                 </script>
             </div>
             
-
             <!-- 글 작성하기 버튼-->
             <div class="text-center">
-                <button type="sumbit" class="btn btn-secondary" >글 작성하기</button>
+                <button id="check" type="sumbit" class="btn btn-secondary" >글 작성하기</button>
                 <a href="javascript:history.go(-1)" class="btn btn-outline-secondary">취소</a>
             </div>
         </form>
     </div>
+    
+    
+    
+  <script>
+    $(document).ready(function() {
+        $('#check').on('click', function() {
+            var selectedOption = $('#free_tag').val();
+            if (selectedOption == "") {
+                alert("말머리를 선택해주세요.");
+                return false; // 선택하지 않았을 경우 false 반환
+            }
+            return true; // 선택한 경우 true 반환
+        });
+    });
+</script>
     <!-- ============================================== -->
 
 </body>

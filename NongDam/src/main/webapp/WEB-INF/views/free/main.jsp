@@ -5,6 +5,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
 
 <html lang="ko" data-bs-theme="light">
@@ -38,11 +39,11 @@
     <!-- 파비콘 -->
     <link rel="icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
     <link rel="shortcut icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
-    
     <title>농담 | 농업 정보 커뮤니티</title>
-   		<script>
+    	
+   		<script type="text/javascript">
    		
-   	 
+
   	  $(document).ready(function () {
   	        $(".page-link").on("click", function (e) {
   	            e.preventDefault();  // 기본 이벤트 막기
@@ -51,18 +52,9 @@
   	            $("#page").val(page);  // 페이지 폼 설정
   	            $("#pageFrm").submit();  // 폼 서브밋
   	        });
-  	        
-  	        $("#moving").on("click",function(e){
-  		         e.preventDefault();
-  		         pageFrm.attr("action","${contextPath}/free/write");
-  		         pageFrm.attr("method","get");
-  		         pageFrm.submit();
-  		     });
-  	  
-  	    });
-   		
-    	</script>
-    
+		
+	});
+  	  </script>
     
 </head>
 <body>
@@ -112,10 +104,13 @@
 				    <tr>
 				        <td><span class="text-muted">${li.free_idx}</span></td>
 				        <td><a class="text-decoration-none tr-list-click" href="${contextPath}/free/detail?free_idx=${li.free_idx}">[${li.free_tag}] ${li.free_title }</span></td>
-				        <td class="d-none d-md-table-cell"><fmt:formatDate value="${li.free_date}" pattern="yyyy-MM-dd [E]"/></td>
-				        <td class="d-none d-md-table-cell">토깽</td>
-				        <td class="d-none d-md-table-cell">${li.free_count}</td>
-				        <td>test</td>
+				        <td class="d-none d-md-table-cell">
+				        <c:set var="now" value="<%=new java.util.Date() %>"></c:set>	        
+						<fmt:formatDate value="${li.free_date }" pattern="yyyy년 MM월 dd일 HH시 mm분"/>	
+						</td>
+				        <td class="d-none d-md-table-cell">${li.user_nickname }</td>
+				        <td class="d-none d-md-table-cell"></td>
+				       <td class="d-none d-md-table-cell">${li.free_count}</td>
 				    </tr>
 				    
 				</c:forEach>
@@ -125,16 +120,20 @@
                             <!-- 정렬용 더미 -->
                             <div class="d-none d-md-block" style="width: 70px"></div>
                             <!-- 검색 인풋 -->
+                            
                             <div style="width: 20rem;">
+                            	<form method="get">
                                 <div class="input-group" >
                                     <select class="btn btn-outline-secondary dropdown-toggle" name="type">
-                                        <option class="dropdown-item" value="title">제목</option>
-                                        <option class="dropdown-item" value="title">작성자</option>
+                                        <option class="dropdown-item" value="free_title">제목</option>
+										<option class="dropdown-item" value="user_nickname">작성자</option>
                                     </select >
-                                    <input type="text" class="form-control" placeholder="검색">
-                                    <button class="btn btn-secondary" type="button" value="${cri.keyword }">검색</button>
+                                    <input type="text" name="keyword" class="form-control" placeholder="검색" value="${cri.keyword }">
+                                    <button class="btn btn-secondary" type="submit">검색</button>
                                 </div>
+                                </form>
                             </div>
+                            
                             <!-- 글쓰기 버튼(2) -->
                             <a class="text-decoration-none" href="${contextPath}/free/write">
                             <button class="btn btn-outline-secondary" id="a3button"> 글쓰기</button>
@@ -145,19 +144,15 @@
             
             
         </table>
-        
-          
-        
        
-        
         <!-- 페이징 -->
-        <div class="mt-4">
+        <div class="mt-3">
             <nav class="d-flex justify-content-center">
-			    <ul class="pagination"> 
+			    <ul class="pagination">
 			        <c:if test="${pageCre.prev}"> 
 			        <!-- 이전버튼 -->
 			            <li class="paginate-item">
-			                <a class="page-link text-secondary" href="${pageCre.startPage-1}">prev</a>
+			                <a class="page-link text-secondary" href="${pageCre.cri.startPage-1}">&laquo;</a>
 			            </li> 
 			        </c:if> 
 			        <!-- 현재버튼 -->
@@ -165,12 +160,12 @@
 					    <li class="page-item ${pageCre.cri.page == pageNum ? 'active' : ''}">
 					        <a class="page-link ${pageCre.cri.page == pageNum ? 'bg-secondary border-secondary' : ''}" href="${pageNum}">${pageNum}</a>
 					    </li>
-					</c:forEach>
+						</c:forEach>
 			        
 			        <!-- 다음페이지 -->
 			        <c:if test="${pageCre.next}"> 
 			            <li class="page-item">
-			                <a class="page-link text-secondary" href="${pageCre.endPage+1}">next</a>
+			                <a class="page-link text-secondary" href="${pageCre.endPage+1}">&raquo;</a>
 			            </li>
 			        </c:if> 
 			    </ul> 
@@ -180,12 +175,16 @@
         </div>	
         
         	<form id="pageFrm" action="${contextPath}/free/main" method="get">
+        		
 				<input type="hidden" id="user_idx" name="user_idx" value="1"/>
 				<input type="hidden" id="page" name="page" value="${pageCre.cri.page }"/>
-				<input type="hidden" name="type" value="${ pageCre.cri.type}"/>
-               	<input type="hidden" name="keyword" value="${pageCre.cri.keyword}"/>
 				<input type="hidden" id="perPageNum" name="perPageNum" value="${pageCre.cri.perPageNum }"/>
-               	
+			
+               	<!-- 페이지 이동 시 값 가져가는 것 방지  -->
+        		<c:if test="${empty pageCre.cri.keyword }">
+					<input type="hidden" name="type" value="${ pageCre.cri.type}"/>
+               		<input type="hidden" name="keyword" value="${pageCre.cri.keyword}"/>
+				</c:if>
 			</form>	
 
         

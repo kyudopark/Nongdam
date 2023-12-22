@@ -1,6 +1,9 @@
 package kr.co.ezen.entity;
 
-import java.sql.Date;
+
+import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
 
@@ -16,7 +19,7 @@ public class Free {
 	private String free_tag;
 	private int free_count;
 	
-	//natural 조인
+	//조인
 	
 	private String user_nickname;
 

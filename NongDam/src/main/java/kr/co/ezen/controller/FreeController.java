@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.annotation.JsonCreator.Mode;
@@ -26,7 +27,6 @@ import kr.co.ezen.entity.TrComment;
 import kr.co.ezen.mapper.FreeMapper;
 import kr.co.ezen.service.FreeService;
 
-
 @Controller
 @RequestMapping("/free/*")	
 public class FreeController {
@@ -35,57 +35,36 @@ public class FreeController {
 	FreeService freeservice;
 
 	@GetMapping("main")
-    public String free(String type, Model m, Criteria cri) {
-			
-        if(cri.getKeyword()==null) {
-            cri.setKeyword("");
-        } 
-        String url ="free/main?type="+type;
-        System.out.println(url);
-        if(type==null||type==""){
-        	
-        	 List<Free> li = freeservice.findAll(cri);
-
-             m.addAttribute("li", li);
-             m.addAttribute("cri", cri);
-
-             PageCre pageCre = new PageCre();
-             pageCre.setCri(cri); //매개변수 cre
-             pageCre.setTotalCount(freeservice.totalCount(cri)); //총 게시글
-
-             m.addAttribute("pageCre", pageCre);
-             return "free/main";
-        }
-
-        else if(type.equals("free")) {
-            List<Free> fr = freeservice.findfr(cri);
-            m.addAttribute("cri", cri);
-            m.addAttribute("li", fr);
-
-            PageCre pageCre = new PageCre();
-            pageCre.setCri(cri); //매개변수 cre
-            pageCre.setTotalCount(freeservice.totalCount(cri)); //총 게시글
-
-            m.addAttribute("pageCre", pageCre);
-            
-            return "free/main";
-           
-        } else if(type.equals("question")) {
-            List<Free> qu = freeservice.findqu(cri);
-            m.addAttribute("cri", cri);
-            m.addAttribute("li", qu);
-
-            PageCre pageCre = new PageCre();
-            pageCre.setCri(cri); //매개변수 cre
-            pageCre.setTotalCount(freeservice.totalCount(cri)); //총 게시글
-
-            m.addAttribute("pageCre", pageCre);
-            
-            return "free/main";
-        }
-        return "";
-    }
+	public String free(Model m, Criteria cri) {
 		
+	    if (cri.getKeyword() == null) {
+	        cri.setKeyword("");
+	    }
+
+	    String url = "free/main?type=" + cri.getType();
+
+	    List<Free> li; // 자유게시판이냐 질문게시판이냐로 옮겨짐.
+	    if (cri.getType() == null || cri.getType().isEmpty()) {
+	        li = freeservice.findAll(cri);
+	    } else if (cri.getType().equals("free")) {
+	        li = freeservice.findfr(cri);
+	    } else if (cri.getType().equals("question")) {
+	        li = freeservice.findqu(cri);
+	    } else {
+	       
+	        return ""; 
+	    }
+
+	    m.addAttribute("cri", cri);
+	    m.addAttribute("li", li);
+
+	    PageCre pageCre = new PageCre();
+	    pageCre.setCri(cri);
+	    pageCre.setTotalCount(freeservice.totalCount(cri));
+	    m.addAttribute("pageCre", pageCre);
+
+	    return "free/main";
+	}	
 	
 	//게시글조회
 		@GetMapping("detail")
@@ -95,6 +74,9 @@ public class FreeController {
 		List<FreeComment> dev = freeservice.findAllComment(free_idx);
 		m.addAttribute("vo",vo);
 		m.addAttribute("dev", dev);
+		
+		freeservice.updatecnt(free_idx);
+		
 		return "free/detail";
 	}
 	
@@ -139,5 +121,21 @@ public class FreeController {
 		return "redirect:/free/main";
 
 	}
-}
+
+	//댓글 관련 controller
 	
+	@PostMapping("/insertComment")
+	public @ResponseBody void insertComment(FreeComment comm) {
+		freeservice.insertComment(comm);
+		
+	}	
+	
+	@GetMapping("/findAllComment")
+	public @ResponseBody List<FreeComment> findAllComment(int free_idx){
+		List<FreeComment> dev = freeservice.findAllComment(free_idx);
+		System.out.println(dev);
+		return dev;
+		
+	}
+}
+
