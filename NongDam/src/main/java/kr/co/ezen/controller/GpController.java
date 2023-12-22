@@ -90,7 +90,7 @@ public class GpController {
 	@PostMapping("/write")
 	public String write(@RequestParam("thumbImg") MultipartFile file, @RequestParam("gp_title") String gp_title,
 			@RequestParam("gp_price") String gp_price, @RequestParam("gp_content") String gp_content,
-			@RequestParam("user_idx") String user_idx, @RequestParam("gp_date_start") String gp_date_start,
+			@RequestParam("user_idx") int user_idx, @RequestParam("gp_date_start") String gp_date_start,
 			@RequestParam("gp_date_last") String gp_date_last,
 			Gp vo, HttpSession session, HttpServletRequest request, RedirectAttributes rttr) throws IOException, ParseException {
 		
@@ -157,7 +157,7 @@ public class GpController {
 	public String modify(@RequestParam("thumbImg") MultipartFile file, 
 			@RequestParam("gp_title") String gp_title, @RequestParam("gp_idx") int gp_idx,
 			@RequestParam("gp_price") String gp_price, @RequestParam("gp_content") String gp_content,
-			@RequestParam("user_idx") String user_idx, @RequestParam("gp_date_start") String gp_date_start,
+			@RequestParam("user_idx") int user_idx, @RequestParam("gp_date_start") String gp_date_start,
 			@RequestParam("gp_date_last") String gp_date_last, @RequestParam(value = "existing_image", required = false) String existingImage,
 			Gp vo, HttpSession session, HttpServletRequest request, RedirectAttributes rttr) throws IOException, ParseException {
 		

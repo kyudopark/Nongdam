@@ -22,7 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select resultType="kr.co.ezen.entity.User" id="findAll" 
 	parameterType="kr.co.ezen.entity.Criteria">
-	select user_idx,user_id,user_nickname,user_name,user_admin from user 
+	select user_idx,user_id,user_nickname,user_name,user_admin from User 
 	<include refid="search"/>
 		order by user_idx desc
 	</select>

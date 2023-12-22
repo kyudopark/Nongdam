@@ -2,6 +2,7 @@ package kr.co.ezen.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,13 +18,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-
-
-
+import kr.co.ezen.entity.Gp;
+import kr.co.ezen.entity.GpUser;
 import kr.co.ezen.entity.Tr;
 
 import kr.co.ezen.entity.User;
+import kr.co.ezen.mapper.GpMapper;
 import kr.co.ezen.mapper.UserMapper;
+import kr.co.ezen.service.GpService;
 import kr.co.ezen.service.MyPageService;
 
 
@@ -37,6 +39,9 @@ public class myPageController {
 	
 	@Autowired
 	UserMapper userMapper;
+	
+	@Autowired
+	GpService gpService;
 	
 	@RequestMapping(value = "/main", method = RequestMethod.GET)
 	public String myPageMain(Model m, HttpSession session) {
@@ -167,19 +172,37 @@ public class myPageController {
                 return "redirect:/myPage/quit";
             }
         } else {
-            
-        	
             return "redirect:/";
         }
         
     }
     
     @RequestMapping(value = "/gplist", method = RequestMethod.GET)
-    public String myPagegplist() {
-       
+    public String myPagegplist(Model m, HttpSession session) {
+    	User uvo = (User)session.getAttribute("uvo");
+        int user_idx = uvo.getUser_idx();
+        
+        List<GpUser> gpUserList = gpService.findGpUserbyIdx(user_idx);
+
+        for (GpUser gpUser : gpUserList) {
+            int gp_idx = gpUser.getGp_idx();
+            Gp gp = gpService.findByIdx(gp_idx);
+
+            // Gp 객체가 null이 아닌 경우에만 속성 복사 수행
+            if (gp != null) {
+                // Gp 정보에서 필요한 속성들을 GpUser 객체에 추가
+                gpUser.setGp_date_start(gp.getGp_date_start());
+                gpUser.setGp_date_last(gp.getGp_date_last());
+                gpUser.setGp_title(gp.getGp_title());
+                gpUser.setGp_price(gp.getGp_price());
+            }
+        }
+
+        m.addAttribute("gpUserList", gpUserList);
+        
         return "myPage/gplist";
     }
-	
+ 
     @RequestMapping("/userImageUpdate")
     public String userImageUpdate(@RequestParam("user_profile")MultipartFile file,@RequestParam("user_nickname")String user_nickname,HttpSession session, HttpServletRequest request)
           throws IOException {
