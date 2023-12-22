@@ -76,7 +76,7 @@ $(document).ready(function() {
             <!--제목-->
             <div class="form-group mb-3">
                 <input type="text" id="title" name="tr_title" 
-                 class="form-control" value="${vo.tr_title }">
+                 class="form-control" value="${vo.tr_title }" maxlength="20">
             </div>
 
             <!-- 말머리 있는 버전 -->

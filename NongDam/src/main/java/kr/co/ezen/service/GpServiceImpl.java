@@ -34,9 +34,9 @@ public class GpServiceImpl implements GpService{
 		return gpDetail;
 	}
 	
-	public GpUser findGpUserbyIdx(int user_idx) {
-		GpUser gpUserDetail = gpMapper.findGpUserbyIdx(user_idx);
-		return gpUserDetail;
+	public List<GpUser> findGpUserbyIdx(int user_idx) {
+		List<GpUser> gpUserList = gpMapper.findGpUserbyIdx(user_idx);
+		return gpUserList;
 	}
 
 	@Override

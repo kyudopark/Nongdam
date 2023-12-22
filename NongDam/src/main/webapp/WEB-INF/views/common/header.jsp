@@ -19,10 +19,24 @@
 		<div class="fw-bolder" style="font-size: smaller;">
 			<ul class="nav gap-2 align-items-center justify-content-end">
 				<c:if test="${!empty uvo }">
-					<li><a href="#" class="text-decoration-none text-body"> <i
-							class="fa-solid fa-seedling"></i> ${uvo.user_nickname }님
-					</a></li>
-				</c:if>
+					<li>
+						<c:if test="${empty uvo.user_profile }">
+							<img
+								style="height: 18px; width: 18px; border-radius: 50%; margin-top: 20px; margin-bottom: 20px;"
+								class="object-fit-cover bg-body-secondary border"
+								src="${contextPath }/resources/image/common/thumbnail-profile-seed.svg">
+							<span>${uvo.user_nickname }님</span>
+						</c:if> 
+						<c:if test="${!empty uvo.user_profile }">
+							<img
+								style="height: 24px; width: 24px; border-radius: 50%; margin-top: 20px; margin-bottom: 20px;"
+								class="object-fit-cover bg-body-secondary border"
+								src="${contextPath}/resources/image/myPage/${uvo.user_profile }"
+								alt="프로필 이미지" />
+							<span>${uvo.user_nickname }님</span>
+
+						</c:if></c:if>
+				</li>
 				<li><button class="btn btn-sm btn-secondary mode-change-btn"
 						onclick="darkMode()">다크모드</button></li>
 			</ul>
@@ -36,7 +50,7 @@
 	                <img src="${contextPath }/resources/image/common/logo.svg"
 	                style="width: 28px;" alt="logo">
 	                <span class="d-inline-block text-body-secondary">농담</span>
-	            </a
+	            </a>
 			<!-- 두번째줄 오른편 -->
 			<div
 				class="navbar navbar-expand-sm bg-body-tertiary text-end justify-content-end"

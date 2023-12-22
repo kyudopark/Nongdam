@@ -19,9 +19,9 @@
 	        <div class="pt-2 fs-5 d-flex pb-4" style="">
 	            <!-- 두번째 줄 왼편(로고) -->
 	            <a class="navbar-brand mb-auto"  href="${contextPath }/">
-	                <img src="https://getbootstrap.com/docs/5.3/assets/brand/bootstrap-logo.svg"
+	                <img src="${contextPath }/resources/image/common/logo.svg"
 	                style="width: 30px;" alt="logo">
-	                <span>로고</span>
+	                <span class="d-inline-block text-body-secondary">농담</span>
 	            </a>
 	            
 	        </div>

@@ -255,7 +255,7 @@ function passwordCheck(){
 	}
 	else{
 		$("#passMessage").html("");
-		$("#user_pw1").val(userPass1);	//서버에 일치하는 비번값 넘겨준다(hidden으로 - #memPassword)
+		$("#user_pw1").val(userPass1);	
 	}
 } 
 
@@ -268,7 +268,7 @@ function passwordCheck(){
 
 
 
-/* function mailCheck() {
+ function mailCheck() {
     var user_email = $("#user_email").val();
 
     $.ajax({
@@ -287,7 +287,7 @@ function passwordCheck(){
             alert("error");
         }
     });
-} */
+} 
 
 
 

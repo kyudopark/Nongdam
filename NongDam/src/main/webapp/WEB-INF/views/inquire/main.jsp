@@ -151,7 +151,7 @@
                 <div class="text-end">
                     <a class="btn btn-outline-secondary" href="${contextPath }/"><i class="fa-solid fa-xmark"></i> 문의 취소</a>
                     
-                    <button type="button" class="btn btn-secondary" id="submitBtn"><i class="fa-solid fa-paper-plane"></i> 문의하기</button>
+                    <button type="button" class="btn btn-secondary" id="submitBtn" disabled><i class="fa-solid fa-paper-plane"></i> 문의하기</button>
                 </div>
             </div>
         </div>

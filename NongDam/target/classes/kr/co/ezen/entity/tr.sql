@@ -6,7 +6,7 @@ create table tr(
 	tr_title varchar(270),
 	tr_content text,
 	user_idx int,
-	tr_time timestamp,
+	tr_time datetime,
 	tr_imgpath varchar(255),
 	primary key(tr_idx)
 )
@@ -22,10 +22,9 @@ insert into Tr (tr_title,tr_content,user_idx,tr_imgpath)
 			    VALUES ('123','123',1,null)
 			    
 
-<<<<<<< HEAD
+
 			    delete * table tr
-=======
->>>>>>> branch 'main' of https://github.com/YJY1129/Nongdam.git
+
 ---------------------------------------------------------------------
 drop table trComment
 select * from trComment

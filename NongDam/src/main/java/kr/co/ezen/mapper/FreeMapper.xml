@@ -44,7 +44,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<insert id="insert" parameterType="kr.co.ezen.entity.Free">
 	   insert into free (free_idx, free_title, free_content, free_date, free_tag, free_count)
-	    VALUES (#{free_idx}, #{free_title}, #{free_content}, #{free_date}, #{free_tag}, #{free_count})
+	    VALUES (#{free_idx}, #{free_title}, #{free_content}, now(), #{free_tag}, #{free_count})
 	</insert>
 	
 	
