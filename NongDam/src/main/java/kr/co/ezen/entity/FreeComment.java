@@ -10,7 +10,7 @@ public class FreeComment {
 	private int free_parent_idx;
 	private int free_comment_idx;
 	private int user_idx;
-	private Date tr_comment_time;
+	private Date free_comment_time;
 	private String free_comment_content;
 	private int free_comment_useable;
 	

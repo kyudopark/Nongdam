@@ -9,21 +9,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<mapper namespace="kr.co.ezen.mapper.FreeMapper">
 	
 	<sql id="search">
-		<!--  <if test="type == 'user_nickname'">
+		<if test="type == 'user_nickname'">
 				where user_nickname like concat('%',#{keyword},'%')
-			
+			</if> 
 			<if test="type == 'free_title'">
 				where free_title like concat('%',#{keyword},'%')
 			</if>
-			</if> -->	
+			
+			
 	</sql>
 		
 	<select id="findAll" resultType="kr.co.ezen.entity.Free" parameterType="kr.co.ezen.entity.Criteria">
 	
-		select free_idx, free_title, free_content, free_date, user_idx, free_tag, free_count from free
+			select * from free 
 			<include refid="search"/>
 			 order by free_idx desc
-			 limit #{pageStart}, #{perPageNum}	
+			 limit #{pageStart}, #{perPageNum}
 	
 	</select>
 	
@@ -31,7 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select * from free where free_tag="자유" order by free_idx desc
         limit #{pageStart}, #{perPageNum}	
 	</select>
-
+	
 	<select id="findqu" resultType="kr.co.ezen.entity.Free" parameterType="kr.co.ezen.entity.Criteria">
         select * from free where free_tag="질문" order by free_idx desc
         limit #{pageStart}, #{perPageNum}	
@@ -43,9 +44,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<insert id="insert" parameterType="kr.co.ezen.entity.Free">
-	   insert into free (free_idx, free_title, free_content, free_date, free_tag, free_count)
-	    VALUES (#{free_idx}, #{free_title}, #{free_content}, #{free_date}, #{free_tag}, #{free_count})
+	   insert into free (free_idx, free_title, free_content, free_date, free_tag, free_count, user_idx)
+	    VALUES (#{free_idx}, #{free_title}, #{free_content}, now(), #{free_tag}, #{free_count}, #{user_idx})
 	</insert>
+	
+	<select id="GetUserIdx" resultType="kr.co.ezen.entity.Free" parameterType="int">
+		select user_idx from User where user_nickname=#{user_nickname}
+		
+	</select>
 	
 	
 	<select id="totalCount" resultType="int" parameterType="kr.co.ezen.entity.Criteria">
@@ -53,14 +59,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		   <include refid="search"/>
 	</select>
 	
-	<!-- <update id="updateByIdx">
-        update free
-        set view_cnt = view_cnt + 1
-        where free_idx = #{free_idx}
-        <include refid="search"/>
-	</update>  -->		
-	
-	
+	<update id="updatecnt">
+	        update free
+	        set free_count = free_count + 1
+	        where free_idx = #{free_idx};
+	</update>
 	
 	<delete id="deleteByIdx" parameterType="int">
 			delete from free where free_idx=#{free_idx}
@@ -74,13 +77,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<select id="findAllComment" resultType="kr.co.ezen.entity.FreeComment" parameterType="int">
 	
-		select free_parent_idx, free_comment_idx, free_comment_time, free_comment_content, free_comment_useable from freeComment 
-			<include refid="search"/>
-			 order by free_parent_idx desc
+		select * from FreeComment as f left outer join User as u on f.user_idx= u.user_idx
+			where free_idx=#{free_idx}
+			order by free_parent_idx desc, free_comment_idx
 	
 	</select>
 	
+	<insert id="insertComment" parameterType="kr.co.ezen.entity.FreeComment">
+	   insert into freeComment (free_idx,free_parent_idx, free_comment_idx, free_comment_time, free_comment_content, free_comment_useable)
+	    VALUES (#{free_idx}, #{free_parent_idx}, #{free_comment_idx}, #{free_comment_time}, #{free_comment_content}, 1)
+	</insert>
 	
+	<delete id="deleteCommentByIdx" parameterType="int">
+		delete from freeComment where free_parent_idx=#{free_parent_idx}
+	</delete>
+	
+	<update id="updateCommentByIdx" parameterType="kr.co.ezen.entity.FreeComment">
+			update freeComment set free_comment_content=#{free_comment_content} 
+			where free_idx=#{free_idx}
+			
+	</update>
 	
 	</mapper>
 	

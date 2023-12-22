@@ -17,6 +17,4 @@ select*from User;
 delete from User where user_idx=4;
 delete from User where user_idx=6;
 
-
-
 INSERT INTO User (user_id, user_pw, user_admin, user_nickname, user_name, user_email) VALUES ('admin', '1234', true, 'admin', 'admin', 'kdpark1002@naver.com');
