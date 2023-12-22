@@ -10,6 +10,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select resultType="kr.co.ezen.entity.Tr" id="findTr" >
 	select  tr_idx,tr_title,tr_time,user_nickname,tr_imgpath from tr natural join User
 	order by tr_time desc
+	limit 8
 		
 	</select>
 	</mapper>

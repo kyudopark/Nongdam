@@ -115,14 +115,17 @@
 									<div class="d-flex flex-row flex-wrap justify-content-between">
 										<div class="col-12 col-lg-auto">
 											<div class="input-group mb-3">
-												<select class="form-select" style="max-width: 140px;"
+												<select class="btn btn-outline-secondary dropdown-toggle"
 													name="type">
-													<option value="user_name">이름</option>
-													<option value="user_nickname">닉네임</option>
-													<option value="user_id">아이디</option>
+													<option class="dropdown-item" value="user_name"
+														${cri.type == 'user_name' ? 'selected' : ''}>이름</option>
+													<option class="dropdown-item" value="user_nickname"
+														${cri.type == 'user_nickname' ? 'selected' : ''}>닉네임</option>
+													<option class="dropdown-item" value="user_id"
+														${cri.type == 'user_id' ? 'selected' : ''}>아이디</option>
 												</select> <input type="text" name="keyword" class="form-control"
-													placeholder="검색" value="${cri.keyword }">
-												<button class="btn btn-outline-secondary" type="submit">검색</button>
+													value="${cri.keyword}" placeholder="검색">
+												<button class="btn btn-secondary" type="submit">검색</button>
 											</div>
 										</div>
 										<div class="col-auto">
