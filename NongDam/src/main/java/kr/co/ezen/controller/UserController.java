@@ -47,9 +47,7 @@ import com.google.gson.JsonParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import kr.co.ezen.entity.GoogleLoginDTO;
-import kr.co.ezen.entity.GoogleLoginRequest;
-import kr.co.ezen.entity.GoogleLoginResponse;
+
 import kr.co.ezen.entity.KakaoDTO;
 import kr.co.ezen.entity.User;
 
@@ -129,56 +127,8 @@ public class UserController {
     	userService.findPw(response, user);
     }
     
-    @RequestMapping("/googlecallback")    
-    public ResponseEntity<GoogleLoginDTO> redirectGoogleLogin(
-            @RequestParam(value = "code") String authCode
-    ) {
-        // HTTP 통신을 위해 RestTemplate 활용
-        RestTemplate restTemplate = new RestTemplate();
-        GoogleLoginRequest requestParams = GoogleLoginRequest.builder()
-                .clientId(googleLoginBO.getGoogleClientId())
-                .clientSecret(googleLoginBO.getGoogleSecret())
-                .code(authCode)
-                .redirectUri(googleLoginBO.getGoogleRedirectUri())
-                .grantType("authorization_code")
-                .build();
-
-        try {
-            // Http Header 설정
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<GoogleLoginRequest> httpRequestEntity = new HttpEntity<>(requestParams, headers);
-            ResponseEntity<String> apiResponseJson = restTemplate.postForEntity(googleLoginBO.getGoogleAuthUrl() + "/token", httpRequestEntity, String.class);
-
-            // ObjectMapper를 통해 String to Object로 변환
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
-            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL); // NULL이 아닌 값만 응답받기(NULL인 경우는 생략)
-            GoogleLoginResponse googleLoginResponse = objectMapper.readValue(apiResponseJson.getBody(), new TypeReference<GoogleLoginResponse>() {});
-
-            // 사용자의 정보는 JWT Token으로 저장되어 있고, Id_Token에 값을 저장한다.
-            String jwtToken = googleLoginResponse.getIdToken();
-
-            // JWT Token을 전달해 JWT 저장된 사용자 정보 확인
-            String requestUrl = UriComponentsBuilder.fromHttpUrl(googleLoginBO.getGoogleAuthUrl() + "/tokeninfo").queryParam("id_token", jwtToken).toUriString();
-
-            String resultJson = restTemplate.getForObject(requestUrl, String.class);
-
-            if(resultJson != null) {
-                GoogleLoginDTO userInfoDto = objectMapper.readValue(resultJson, new TypeReference<GoogleLoginDTO>() {});
-
-                return ResponseEntity.ok().body(userInfoDto);
-            }
-            else {
-                throw new Exception("Google OAuth failed!");
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return ResponseEntity.badRequest().body(null);
-    }
+    //google 있던 자리
+    
     
     @RequestMapping("/kakaocallback")
     public String kakaoCallBack(HttpSession session, @RequestParam("code") String code,@RequestParam(value = "state", required = false) String state, Model model) {

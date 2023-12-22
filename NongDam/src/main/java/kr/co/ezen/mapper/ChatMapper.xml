@@ -29,11 +29,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		resultType="kr.co.ezen.entity.ChatRoom">
 			select		
 				x.chatroom_idx, x.user_idx, y.user_idx AS user_corr_idx, x.chat_disabled_time,
-				user.user_nickname AS user_corr_name,
-				IFNULL(user.user_profile,null) AS user_corr_profile
+				User.user_nickname AS user_corr_name,
+				IFNULL(User.user_profile,null) AS user_corr_profile
 			from
-				ChatRoom AS x LEFT JOIN ChatRoom AS y ON x.chatroom_idx=y.chatroom_idx
-				LEFT JOIN user ON y.user_idx=user.user_idx
+				chatRoom AS x LEFT JOIN chatRoom AS y ON x.chatroom_idx=y.chatroom_idx
+				LEFT JOIN User ON y.user_idx=User.user_idx
 			where
 				<include refid="user_corr_idxIsEmpty"/>
 			GROUP BY
@@ -53,13 +53,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		resultType="kr.co.ezen.entity.ChatRoom">
 			select	
 				x.chatroom_idx, x.user_idx, y.user_idx AS user_corr_idx, x.chat_disabled_time,
-				user.user_nickname AS user_corr_name,
-				IFNULL(user.user_profile,null) AS user_corr_profile,
+				User.user_nickname AS user_corr_name,
+				IFNULL(User.user_profile,null) AS user_corr_profile,
 				chat.chat_time AS last_chat_time,
 				chat.chat_message AS last_chat_message	
 			from	
-				ChatRoom AS x LEFT JOIN chatRoom AS y ON x.chatroom_idx=y.chatroom_idx
-				LEFT JOIN user ON y.user_idx=user.user_idx
+				chatRoom AS x LEFT JOIN chatRoom AS y ON x.chatroom_idx=y.chatroom_idx
+				LEFT JOIN User ON y.user_idx=User.user_idx
 				LEFT JOIN (select chatroom_idx, chat_message, chat_time 
 									from chat 
 									where (chat_time) in (
