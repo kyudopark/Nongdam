@@ -77,7 +77,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<select id="findAllComment" resultType="kr.co.ezen.entity.FreeComment" parameterType="int">
 	
-		select * from FreeComment as f left outer join User as u on f.user_idx= u.user_idx
+		select * from freeComment as f left outer join User as u on f.user_idx= u.user_idx
 			where free_idx=#{free_idx}
 			order by free_parent_idx desc, free_comment_idx
 	

@@ -36,9 +36,25 @@
 	<context:component-scan base-package="kr.co.ezen.controller" />
 	
 	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+
 		<beans:property name="maxUploadSize" value="52428800" />
 		<beans:property name="maxInMemorySize" value="10485760" />
 	</beans:bean>
+	
+		
+	<!--  231216 websocket -->
+	<beans:bean id="ChatHandler" class="kr.co.ezen.handler.ChatHandler"/>
+	
+	<websocket:handlers>
+		<websocket:mapping handler="ChatHandler" path="/chat/{chatroom_idx}"/>
+		<websocket:handshake-interceptors>
+			<beans:bean class="kr.co.ezen.interceptor.HandshakeInterceptorImpl"/>
+		</websocket:handshake-interceptors>
+	</websocket:handlers>
+	<!--  end ====  -->
+	
+	
+
 
 	
 </beans:beans>
