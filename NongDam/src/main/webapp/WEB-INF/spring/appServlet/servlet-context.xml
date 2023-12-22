@@ -25,12 +25,19 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
+	<!-- mvc:interceptors -->
 	<mvc:interceptors>
-	   <mvc:interceptor>
-        <mvc:mapping path="/admin/**"/> 
-        <beans:bean class="kr.co.ezen.interceptor.LoginInterceptor"/>
-    </mvc:interceptor>
-</mvc:interceptors>
+	   	<mvc:interceptor>
+	        <mvc:mapping path="/admin/**"/> 
+	        <beans:bean class="kr.co.ezen.interceptor.LoginInterceptor"/>
+    	</mvc:interceptor>
+    
+       <mvc:interceptor>
+	        <mvc:mapping path="/myPage/**"/> 
+	        <beans:bean class="kr.co.ezen.interceptor.MyPageInterceptor"/>
+	    </mvc:interceptor>
+	</mvc:interceptors>
+	<!-- mvc:interceptors  end -->
 	
 	<!-- 빈등록 -->
 	<context:component-scan base-package="kr.co.ezen.controller" />

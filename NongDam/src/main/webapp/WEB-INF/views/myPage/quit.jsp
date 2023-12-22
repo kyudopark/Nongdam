@@ -41,9 +41,14 @@
     
     <title>농담 | 농업 정보 커뮤니티</title>
  
-<script>
-   
-</script>
+<script type="text/javascript">
+  $(document).ready(function(){
+    if(${!empty msgType}){
+      $("#messageType").attr("class", "modal-content panel-warning");    
+      $("#myMessage").modal("show");
+    }
+  });
+  </script>
 
 </head>
 <body>
@@ -116,12 +121,12 @@
                         <c:if test="${ uvo.user_kakaologin=='Y' }">
                         <!-- 마이페이지 회원탈퇴 -->
                         <div class="pt-4 pb-4 mt-4 mb-4">
-                            <h4 class="ms-2 mb-4 text-body-secondary"><i class="fa-solid fa-wrench me-2"></i> 회원 탈퇴</h4>
+                            <h4 class="ms-2 mb-4 text-body-secondary"><i class="fa-solid fa-wrench me-2"></i> 카카오 회원 탈퇴</h4>
                             <div class="pt-2">
                                 <div class="text-center border">
                                     <p class="fw-bolder fs-5 p-4 pt-0" style="margin-top:2.6rem; ">회원 탈퇴</p>
                                     <p>회원 탈퇴 시 가입 정보가 모두 삭제됩니다.</p>
-                                    <p>SNS 연동 계정 탈퇴 시에 해당 연동은 끊어지며,</p>
+                                    <p><span class="badge text-bg-warning">카카오</span> 연동 계정 탈퇴 시에 해당 연동은 끊어지며,</p>
                                     <p>작성한 게시글과 댓글은 모두 숨김처리됩니다.</p>
                                     <p><b>회원 탈퇴 처리</b>를 위해 <b>이름을 다시 한번 입력</b>해 주시기 바랍니다.</p>
                                     <form action="${contextPath}/myPage/quit2" method="post">
@@ -144,6 +149,28 @@
     
     <!-- 마이페이지 끝 -->
 	
+	
+	<!-- 실패 메세지를 출력(modal) -->
+			<div id="myMessage" class="modal fade" role="dialog">
+				<div class="modal-dialog">
+					<!-- Modal content-->
+					<div id="messageType" class="modal-content panel-info">
+						<div class="modal-header panel-heading">
+							<button type="button" class="btn" data-bs-dismiss="modal">&times;</button>
+							<h4 class="modal-title">${msgType}</h4>
+						</div>
+						<div class="modal-body">
+							<p>${msg}</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn"
+								data-bs-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+				
 	
 	
 	<jsp:include page="../common/footer.jsp"/>

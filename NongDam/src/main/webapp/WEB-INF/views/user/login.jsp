@@ -60,13 +60,17 @@
 	crossorigin="anonymous"></script>
 	
 
-
+<script src="https://www.google.com/recaptcha/enterprise.js?render=6Lef5zcpAAAAAANXCWScFJ1ACpQ1Inwjmsdc-qAq"></script>
 <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
 <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.5.0/kakao.min.js"
 	integrity="sha384-kYPsUbBPlktXsY6/oNHSUDZoTX6+YI51f63jCPEIPFP09ttByAdxd2mEjKuhdqn4"
 	crossorigin="anonymous"></script>
 
+<script>
+</script>
 
+<script>
+</script>
 
 
 
@@ -91,7 +95,7 @@
 		<div class="row justify-content-center text-center mt-5 mb-5">
 			<div class="col-12 col-md-10 col-lg-7 col-xl-6">
 				<h4 class="mb-5">로그인</h4>
-				<form action="${contextPath }/user/userLogin" method="post">
+				<form action="${contextPath }/user/userLogin" method="post" id="loginForm">
 					<div>
 						<!-- input의 placeholder와 라벨의 이름을 같게 주세요.-->
 						<!-- 아이디 -->
@@ -114,6 +118,7 @@
 						</button>
 					</div>
 				</form>
+				
 				<!-- form 영역 끝 -->
 
 				<!-- a 태그들 -->
@@ -166,14 +171,14 @@
 			<!-- Modal content-->
 			<div id="messageType" class="modal-content panel-info">
 				<div class="modal-header panel-heading">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<button type="button" class="btn" data-bs-dismiss="modal">&times;</button>
 					<h4 class="modal-title">${msgType}</h4>
 				</div>
 				<div class="modal-body">
 					<p>${msg}</p>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn" data-bs-dismiss="modal">Close</button>
 				</div>
 			</div>
 		</div>
