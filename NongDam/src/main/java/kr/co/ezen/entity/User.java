@@ -11,7 +11,7 @@ import lombok.Data;
 
 @Data
 public class User {
-	private Long user_idx;
+	private int user_idx;
 	@NotNull
 	@Size(min = 4, max = 20)
     private String user_id;

@@ -7,4 +7,113 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	
 	<mapper namespace="kr.co.ezen.mapper.ChatMapper">
+		<sql id="user_corr_idxIsEmpty">
+			<if test="user_corr_idx == 0 || user_corr_idx == null">
+				x.chatroom_idx=#{chatroom_idx}
+				and x.user_idx=#{user_idx}
+				and y.user_idx!=#{user_idx}
+			</if>
+			<if test="user_corr_idx != 0">
+				x.user_idx=#{user_idx}
+				and y.user_idx=#{user_corr_idx}
+			</if>
+		</sql>
+		
+		<select id="findCorr_idx" parameterType="kr.co.ezen.entity.Chat"
+		resultType="int">
+			select user_idx from chatRoom 
+			where chatroom_idx=#{chatroom_idx} and user_idx!=#{user_idx}
+		</select>
+	
+		<select id="findChatroom" parameterType="kr.co.ezen.entity.ChatRoom"
+		resultType="kr.co.ezen.entity.ChatRoom">
+			select		
+				x.chatroom_idx, x.user_idx, y.user_idx AS user_corr_idx, x.chat_disabled_time,
+				user.user_nickname AS user_corr_name,
+				IFNULL(user.user_profile,null) AS user_corr_profile
+			from
+				ChatRoom AS x LEFT JOIN ChatRoom AS y ON x.chatroom_idx=y.chatroom_idx
+				LEFT JOIN user ON y.user_idx=user.user_idx
+			where
+				<include refid="user_corr_idxIsEmpty"/>
+			GROUP BY
+				x.chatroom_idx,
+				x.user_idx,
+				y.user_idx,
+				x.chat_disabled_time
+		</select>
+		
+		<select id="findR_idxByU_idx" parameterType="int"
+		resultType="Integer">
+			select chatroom_idx from chatRoom 
+			where user_idx=#{user_idx}
+		</select>
+		
+		<select id="findAllChatroom" parameterType="int"
+		resultType="kr.co.ezen.entity.ChatRoom">
+			select	
+				x.chatroom_idx, x.user_idx, y.user_idx AS user_corr_idx, x.chat_disabled_time,
+				user.user_nickname AS user_corr_name,
+				IFNULL(user.user_profile,null) AS user_corr_profile,
+				chat.chat_time AS last_chat_time,
+				chat.chat_message AS last_chat_message	
+			from	
+				ChatRoom AS x LEFT JOIN ChatRoom AS y ON x.chatroom_idx=y.chatroom_idx
+				LEFT JOIN user ON y.user_idx=user.user_idx
+				LEFT JOIN (select chatroom_idx, chat_message, chat_time 
+									from chat 
+									where (chat_time) in (
+										select max(chat_time) as chat_time 
+									    	from chat 
+									        group by chatroom_idx
+									   )) AS chat ON x.chatroom_idx=chat.chatroom_idx
+			where
+				x.user_idx=#{user_idx}
+				and y.user_idx!=#{user_idx}
+			GROUP BY	
+				x.chatroom_idx,	
+				x.user_idx,	
+				y.user_idx,	
+				x.chat_disabled_time,
+				last_chat_time,
+				last_chat_message	
+			HAVING	
+				last_chat_time > x.chat_disabled_time
+			ORDER BY	
+				last_chat_time DESC
+		</select>
+	
+		<select id="isExistence" parameterType="kr.co.ezen.entity.ChatRoom"
+		resultType="kr.co.ezen.entity.ChatRoom">
+			select x.chatroom_idx, x.user_idx, y.user_idx AS user_corr_idx
+			from ChatRoom AS x JOIN ChatRoom AS y ON x.chatroom_idx=y.chatroom_idx
+			where x.user_idx=#{user_idx} and y.user_idx=#{user_corr_idx}
+		</select>
+		
+		<insert id="createRoom" parameterType="kr.co.ezen.entity.ChatRoom">
+			<selectKey keyProperty="chatroom_idx"  resultType="int" order="BEFORE">
+				select IFNULL(MAX(chatroom_idx)+1,1) AS chatroom_idx from chatRoom
+			</selectKey>
+			insert into chatRoom(chatroom_idx,user_idx,chat_disabled_time)
+			values(#{chatroom_idx},#{user_idx},now()),(#{chatroom_idx},#{user_corr_idx},now())
+		</insert>
+		
+		<select id="findChatting" parameterType="kr.co.ezen.entity.ChatRoom"
+		resultType="kr.co.ezen.entity.Chat">
+			select chatroom_idx,user_idx,chat_time,chat_message
+			from chat
+			where chatroom_idx=#{chatroom_idx} and chat_time>=#{chat_disabled_time}
+		</select>
+	
+		<insert id="insert" parameterType="kr.co.ezen.entity.Chat">
+			insert into Chat (chatroom_idx,user_idx,chat_time,chat_message) 
+			values (#{chatroom_idx},#{user_idx},#{chat_time},#{chat_message})
+		</insert>
+		
+		<update id="disabledRoom"  parameterType="kr.co.ezen.entity.ChatRoom">
+			update chatRoom set chat_disabled_time=now()
+			 where user_idx=#{user_idx} and chatroom_idx=#{chatroom_idx}
+		</update>
+		
+	
 	</mapper>

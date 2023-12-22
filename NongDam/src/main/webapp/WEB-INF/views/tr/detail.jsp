@@ -180,7 +180,7 @@
 		}
 		
 		function openChatByIdx(user_idx){
-		   window.open("${contextPath}/chat/list/"+user_idx,"채팅하기","width=400, height=500, left=100, top=50");
+		   window.open("${contextPath}/chat/enterRoom?user_corr_idx="+user_idx,"채팅","width=400, height=500, left=100, top=50");
 		}
 		
 		function deleteByIdx(tr_idx){
@@ -282,6 +282,9 @@
 			})
         }
         //-----------------------------------------------------
+        function mainfrm(){
+        	$('#mainfrm').submit();
+        }
 	</script>
 </head>
 <body>
@@ -293,7 +296,7 @@
 	<!-- 글 조회 div container-->
     <div class="container mt-5 mb-5">
         <div class="pt-3 pb-3">
-            <a class="text-muted" href="javascript:history.go(-1)"> &lt; 목록으로 </a>
+            <a class="text-muted" href="javascript:mainfrm()"> &lt; 목록으로 </a>
         </div>
         <!-- 글 제목 -->
         <div class="border-bottom">
@@ -323,8 +326,19 @@
 	            <a href="${contextPath }/tr/modify?tr_idx=${vo.tr_idx}" class="btn btn-secondary">수정</a>
 	            <button onclick="deleteByIdx(${vo.tr_idx})" class="btn btn-danger">삭제</button>
             </c:if>
-            <a href="javascript:history.go(-1)" class="btn btn-secondary">리스트</a>
+            <a href="javascript:mainfrm()" class="btn btn-secondary">리스트</a>
         </div>
+
+        <!-- tr/main으로 갈때 사용하는 폼 -->
+        <form action="${contextPath }/tr/main" method="get" id="mainfrm">
+        	<input type="hidden" name="page" value="${cri.page }"/>
+        	<input type="hidden" name="perPageNum" value="${cri.perPageNum }"/>
+        	<c:if test="${!empty cri.type }">
+        	<input type="hidden" name="type" value="${cri.type }"/>
+        	<input type="hidden" name="keyword" value="${cri.keyword }"/>
+        	</c:if>
+        </form>
+        
 
         <!-- 댓글 -->
         <form id="insertCommentForm">

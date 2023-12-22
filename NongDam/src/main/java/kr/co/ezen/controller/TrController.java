@@ -71,7 +71,7 @@ public class TrController {
 	}
 
 	@GetMapping("/detail")
-	public String detail(@RequestParam("tr_idx") int tr_idx, Model m) {
+	public String detail(@RequestParam("tr_idx") int tr_idx, Model m, Criteria cri) {
 		// 게시글조회
 
 		Tr vo = trService.findByIdx(tr_idx);
@@ -79,6 +79,7 @@ public class TrController {
 
 		m.addAttribute("vo", vo);
 		m.addAttribute("cvo", cvo);
+		m.addAttribute("cri",cri);
 
 		return "tr/detail";
 	}
