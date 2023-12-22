@@ -4,8 +4,9 @@
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xsi:schemaLocation="http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket-4.3.xsd
-		http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
 
@@ -13,6 +14,7 @@
 	
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<annotation-driven />
+	
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />
@@ -23,17 +25,20 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
+	<mvc:interceptors>
+	   <mvc:interceptor>
+        <mvc:mapping path="/admin/**"/> 
+        <beans:bean class="kr.co.ezen.interceptor.LoginInterceptor"/>
+    </mvc:interceptor>
+</mvc:interceptors>
+	
 	<!-- 빈등록 -->
 	<context:component-scan base-package="kr.co.ezen.controller" />
 	
 	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-    <beans:property name="maxUploadSize" value="52428800" />
-	<beans:property name="maxInMemorySize" value="10485760" />
+		<beans:property name="maxUploadSize" value="52428800" />
+		<beans:property name="maxInMemorySize" value="10485760" />
 	</beans:bean>
-	
-	
-	
-	
 
-
+	
 </beans:beans>

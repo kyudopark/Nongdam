@@ -12,7 +12,7 @@ public interface AdminMapper {
 	public List<User> findAll(Criteria cri);
 	public void deleteByIdx(int user_idx);
 	public void updateAdminStatus(User user);
-
-
+	public void deleteByCheckbox(List<Integer> selectedUsers);
+ 
 
 }
