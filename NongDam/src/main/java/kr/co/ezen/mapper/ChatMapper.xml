@@ -58,7 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				chat.chat_time AS last_chat_time,
 				chat.chat_message AS last_chat_message	
 			from	
-				ChatRoom AS x LEFT JOIN ChatRoom AS y ON x.chatroom_idx=y.chatroom_idx
+				ChatRoom AS x LEFT JOIN chatRoom AS y ON x.chatroom_idx=y.chatroom_idx
 				LEFT JOIN user ON y.user_idx=user.user_idx
 				LEFT JOIN (select chatroom_idx, chat_message, chat_time 
 									from chat 
@@ -86,7 +86,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<select id="isExistence" parameterType="kr.co.ezen.entity.ChatRoom"
 		resultType="kr.co.ezen.entity.ChatRoom">
 			select x.chatroom_idx, x.user_idx, y.user_idx AS user_corr_idx
-			from ChatRoom AS x JOIN ChatRoom AS y ON x.chatroom_idx=y.chatroom_idx
+			from chatRoom AS x JOIN chatRoom AS y ON x.chatroom_idx=y.chatroom_idx
 			where x.user_idx=#{user_idx} and y.user_idx=#{user_corr_idx}
 		</select>
 		
@@ -106,7 +106,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</select>
 	
 		<insert id="insert" parameterType="kr.co.ezen.entity.Chat">
-			insert into Chat (chatroom_idx,user_idx,chat_time,chat_message) 
+			insert into chat (chatroom_idx,user_idx,chat_time,chat_message) 
 			values (#{chatroom_idx},#{user_idx},#{chat_time},#{chat_message})
 		</insert>
 		

@@ -16,7 +16,7 @@ create table chatRoom(
 -- ====================================
 drop table chat
 drop table chatroom
-select * from user
+select * from User
 select * from chat 
 select * from chatroom
 delete from chatroom where chatroom_idx=0
