@@ -7,8 +7,7 @@ import org.springframework.stereotype.Service;
 import kr.co.ezen.entity.Criteria;
 import kr.co.ezen.entity.Free;
 import kr.co.ezen.entity.FreeComment;
-
-
+import kr.co.ezen.entity.TrComment;
 
 public interface FreeService {
 	
@@ -28,8 +27,15 @@ public interface FreeService {
 	//태그
 	public List<Free> findfr(Criteria cri);
 	public List<Free> findqu(Criteria cri);
-
 	
+	//조회수 증가 
+	public void updatecnt(int free_idx);
+	//조회수or날짜 별로 최신순/인기순
+	public List<Free> findBydate(Criteria cri);
+	public List<Free> findBycount(Criteria cri);
+	
+	
+
 	public List<FreeComment> findAllComment(int free_idx);
 	public void insertComment(FreeComment dev);
 	public void insertReplyComment(FreeComment dev);

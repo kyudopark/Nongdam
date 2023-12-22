@@ -7,10 +7,14 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
 
-<!--<script type="text/javascript" src="${contextPath }/resources/common/js/test.js"></script>  -->
 
 <script type="text/javascript" src="${contextPath }/resources/common/js/darkmode.js"></script>
 
+<script>
+	function openChat(){
+	    window.open("${contextPath}/chat/main","채팅하기","width=400, height=500, left=100, top=50");
+	}
+</script>
 
 
 <header class="border-bottom bg-body-tertiary">

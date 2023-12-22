@@ -65,51 +65,66 @@ public class FreeServiceImpl implements FreeService {
 		return qu;
 	}
 	
+	@Override
+	public void updatecnt(int free_idx) {
+		freemapper.updatecnt(free_idx);
+		
+	}
+	
+	@Override
+	public List<Free> findBydate(Criteria cri) {
+		List<Free> fd=freemapper.findqu(cri);
+		return fd;
+	}
+
+
+	@Override
+	public List<Free> findBycount(Criteria cri) {
+		List<Free> fc=freemapper.findqu(cri);
+		return fc;
+	}
+
+
+	
+	
 	
 	@Override
 	public List<FreeComment> findAllComment(int free_idx) {
 		List<FreeComment> dev=freemapper.findAllComment(free_idx);
 		return dev;
 	}
-
-
-
-
-
-	@Override
-	public void insertComment(FreeComment dev) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
+	
 	@Override
 	public void insertReplyComment(FreeComment dev) {
-		// TODO Auto-generated method stub
+		freemapper.insertReplyComment(dev);
 		
 	}
-
-
 	@Override
 	public void updateCommentByIdx(FreeComment dev) {
-		// TODO Auto-generated method stub
+		freemapper.updateCommentByIdx(dev);
 		
 	}
 
 
 	@Override
 	public void deleteCommentByIdx(int free_comment_idx) {
-		// TODO Auto-generated method stub
+		freemapper.deleteCommentByIdx(free_comment_idx);
 		
 	}
 
 
 	@Override
 	public void deleteCommentByfree_idx(int free_idx) {
-		// TODO Auto-generated method stub
+		freemapper.deleteCommentByIdx(free_idx);
 		
 	}
 
+
+	@Override
+	public void insertComment(FreeComment dev) {
+		freemapper.insertComment(dev);
+		
+	}
 
 
 

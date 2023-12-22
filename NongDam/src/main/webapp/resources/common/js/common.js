@@ -1,9 +1,8 @@
 
-	/* 채팅방 오픈 함수 */
-	function openChat(){
-	    window.open("${contextPath}/chat/list","채팅하기","width=400, height=500, left=100, top=50");
-	}
-	
+	/* 채팅방 오픈 함수 ==> 2023-12-21 common/header.jsp로 이동 */
+
+
+	/* 다크모드 관련 색 설정 */
 	$(document).ready(function(){
 	    //문서 준비 완료되었을때 ckEditor부분 다크모드 관련 클래스 추가
 	    //css도 따로 하나 들어가있음(바로 밑에 있는 스타일태그)
@@ -15,7 +14,6 @@
 	        $('.collapse').slideToggle();
 	    })
 	
-	    
-	   
+
 	    //document.ready 끝
 	});

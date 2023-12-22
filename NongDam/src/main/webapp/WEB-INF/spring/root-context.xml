@@ -11,7 +11,14 @@
 		<context:component-scan base-package="kr.co.ezen.service" />
 		
 		<!-- hikariCP Config -->
-		<bean class="com.zaxxer.hikari.HikariConfig" id="hikariConfig">
+		<!-- <bean class="com.zaxxer.hikari.HikariConfig" id="hikariConfig">
+			이 안에 값을 주입해볼것이다.
+			<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+			<property name="jdbcUrl" value="jdbc:mysql://nongtest.cu2lmym8cped.ap-northeast-2.rds.amazonaws.com:3306/nongdam"/>
+			<property name="username" value="admin"/>
+			<property name="password" value="1KAimbnfsm0HOAZU0fgS"/>
+     	</bean> -->
+     	<bean class="com.zaxxer.hikari.HikariConfig" id="hikariConfig">
 			<!-- 이 안에 값을 주입해볼것이다. -->
 			<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
 			<property name="jdbcUrl" value="jdbc:mysql://nongtest.cu2lmym8cped.ap-northeast-2.rds.amazonaws.com:3306/nongdam"/>
@@ -39,21 +46,21 @@
 		
 		<!-- mail설정 1207 -->
 		<!-- javax mail bean -->
-    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-    <property name="host" value="smtp.gmail.com" />
-    <property name="port" value="587" />
-    <property name="username" value="kdpark1002@gmail.com" />
-    <property name="password" value="ysmr eint wxzt fvnu" />
-    <property name="defaultEncoding" value="UTF-8" />
-    <property name="javaMailProperties">
-        <props>
-            <prop key="mail.transport.protocol">smtp</prop>
-            <prop key="mail.smtp.auth">true</prop>
-            <prop key="mail.smtp.starttls.enable">true</prop>
-            <prop key="mail.debug">true</prop>
-        </props>
-    </property>
-</bean>
+	    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		    <property name="host" value="smtp.gmail.com" />
+		    <property name="port" value="587" />
+		    <property name="username" value="kdpark1002@gmail.com" />
+		    <property name="password" value="ysmr eint wxzt fvnu" />
+		    <property name="defaultEncoding" value="UTF-8" />
+		    <property name="javaMailProperties">
+		        <props>
+		            <prop key="mail.transport.protocol">smtp</prop>
+		            <prop key="mail.smtp.auth">true</prop>
+		            <prop key="mail.smtp.starttls.enable">true</prop>
+		            <prop key="mail.debug">true</prop>
+		        </props>
+		    </property>
+		</bean>
 	
    
 		
