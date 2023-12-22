@@ -32,12 +32,37 @@
     <link rel="stylesheet" href="${contextPath }/resources/common/css/style.css">
     <!-- 기본js -->
     <script type="text/javascript" src="${contextPath }/resources/common/js/common.js"></script>
+    <!-- gp/* js파일 -->
+    <script type="text/javascript" src="${contextPath }/resources/gp/js/script.js"></script>
+    
+    <!-- 다음(카카오) 우편번호 -->
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     
     <meta name="농담" content="안녕하세요, 농업 정보 커뮤니티 농담입니다."/>
     
     <!-- 파비콘 -->
     <link rel="icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
     <link rel="shortcut icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
+    
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $(window).on('load', function() {
+            $(".info-section").hide();
+        });
+
+        $("#info").on("click", function () {
+            $(".info-section").toggle();
+        });
+        
+        
+		var addrParts = $('#').val().split(',');
+		
+		$('#gp_zipcode2').val(addrParts[0]);
+		$('#gp_zipcode3').val(addrParts[1]);
+        
+	});
+
+	</script>
     
     <title>농담 | 농업 정보 커뮤니티</title>
     
@@ -96,6 +121,16 @@
                         <!-- 공동구매 -->
                         <div class="mt-2 mb-4 pb-4">
                             <h4 class="ms-2 mb-4 text-body-secondary"><i class="fa-solid fa-tag me-2"></i> 공동구매 신청 내역</h4>
+                            <c:forEach var="gpUserList" items="${gpUserList }">
+	                            <c:set var="currentDate" value="<%= new java.util.Date() %>"/>
+								<c:set var="startDate" value="${gpUserList.gp_date_start }"/>
+								<c:set var="endDate" value="${gpUserList.gp_date_last }"/>
+									
+								<c:set var="diffMillis" value="${startDate.time - currentDate.time}"/>
+								<c:set var="diffDays" value="${diffMillis / (24 * 60 * 60 * 1000)}"/>
+									                       
+								<c:set var="diffMillisEnd" value="${endDate.time - currentDate.time}"/>
+								<c:set var="diffDaysEnd" value="${diffMillisEnd / (24 * 60 * 60 * 1000)}"/>
                             <!-- 맨 윗줄 -->
                             <div class="d-flex flex-row flex-wrap pt-2 pb-2 border">
                                 <div class="d-none d-lg-block col-1 text-center">
@@ -115,7 +150,7 @@
                             <!-- 목록 하나 -->
                             <div class="d-flex flex-row flex-wrap justify-content-center align-items-center pt-3 pb-3 border border-top-0 bg-body-tertiary">
                                 <div class="d-none d-lg-block col-1 text-center">
-                                    {번호}
+                                    ${gpUserList.gp_uid }
                                 </div>
                                 <div class="col-12 col-lg-5">
                                     <div class="d-flex gap-2 ms-3 me-3">
@@ -125,29 +160,47 @@
                                         <div>
                                             <a href="#" class="text-decoration-none text-body title-overflow-1">
                                                 <!-- 둘중 하나 사용하세요 -->
-                                                <span class="text-danger">[거래중]</span>
-                                                <span class="text-muted">[배송완료]</span>
+                                                <c:choose>
+													<c:when test="${diffDaysEnd > 0}">
+														<span class="text-danger">
+															[거래중] 
+														</span>
+													</c:when>
+													<c:when test="${diffDaysEnd < 0}">
+														<span class="text-muted">
+															[거래완료] 
+														</span>
+													</c:when>
+												</c:choose>
                                                 <!-- 상품명 -->
-                                                <span>{상품명}이 긴 경우도 고려됨</span>
+                                                <span>${gpUserList.gp_title }</span>
                                             </a>
                                             <div class="text-muted">
-                                                <span>{0000}원</span>
-                                                <span>{00}개</span>
+                                                <span>${gpUserList.gp_price }원</span>
+                                                <span>${gpUserList.gp_num }개</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-6 col-lg-3 text-center">
-                                    ~ {YYYY-MM-DD}
+                                    ~ <fmt:formatDate value="${gpUserList.gp_date_last }" pattern="YYYY-MM-dd "/>
                                 </div>
                                 <div class="col-6 col-lg-3 text-center">
-                                    <button class="btn btn-sm btn-secondary">세부내역</button>
-                                    <button class="btn btn-sm btn-secondary">취소하기</button>
+                                    <button type="button" class="btn btn-sm btn-secondary" id="info">세부내역</button>
+                                    <c:choose>
+										<c:when test="${diffDaysEnd > 0}">
+											<button class="btn btn-sm btn-secondary">취소하기</button> 
+										</c:when>
+										<c:when test="${diffDaysEnd < 0}">
+											<button class="btn btn-sm btn-secondary" disabled="disabled">취소하기</button>
+										</c:when>
+									</c:choose>
+                                    
                                 </div>
                             </div>
                             <!-- 목록 하나 끝 =============================================== -->
                             <!-- 목록의 세부내역 버튼을 클릭했을 때 나오는 배송지(세부내역) -->
-                            <div class="p-3 pt-2 pb-2 border border-top-0">
+                            <div class="p-3 pt-2 pb-2 border border-top-0 info-section">
                                 <div class="p-2 pt-3 pb-3">
                                     <h6 class="mb-3">
                                         배송지 설정
@@ -158,7 +211,7 @@
                                             성명
                                         </div>
                                         <div class="col-12 col-sm-5">
-                                            <input type="text" placeholder="성명" class="form-control">
+                                            <input type="text" placeholder="성명" class="form-control" value="${gpUserList.gp_name }">
                                         </div>
                                     </div>
                                     <!-- 배송지 -->
@@ -169,16 +222,17 @@
                                                 <div class="row mb-2">
                                                     <div class="col-5">
                                                         <!-- 우편번호. readonly로 되어있으나 풀어도 됩니다 -->
-                                                        <input type="text" class="form-control" id="user_zipcode" placeholder="00000" readonly>
+                                                        <input type="text" class="form-control" id="gp_zipcode" placeholder="00000" readonly value="${gpUserList.gp_zipcode }">
                                                     </div>
                                                     <div class="col-7">
                                                         <!-- 우편번호 찾기 버튼. -->
-                                                        <button class="btn btn-secondary">우편번호 찾기</button>
+                                                        <button type="button" class="btn btn-secondary" onclick="execDaumPostcode()">우편번호 찾기</button>
+                                                        <button type="button" class="btn btn-secondary" onclick="execDaumPostcodeReset()">초기화</button>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <input type="text" class="form-control mb-2" id="user_zipcode2" placeholder="주소">
-                                            <input type="text" class="form-control" id="user_zipcode3" placeholder="상세 주소">
+                                            <input type="text" class="form-control mb-2" id="gp_zipcode2" value="" placeholder="주소">
+                                            <input type="text" class="form-control" id="gp_zipcode3" value="" placeholder="상세 주소">
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-end">
@@ -187,7 +241,7 @@
                                 </div>
                             </div>
                             <!-- 세부내역 끝 =============================================== -->
-
+							</c:forEach>
                             <!--공동구매 끝 =============================================== -->
                         </div>
                         <!-- =============================================== -->

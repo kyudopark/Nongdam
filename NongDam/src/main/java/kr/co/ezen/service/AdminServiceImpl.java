@@ -31,6 +31,11 @@ public class AdminServiceImpl  implements AdminService{
 		adminMapper.updateAdminStatus(user);
 	}
 
+	@Override
+	public void deleteByCheckbox(List<Integer> selectedUsers) {
+		adminMapper.deleteByCheckbox(selectedUsers);
+	}
+
 
 
 	

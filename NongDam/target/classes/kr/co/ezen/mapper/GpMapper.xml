@@ -44,7 +44,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</select>
 		
 		<insert id="insert" parameterType="kr.co.ezen.entity.Gp">
-			insert into Gp (gp_title,gp_content,gp_price,gp_date_start, gp_date_last, gp_thumb, user_idx)
+			insert into gp (gp_title,gp_content,gp_price,gp_date_start, gp_date_last, gp_thumb, user_idx)
 			VALUES (#{gp_title}, #{gp_content},#{gp_price},#{gp_date_start},#{gp_date_last},#{gp_thumb}, #{user_idx})
 		</insert>
 		
@@ -62,7 +62,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		
 		
 		<insert id="request" parameterType="kr.co.ezen.entity.GpUser">
-			insert into GpUser (gp_idx, user_idx,gp_uid, gp_zipcode, gp_addr, gp_name, gp_email, gp_total, gp_num)
+			insert into gpUser (gp_idx, user_idx,gp_uid, gp_zipcode, gp_addr, gp_name, gp_email, gp_total, gp_num)
 			VALUES (#{gp_idx},#{user_idx},#{gp_uid},#{gp_zipcode},#{gp_addr},#{gp_name},#{gp_email},#{gp_total}, #{gp_num})
 		</insert>
 

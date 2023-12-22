@@ -142,7 +142,7 @@ public class TrController {
 	public String modify(@RequestParam("tr_imgpath") MultipartFile file, @RequestParam("tr_idx") int tr_idx,
 	                     @RequestParam("tr_title") String tr_title, @RequestParam("tr_content") String tr_content,
 	                     @RequestParam(value = "existing_image", required = false) String existingImage,
-	                     HttpServletRequest request, RedirectAttributes rttr) throws IOException {
+	                     HttpServletRequest request, RedirectAttributes rttr,Criteria cri) throws IOException {
 
 	    Tr existingTr = trService.findByIdx(tr_idx);
 	    String existingThumbnail = existingTr.getTr_imgpath();
@@ -151,6 +151,9 @@ public class TrController {
 	    vo.setTr_idx(tr_idx);
 	    vo.setTr_title(tr_title);
 	    vo.setTr_content(tr_content);
+	    
+	    
+	    rttr.addAttribute("tr_idx", tr_idx);
 
 	    // 기존 이미지 삭제 로직은 유지됩니다.
 	    if (existingImage != null && !existingImage.isEmpty() && !file.isEmpty()) {
@@ -199,7 +202,7 @@ public class TrController {
 
 	    trService.updateByIdx(vo);
 
-	    return "redirect:/tr/main";
+	    return "redirect:/tr/detail";
 	}
 
 	@ResponseBody

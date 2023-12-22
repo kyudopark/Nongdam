@@ -17,4 +17,10 @@ public class GpUser {
 	private String gp_num;
 	private String gp_total;
 
+	
+	private Date gp_date_start;
+    private Date gp_date_last;
+    private String gp_title;
+    private String gp_price;
+    
 }

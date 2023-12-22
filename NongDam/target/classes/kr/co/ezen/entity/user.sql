@@ -25,4 +25,10 @@ delete from User where user_idx=14;
 
 
 
-INSERT INTO User (user_id, user_pw, user_admin, user_nickname, user_name, user_email) VALUES ('admin', '1234', true, 'admin', 'admin', 'kdpark1002@naver.com');
+INSERT INTO User (user_id, user_pw, user_admin, user_nickname, user_name, user_email) VALUES ('asdf', '1234', true, 'admin', 'admin', 'kdpark1002@naver.com');
+INSERT INTO User (user_id, user_pw, user_admin, user_nickname, user_name, user_email) VALUES ('asdf', '1234', true, 'admin', 'admin', 'kdpark1002@naver.com');
+INSERT INTO User (user_id, user_pw, user_admin, user_nickname, user_name, user_email) VALUES ('asdf', '1234', true, 'admin', 'admin', 'kdpark1002@naver.com');
+INSERT INTO User (user_id, user_pw, user_admin, user_nickname, user_name, user_email) VALUES ('asdf', '1234', true, 'admin', 'admin', 'kdpark1002@naver.com');
+INSERT INTO User (user_id, user_pw, user_admin, user_nickname, user_name, user_email) VALUES ('asdf', '1234', true, 'admin', 'admin', 'kdpark1002@naver.com');
+INSERT INTO User (user_id, user_pw, user_admin, user_nickname, user_name, user_email) VALUES ('asdf', '1234', true, 'admin', 'admin', 'kdpark1002@naver.com');
+INSERT INTO User (user_id, user_pw, user_admin, user_nickname, user_name, user_email) VALUES ('asdf', '1234', true, 'admin', 'admin', 'kdpark1002@naver.com');

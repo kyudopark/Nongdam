@@ -67,44 +67,9 @@
 	crossorigin="anonymous"></script>
 
 <script>
-  function onClick(e) {
-    e.preventDefault();
-    grecaptcha.enterprise.ready(async () => {
-      const token = await grecaptcha.enterprise.execute('6Lef5zcpAAAAAANXCWScFJ1ACpQ1Inwjmsdc-qAq', {action: 'LOGIN'});
-    });
-  }
 </script>
 
 <script>
-$(function() {
-$('#loginForm').submit(function() {
-		var captcha = 1;
-		$.ajax({
-            url: '/pro/VerifyRecaptcha',
-            type: 'post',
-            data: {
-                recaptcha: $("#g-recaptcha-response").val()
-            },
-            success: function(data) {
-                switch (data) {
-                    case 0:
-                        console.log("자동 가입 방지 봇 통과");
-                        captcha = 0;
-                		break;
-                    case 1:
-                        alert("자동 가입 방지 봇을 확인 한뒤 진행 해 주세요.");
-                        break;
-                    default:
-                        alert("자동 가입 방지 봇을 실행 하던 중 오류가 발생 했습니다. [Error bot Code : " + Number(data) + "]");
-                   		break;
-                }
-            }
-        });
-		if(captcha != 0) {
-			return false;
-		} 
-});
-});
 </script>
 
 
@@ -153,7 +118,7 @@ $('#loginForm').submit(function() {
 						</button>
 					</div>
 				</form>
-				<div class="g-recaptcha" data-sitekey=" 6Lef5zcpAAAAAANXCWScFJ1ACpQ1Inwjmsdc-qAq"></div>
+				
 				<!-- form 영역 끝 -->
 
 				<!-- a 태그들 -->

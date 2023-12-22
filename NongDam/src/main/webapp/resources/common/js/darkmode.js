@@ -32,4 +32,5 @@ function saveDarkModePreference(mode) {
             $('html').attr("data-bs-theme", "light");
             $('.mode-change-btn').html('다크 모드');
         }
+
 	});
