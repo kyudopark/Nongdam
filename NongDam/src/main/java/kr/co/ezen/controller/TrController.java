@@ -152,7 +152,7 @@ public class TrController {
 	    vo.setTr_title(tr_title);
 	    vo.setTr_content(tr_content);
 	    
-
+	    
 	    rttr.addAttribute("tr_idx", tr_idx);
 
 	    // 기존 이미지 삭제 로직은 유지됩니다.
