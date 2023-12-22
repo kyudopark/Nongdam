@@ -58,6 +58,16 @@
 	href="${contextPath }/resources/image/common/favicon.ico" />
 
 <title>농담 | 농업 정보 커뮤니티</title>
+
+<!-- 231222 modal -->
+<script type="text/javascript">
+  $(document).ready(function(){
+    if(${!empty msgType}){
+      $("#messageType").attr("class", "modal-content panel-warning");    
+      $("#myMessage").modal("show");
+    }
+  });
+  </script>
 </head>
 <body>
 
@@ -91,6 +101,7 @@
 					</p>
 				</div>
 			</div>
+
 		</div>
 	</div>
 
@@ -156,7 +167,6 @@
 				</c:forEach>
 				<!-- 카드 하나 끝 -->
 
-
 			</div>
 			<!-- 더보기 버튼-->
 			<div class="d-flex justify-content-center">
@@ -174,14 +184,15 @@
 			<!-- Modal content-->
 			<div id="messageType" class="modal-content panel-info">
 				<div class="modal-header panel-heading">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<button type="button" class="btn" data-bs-dismiss="modal">&times;</button>
 					<h4 class="modal-title">${msgType}</h4>
 				</div>
 				<div class="modal-body">
 					<p>${msg}</p>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn"
+						data-bs-dismiss="modal">Close</button>
 				</div>
 			</div>
 		</div>

@@ -6,7 +6,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
@@ -26,109 +29,61 @@ import com.google.gson.JsonParser;
 
 @Component
 public class GoogleLoginBO {
-    private final String CODE_URI = "https://accounts.google.com/o/oauth2/auth";
-    private final String TOKEN_URI = "https://oauth2.googleapis.com/token";
-    private final String USER_INFO_URI = "https://www.googleapis.com/oauth2/v3/userinfo";
-    private final String RESPONSE_TYPE = "code";
-    private final String GRANT_TYPE = "authorization_code";
-    private final String CLIENT_ID = "220297266440-0j0v50kmorgqq1hh49igc2qon03lnrqm.apps.googleusercontent.com";
-    private final String CLIENT_SECRET = "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";
-    private final String REDIRECT_URI = "http://localhost:8080/ezen/user/googlecallback";
-    private final String SCOPE = "openid profile email";
-    private final String SESSION_STATE = "google_state";
+	
+		
+		
+		
+	    private final String googleAuthUrl="https://oauth2.googleapis.com";
+		private final String googleLoginUrl="https://accounts.google.com";
+		private final String googleRedirectUrl="http://localhost:8080/ezen/user/googlecallback";
+		private final String googleClientId="220297266440-0j0v50kmorgqq1hh49igc2qon03lnrqm.apps.googleusercontent.com";
+		private final String googleSecret="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";
+		private final String scopes="profile,email,openid";
+	
+    
 
-    RestTemplate restTemplate = new RestTemplate();
+		public String googleInitUrl() {
+	        Map<String, Object> params = new HashMap<>();
+	        params.put("client_id", getGoogleClientId());
+	        params.put("redirect_uri", getGoogleRedirectUri());
+	        params.put("response_type", "code");
+	        params.put("scope", getScopeUrl());
 
-    public String requestCode(HttpSession session) throws Exception {
-        String state = generateRandomString();
-        setSession(session, state);
+	        String paramStr = params.entrySet().stream()
+	                .map(param -> param.getKey() + "=" + param.getValue())
+	                .collect(Collectors.joining("&"));
 
-        String codeRequestUrl = CODE_URI;
-        codeRequestUrl += "?response_type=" + RESPONSE_TYPE;
-        codeRequestUrl += "&client_id=" + CLIENT_ID;
-        codeRequestUrl += "&redirect_uri=" + REDIRECT_URI;
-        codeRequestUrl += "&state=" + state;
-        codeRequestUrl += "&scope=" + SCOPE;
+	        return getGoogleLoginUrl()
+	                + "/o/oauth2/v2/auth"
+	                + "?"
+	                + paramStr;
+	    }
 
-        System.out.println(codeRequestUrl);
-        return codeRequestUrl;
-    }
+	    public String getGoogleAuthUrl() {
+	        return googleAuthUrl;
+	    }
 
-    public String requestToken(HttpSession session, String code, String state) {
-        String sessionState = getSession(session);
-        String response = "";
+	    public String getGoogleLoginUrl() {
+	        return googleLoginUrl;
+	    }
 
-        if (StringUtils.pathEquals(state, sessionState)) {
-            MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
-            parameters.add("grant_type", GRANT_TYPE);
-            parameters.add("client_id", CLIENT_ID);
-            parameters.add("client_secret", CLIENT_SECRET);
-            parameters.add("redirect_uri", REDIRECT_URI);
-            parameters.add("code", code);
+	    public String getGoogleClientId() {
+	        return googleClientId;
+	    }
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+	    public String getGoogleRedirectUri() {
+	        return googleRedirectUrl;
+	    }
 
-            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(parameters, headers);
+	    public String getGoogleSecret() {
+	        return googleSecret;
+	    }
 
-            try {
-                response = restTemplate.postForObject(TOKEN_URI, request, String.class);
-                // 토큰에서 access_token 추출
-                JsonObject jsonObject = JsonParser.parseString(response).getAsJsonObject();
-                response = jsonObject.get("access_token").getAsString();
-            } catch (RestClientException e) {
-                e.printStackTrace();
-                response = "Socket read timed out";
-            } catch (Exception e) {
-                e.printStackTrace();
-                response = "I/O Errors";
-            }
-        }
+		// scope의 값을 보내기 위해 띄어쓰기 값을 UTF-8로 변환하는 로직 포함 
+	    public String getScopeUrl() {
+//	        return scopes.stream().collect(Collectors.joining(","))
+//	                .replaceAll(",", "%20");
+	        return scopes.replaceAll(",", "%20");
+	    }
+	}
 
-        return response;
-    }
-
-    public String requestProfile(String token) {
-        String result = "";
-
-        try {
-            URL url = new URL(USER_INFO_URI);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Authorization", "Bearer " + token);
-
-            int responseCode = conn.getResponseCode();
-            System.out.println("responseCode :" + responseCode);
-
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String line = "";
-
-            while ((line = bufferedReader.readLine()) != null) {
-                result += line;
-            }
-
-            System.out.println("responseBody :" + result);
-        } catch (Exception e) {
-            e.printStackTrace();
-            result = "Errors";
-        }
-
-        return result;
-    }
-
-    // 세션 유효성 검증을 위한 난수 생성
-    private String generateRandomString() {
-        return UUID.randomUUID().toString();
-    }
-
-    // http session에 데이터 저장
-    private void setSession(HttpSession session, String state) {
-        session.setAttribute(SESSION_STATE, state);
-    }
-
-    // http session에서 데이터 가져오기
-    private String getSession(HttpSession session) {
-        return (String) session.getAttribute(SESSION_STATE);
-    }
-}
