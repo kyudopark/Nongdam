@@ -155,4 +155,26 @@ public class UserServiceImpl implements UserService {
 		
 	}
 
+	
+	
+	
+	
+	
+    //231226 Naver 로그인 관련============
+	@Override
+	public User findNaverId(User vo) {
+		return userMapper.findNaverId(vo);
+		
+	}
+
+	@Override
+	public void insertNaverUser(User vo) {
+		userMapper.insertNaverUser(vo);
+	}
+
+	@Override
+	public void deleteNaverUser(User uvo) {
+		userMapper.deleteNaverUser(uvo);
+	}
+   //==================================
 }

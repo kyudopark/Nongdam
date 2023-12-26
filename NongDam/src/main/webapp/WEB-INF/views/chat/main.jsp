@@ -84,6 +84,15 @@
     <!--채팅방 내부 -->
     <div id="viewDiv" class="bg-body container overflow-y-scroll p-0 pb-4 h-100" >
         <ol id="viewOl" class="list-group list-group-numbered">
+        	<c:if test="${empty crvo }">
+        		<li class="w-100 pt-3">
+        			<div class="text-center text-muted">
+	        			아직 채팅방이 없습니다.
+	        			<br>
+	        			1:1거래 게시판에서 채팅을 시작해보세요!
+        			</div>
+        		</li>
+        	</c:if>
             <c:forEach var="crvo" items="${crvo }">
 	            <!-- 상대 채팅 -->
 	            <li class="p-2 pt-3 pb-3 d-flex flex-column align-items-start border-bottom">

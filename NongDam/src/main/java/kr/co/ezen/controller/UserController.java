@@ -41,6 +41,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -75,7 +76,10 @@ public class UserController {
 	@Autowired
 	KakaoLoginBO kakaoLoginBO;
 	
-	
+	//231226===================
+	@Autowired
+	NaverLoginBO naverLoginBO;
+	//=========================
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String userLogin(HttpSession session, Model model) throws Exception{
@@ -84,6 +88,16 @@ public class UserController {
     	
     	String googleLoginUrl = googleLoginBO.getGoogleAuthUrl();
         model.addAttribute("googleLoginUrl", googleLoginUrl);
+        
+        
+        //231226
+        
+        String state = naverLoginBO.getState();
+	    session.setAttribute("state", state);
+	    String naverLoginUrl = naverLoginBO.getRedirectApiURI(state);
+	    model.addAttribute("naverLoginUrl", naverLoginUrl);
+        //===================================================
+        
         return "user/login";
     }
     
@@ -364,15 +378,64 @@ public class UserController {
 
    
 
-  	
-  	
-  	
-  	
-  	
 
-	
+	//231226 naver로그인관련
+  	
+  	//콜백
+  	//user/naver-callback?code=&state=
+  	@RequestMapping("/naver-callback")
+  	public String navercallback(HttpSession session,String code, String state) {
 
-	
+  		String session_state = (String) session.getAttribute("state");
+  	    if (!state.equals(session_state)) {
+  	        System.out.println("세션에 저장된 state와 다른 값으로 반환되었습니다.");
+  	        session.removeAttribute("state");
+  	        return "redirect:/main";
+  	    }
+
+  	    String apiURL = naverLoginBO.getAuthorizationApiURI(code, state);
+  	    String access_token = "";
+  	    //String refresh_token = "";
+  	    try {
+  			URL url = new URL(apiURL);
+  			HttpURLConnection con = (HttpURLConnection)url.openConnection();
+  			con.setRequestMethod("GET");
+  			int responseCode = con.getResponseCode();
+  			BufferedReader br;
+  			if(responseCode==200) { // 정상 호출
+  			  br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+  			} else {  // 에러 발생
+  			  br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+  			}
+  			String inputLine;
+  			StringBuffer res = new StringBuffer();
+  			while ((inputLine = br.readLine()) != null) {
+  			  res.append(inputLine);
+  			}
+  			br.close();
+  			if(responseCode==200) {
+  				//res.toString() <= json형식의 access_token,refresh_token		
+  				Gson gson = new Gson();
+  				JsonObject naverUser = gson.fromJson(res.toString(), JsonObject.class);
+  				access_token = naverUser.get("access_token").getAsString();
+  				User profile = naverLoginBO.getNaverProfile(access_token);
+  				
+  				User uvoIsEx = userService.findNaverId(profile);
+  				
+  				if(uvoIsEx!=null){
+  					session.setAttribute("uvo", uvoIsEx);
+  				}else{
+	  				userService.insertNaverUser(profile);
+	  				User uvo = userService.findNaverId(profile);
+	  				session.setAttribute("uvo", uvo);
+  				}
+  			}
+  	    } catch (Exception e) {
+  	      System.out.println(e);
+  	    }
+  	    
+  	    return "redirect:/";
+  	}
     
   	
   	

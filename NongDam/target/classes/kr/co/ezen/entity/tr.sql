@@ -34,7 +34,7 @@ create table trComment(
 	tr_parent_idx int, 
 	tr_comment_idx int auto_increment, 
 	user_idx int,
-	tr_comment_time timestamp,
+	tr_comment_time timestamp DEFAULT CURRENT_TIMESTAMP,
 	tr_comment_content varchar(255),
 	tr_comment_useable int,
 	primary key (tr_comment_idx)

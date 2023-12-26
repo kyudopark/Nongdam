@@ -131,7 +131,7 @@
 		
           
 		myMessages = "<li class='p-2 pb-1 d-flex flex-column align-items-end'>";
-		myMessages += "	<div class='name'>${uvo.user_name }</div>";
+		myMessages += "	<div class='name'>${uvo.user_nickname }</div>";
 		myMessages += "		<div class='d-flex flex-row  align-items-end justify-content-end w-100'>";
 		myMessages += "			<div class='d-inline-block text-secondary' style='margin-right: 4px; margin-bottom: 2px;'>";
 		myMessages += 				chat_time;
@@ -295,7 +295,7 @@
 				<c:if test="${li.user_idx == uvo.user_idx }">
 		            <!-- 내 채팅 -->
 		            <li class='p-2 pb-1 d-flex flex-column align-items-end'>
-		                <div class='name'>${uvo.user_name }</div>
+		                <div class='name'>${uvo.user_nickname }</div>
 		                <div class='d-flex flex-row  align-items-end justify-content-end w-100'>
 		                    <div class='d-inline-block text-secondary' style='margin-right: 4px; margin-bottom: 2px;'>
 		                        <fmt:formatDate value="${li.chat_time }" pattern="HH:mm"/>

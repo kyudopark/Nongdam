@@ -154,7 +154,10 @@
 							width="222" alt="구글 로그인 버튼" />
 						</a>
 
-
+						<a href="${naverLoginUrl }">
+							<img height="50" 
+							src="http://static.nid.naver.com/oauth/small_g_in.PNG"/>
+						</a>
 
 
 					</div>

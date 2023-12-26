@@ -36,4 +36,12 @@ public interface UserMapper {
     
     public void updateUserProfile(User user);
 
+    
+    
+    
+    //231226 Naver 로그인 관련============
+    public User findNaverId(User vo);
+    public void insertNaverUser(User vo);
+    public void deleteNaverUser(User uvo);
+    //==================================
 }
