@@ -1,6 +1,6 @@
 CREATE TABLE User (
     user_idx INT AUTO_INCREMENT PRIMARY KEY,
-    user_id VARCHAR(20) unique NOT NULL,
+    user_id VARCHAR(50) unique NOT NULL,
     user_pw VARCHAR(15) NOT NULL,
     user_zipcode VARCHAR(255),
     user_addr VARCHAR(255),
@@ -11,13 +11,16 @@ CREATE TABLE User (
     user_email VARCHAR(255) NOT NULL,
     user_kakaologin VARCHAR(255),
     user_admin BOOLEAN NOT NULL DEFAULT false
-);
+);         
+
+desc User;
+
 select*from User;
 select*from tr;
-
+sapcwewfnbim
 
 ALTER TABLE User
-MODIFY COLUMN user_id VARCHAR(20) NOT NULL UNIQUE;
+MODIFY COLUMN user_pw VARCHAR(50) NOT NULL;
 
 drop table User;
 delete from User where user_idx=14;

@@ -18,7 +18,7 @@ drop table chat
 drop table chatroom
 select * from User
 select * from chat 
-select * from chatroom
+select * from chatRoom
 delete from chatroom where chatroom_idx=0
 delete from chat
 

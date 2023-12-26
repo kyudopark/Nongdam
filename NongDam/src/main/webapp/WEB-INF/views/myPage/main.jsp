@@ -59,6 +59,18 @@
 
 <title>농담 | 농업 정보 커뮤니티</title>
 
+<script type="text/javascript" src="http://api.nongsaro.go.kr/js/framework.js"></script>	
+<script type="text/javascript" src="http://api.nongsaro.go.kr/js/openapi_nongsaro.js"></script>
+
+	
+<!-- <script type="text/javascript">
+nongsaroOpenApiRequest.apiKey = "202312264D3QMKKMXGFTEQRGQ5BTYG";
+nongsaroOpenApiRequest.serviceName = "cropTechInfo";
+nongsaroOpenApiRequest.operationName = "mainCategoryList";
+nongsaroOpenApiRequest.htmlArea="nongsaroApiLoadingArea";
+nongsaroOpenApiRequest.callback = "http://localhost:8080/ezen/user/googlecallback";
+
+</script> -->
 
 </head>
 <body>
@@ -143,6 +155,10 @@
                                         <c:if test="${uvo.user_kakaologin == 'G'  }">
                                     		<span class="badge text-bg-primary bg-gradient">구글</span>
                                     	</c:if>
+                                    	
+                                    	<c:if test="${user_kakaologin="N" }"> 
+											<span class="badge text-bg-success bg-gradient">네이버</span>
+										</c:if>
                                         
                                         
 										<span>${uvo.user_nickname }님</span>
@@ -190,6 +206,8 @@
                                 </table>
                             </div>
                         </div>
+                        
+		                        
                         <!-- =============================================== -->
 
                         

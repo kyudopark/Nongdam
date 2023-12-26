@@ -66,10 +66,52 @@
 	integrity="sha384-kYPsUbBPlktXsY6/oNHSUDZoTX6+YI51f63jCPEIPFP09ttByAdxd2mEjKuhdqn4"
 	crossorigin="anonymous"></script>
 
-<script>
-</script>
 
+<script src="https://www.google.com/recaptcha/api.js"></script>
 <script>
+
+
+$(function () {
+    $('#loginForm').submit(function (event) {
+        // 폼 제출을 막기 위해 기본 이벤트를 중단
+        event.preventDefault();
+
+        // 캡차 검증 후 제출 여부를 결정하는 함수
+        function submitFormIfCaptchaValid() {
+            // 캡차 검증 결과에 따라 동작 수행
+            switch (captcha) {
+                case 0:
+                    console.log("자동 가입 방지 봇 통과");
+                    // 캡차 통과 시 폼 서버로 제출
+                    $('#loginForm')[0].submit();
+                    break;
+                case 1:
+                    alert("자동 가입 방지 봇을 확인 한뒤 진행 해 주세요.");
+                    break;
+                default:
+                    alert("자동 가입 방지 봇을 실행 하던 중 오류가 발생 했습니다. [Error bot Code : " + Number(captcha) + "]");
+                    break;
+            }
+        }
+
+        // Ajax를 통한 캡차 검증
+        $.ajax({
+            url: '${contextPath}/user/VerifyRecaptcha',
+            type: 'post',
+            data: {
+                recaptcha: $("#g-recaptcha-response").val()
+            },
+            success: function (data) {
+                // 캡차 검증 결과를 전역 변수에 저장
+                captcha = data;
+
+                // 캡차 검증 후 폼 제출 여부를 결정하는 함수 호출
+                submitFormIfCaptchaValid();
+            }
+        });
+    });
+});
+
 </script>
 
 
@@ -117,7 +159,10 @@
 							<i class="fa-solid fa-right-to-bracket"></i> 로그인
 						</button>
 					</div>
+					
+				<div class="g-recaptcha" data-sitekey="6LePKTkpAAAAAMrly0tV36TPjrmDBVwRJhKV01Ua"></div>	
 				</form>
+				
 				
 				<!-- form 영역 끝 -->
 
