@@ -26,14 +26,14 @@
 					<li>
 						<c:if test="${empty uvo.user_profile }">
 							<img
-								style="height: 18px; width: 18px; border-radius: 50%; margin-top: 20px; margin-bottom: 20px;"
+								style="height: 24px; width: 24px; border-radius: 50%; "
 								class="object-fit-cover bg-body-secondary border"
 								src="${contextPath }/resources/image/common/thumbnail-profile-seed.svg">
 							<span>${uvo.user_nickname }님</span>
 						</c:if> 
 						<c:if test="${!empty uvo.user_profile }">
 							<img
-								style="height: 24px; width: 24px; border-radius: 50%; margin-top: 20px; margin-bottom: 20px;"
+								style="height: 24px; width: 24px; border-radius: 50%; "
 								class="object-fit-cover bg-body-secondary border"
 								src="${contextPath}/resources/image/myPage/${uvo.user_profile }"
 								alt="프로필 이미지" />
