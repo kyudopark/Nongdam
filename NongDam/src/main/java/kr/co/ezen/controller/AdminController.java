@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.co.ezen.entity.Criteria;
+import kr.co.ezen.entity.Gp;
+import kr.co.ezen.entity.GpUser;
+import kr.co.ezen.entity.Tr;
 import kr.co.ezen.entity.User;
 import kr.co.ezen.service.AdminService;
 
@@ -25,8 +28,15 @@ public class AdminController {
 	
 	
 	@RequestMapping("/main")
-	public String main() {
-		
+	public String main(Model m, Gp gp, Tr tr, GpUser gpUser) {
+
+		gp.setGpCount(adminService.countGpAll(gp));
+		tr.setTrCount(adminService.countTrAll(tr));
+		gpUser.setGpUserCount(adminService.countGpUserAll(gpUser));
+
+		m.addAttribute("gp", gp);
+		m.addAttribute("tr", tr);
+		m.addAttribute("gpUser", gpUser);
 		return "admin/main";
 	}
 	

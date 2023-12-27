@@ -54,12 +54,26 @@
             $(".info-section").toggle();
         });
         
-        
-		var addrParts = $('#').val().split(',');
-		
-		$('#gp_zipcode2').val(addrParts[0]);
-		$('#gp_zipcode3').val(addrParts[1]);
-        
+        var userAddr = $('#gp_addr').val();
+        var addrParts = userAddr.split(',');
+
+        if (addrParts.length === 2) {
+            $('#addr1').val(addrParts[0]);
+            $('#addr2').val(addrParts[1]);
+        }
+
+        $('button').on('click',function(e){
+        	var btn = $(this).data('btn'); // 내가 현재 클릭한 버튼 -> data-btn
+        	
+        	if(btn == 'delete') {
+        		let result = confirm('해당 공동구매 게시글을 삭제하시겠습니까?');
+				if(result == false){
+					return;
+				} else {
+					location.href = "${contextPath}/myPage/deleteRequest?gp_idx=" + $("#gp_idx").val() + "&user_idx=" + $("#user_idx").val();
+				}
+        	}
+        });
 	});
 
 	</script>
@@ -122,6 +136,7 @@
                         <div class="mt-2 mb-4 pb-4">
                             <h4 class="ms-2 mb-4 text-body-secondary"><i class="fa-solid fa-tag me-2"></i> 공동구매 신청 내역</h4>
                             <c:forEach var="gpUserList" items="${gpUserList }">
+								
 	                            <c:set var="currentDate" value="<%= new java.util.Date() %>"/>
 								<c:set var="startDate" value="${gpUserList.gp_date_start }"/>
 								<c:set var="endDate" value="${gpUserList.gp_date_last }"/>
@@ -131,6 +146,11 @@
 									                       
 								<c:set var="diffMillisEnd" value="${endDate.time - currentDate.time}"/>
 								<c:set var="diffDaysEnd" value="${diffMillisEnd / (24 * 60 * 60 * 1000)}"/>
+								
+								<input type="hidden" id="gp_addr" value="${gpUserList.gp_addr }"  />
+								<input type="hidden" id="gp_idx" value="${gpUserList.gp_idx }"  />
+								<input type="hidden" id="user_idx" value="${uvo.user_idx }"  />
+								
                             <!-- 맨 윗줄 -->
                             <div class="d-flex flex-row flex-wrap pt-2 pb-2 border">
                                 <div class="d-none d-lg-block col-1 text-center">
@@ -189,13 +209,12 @@
                                     <button type="button" class="btn btn-sm btn-secondary" id="info">세부내역</button>
                                     <c:choose>
 										<c:when test="${diffDaysEnd > 0}">
-											<button class="btn btn-sm btn-secondary">취소하기</button> 
+											<button class="btn btn-sm btn-secondary" data-btn="delete">취소하기</button> 
 										</c:when>
 										<c:when test="${diffDaysEnd < 0}">
 											<button class="btn btn-sm btn-secondary" disabled="disabled">취소하기</button>
 										</c:when>
 									</c:choose>
-                                    
                                 </div>
                             </div>
                             <!-- 목록 하나 끝 =============================================== -->
@@ -231,8 +250,8 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <input type="text" class="form-control mb-2" id="gp_zipcode2" value="" placeholder="주소">
-                                            <input type="text" class="form-control" id="gp_zipcode3" value="" placeholder="상세 주소">
+                                            <input type="text" class="form-control mb-2" id="addr1" placeholder="주소">
+                                            <input type="text" class="form-control" id="addr2" placeholder="상세 주소">
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-end">
@@ -240,17 +259,15 @@
                                     </div>
                                 </div>
                             </div>
+                            
                             <!-- 세부내역 끝 =============================================== -->
 							</c:forEach>
                             <!--공동구매 끝 =============================================== -->
                         </div>
                         <!-- =============================================== -->
+						
 
 
-
-
-
-                        
 
 
                         

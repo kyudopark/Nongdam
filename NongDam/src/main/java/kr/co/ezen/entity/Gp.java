@@ -27,5 +27,7 @@ public class Gp {
 	
 	
 	private String gp_thumb;
+	
+	private int gpCount;
 
 }

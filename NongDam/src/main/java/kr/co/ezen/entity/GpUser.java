@@ -23,4 +23,5 @@ public class GpUser {
     private String gp_title;
     private String gp_price;
     
+    private int gpUserCount;
 }

@@ -69,15 +69,13 @@ public class GpController {
 	}
 	
 	@GetMapping("/detail")
-	public String detail(@RequestParam("gp_idx") int gp_idx, Model m,
-			@ModelAttribute("cri") Criteria cri) {
+	public String detail(@RequestParam("gp_idx") int gp_idx, Model m, Criteria cri) {
 		//게시글조회
 		
 		Gp vo = gpService.findByIdx(gp_idx);
-		//List<GpUser> cvo = gpService.findByUser(gp_idx);
 		
 		m.addAttribute("vo", vo);
-		//m.addAttribute("cvo", cvo);		
+		m.addAttribute("cri",cri);	
 		
 		return "gp/detail";
 	}

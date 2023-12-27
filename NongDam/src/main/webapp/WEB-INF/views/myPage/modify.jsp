@@ -124,6 +124,14 @@ $(document).ready(function(){
             alert("모든 필수 항목을 입력하세요.");
         }
     });
+	
+	var userAddr = $("#user_addr").val();
+    var addrParts = userAddr.split(',');
+
+    if (addrParts.length === 2) {
+        $('#sample6_ddress1').val(addrParts[0]);
+        $('#sample6_detailAddress').val(addrParts[1]);
+    }
 });
 </script>
 </head>
@@ -185,7 +193,7 @@ $(document).ready(function(){
 					    <input type="hidden" name="user_profile" value="${uvo.user_profile}" />
 					    <input type="hidden" name="user_email" value="${uvo.user_email}" />
 					    <input type="hidden" name="user_kakaologin" value="${uvo.user_kakaologin}" />
-					    
+					    <input type="hidden" id="user_addr" value="${uvo.user_addr}" />
 						<div class=" mt-5 mb-5">
 							<div>
 								<h4 class="mb-4">회원정보 수정</h4>
@@ -310,7 +318,7 @@ $(document).ready(function(){
 									</div>
 		
 		
-									<input type="text" class="form-control mb-2" id="sample6_address"
+									<input type="text" class="form-control mb-2" id="sample6_ddress1"
 										name="user_addr" value="${uvo.user_addr }"> <input type="text"
 										class="form-control" id="sample6_detailAddress" name="user_addr" placeholder="상세주소"
 										>

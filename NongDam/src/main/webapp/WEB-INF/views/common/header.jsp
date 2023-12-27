@@ -81,7 +81,7 @@
 								href="${contextPath }/user/logout">로그아웃</a></li>
 							<li class="nav-item">
 						<c:if test="${uvo.user_admin == 'true'}">
-									<a class="nav-link" href="${contextPath}/admin/userManage">관리자페이지</a>
+									<a class="nav-link" href="${contextPath}/admin/main">관리자페이지</a>
 						</c:if> 
 						<c:if test="${uvo.user_admin != 'true'}">
 								<a class="nav-link" href="${contextPath}/myPage/main"id="a5button">마이페이지</a>

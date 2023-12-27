@@ -93,15 +93,43 @@
 					</div>
 					</p>
 				</div>
+				<!-- 공동구매 마감 임박 상품들 -->
 				<div class="border-start col-lg-5 col-12 p-3">
-					<p class="d-flex flex-wrap">
-						<span class="d-inline-block me-auto fs-6 fw-bolder">공동구매 마감
-							임박 상품들</span> <a class="d-inline-block text-muted"
-							href="${contextPath }/gp/main">공동구매 게시판 &gt;</a>
-					</p>
+				    <p class="d-flex flex-wrap">
+				        <span class="d-inline-block me-auto fs-6 fw-bolder">공동구매 마감
+				            임박 상품들</span> <a class="d-inline-block text-muted"
+				            href="${contextPath }/gp/main">공동구매 게시판 &gt;</a>
+				    </p>
+				    <div id="carouselExample" class="carousel carousel-dark slide" data-bs-ride="carousel">
+				        <div class="carousel-inner">
+				            <c:forEach var="gplist" items="${gplist}" varStatus="loop">
+				                <div class="carousel-item ${loop.first ? 'active' : ''}">
+				                    <div class="row p-3">
+				                        <img class="col-12 col-sm-6 bg-light object-fit-cover p-0"
+				                            style="height: 240px"
+				                            src="${contextPath }/resources/image/gp/${gplist.gp_thumb }" />
+				                        <div class="col-12 col-sm-6 pt-3">
+				                            <p class="fw-bolder">상품명 : ${gplist.gp_title}</p>
+				                            <p class="title-overflow-6">신청 시작일 : <fmt:formatDate value="${gplist.gp_date_start }" pattern="YYYY-MM-dd "/></p>
+				                            <p class="title-overflow-6">신청 마감일 : <fmt:formatDate value="${gplist.gp_date_last }" pattern="YYYY-MM-dd "/></p>
+				                            <p class="title-overflow-6">신청 가격 : ${gplist.gp_price }</p>
+				                            <a class="btn btn-outline-secondary" href="${contextPath }/gp/detail?gp_idx=${gplist.gp_idx}">게시글 더보기</a>
+				                        </div>
+				                    </div>
+				                </div>
+				            </c:forEach>
+				        </div>
+				        <a class="carousel-control-prev" href="#carouselExample" role="button" data-bs-slide="prev"></a>
+				        <a class="carousel-control-next" href="#carouselExample" role="button" data-bs-slide="next"></a>
+				        <div class="carousel-indicators mb-0">
+							<button data-bs-target="#carouselExample" data-bs-slide-to="0" class="btn bg-tertiary active" aria-current="true" aria-label="Slide 1"></button>
+							<button data-bs-target="#carouselExample" data-bs-slide-to="1" class="btn bg-tertiary" aria-label="Slide 2"></button>
+							<button data-bs-target="#carouselExample" data-bs-slide-to="2" class="btn bg-tertiary" aria-label="Slide 3"></button>
+							<button data-bs-target="#carouselExample" data-bs-slide-to="3" class="btn bg-tertiary" aria-label="Slide 4"></button>
+						</div>
+				    </div>
 				</div>
 			</div>
-
 		</div>
 	</div>
 

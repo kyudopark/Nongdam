@@ -89,10 +89,10 @@
 							data-bs-parent="#accordionExample">
 							<div class="accordion-body p-0">
 								<ul class="list-group list-group-flush rounded-bottom-2">
-									<li class="list-group-item  bg-body-secondary"><a
-										class="text-decoration-none text-body" href="#">회원 정보 변경</a></li>
-									<li class="list-group-item"><a
-										class="text-decoration-none text-body" href="#">{메뉴}</a></li>
+									<li class="list-group-item">
+										<a class="text-decoration-none text-body" href="${contextPath }/admin/main">관리자페이지 메인</a>
+									<li class="list-group-item bg-body-secondary"><a
+										<a class="text-decoration-none text-body" href="${contextPath }/admin/userManage">회원정보 관리</a>
 								</ul>
 							</div>
 						</div>

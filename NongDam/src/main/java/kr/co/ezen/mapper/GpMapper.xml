@@ -39,7 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		
 		<select resultType="kr.co.ezen.entity.GpUser" 
 		parameterType="int" id="findGpUserbyIdx">
-			select * from gpUser
+			select gp_idx, gp_uid, user_idx, gp_zipcode, gp_addr, gp_name, gp_email, gp_total, gp_num from gpUser
 			where user_idx=#{user_idx}
 		</select>
 		
@@ -60,10 +60,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</delete>
 		
 		
-		
 		<insert id="request" parameterType="kr.co.ezen.entity.GpUser">
 			insert into gpUser (gp_idx, user_idx,gp_uid, gp_zipcode, gp_addr, gp_name, gp_email, gp_total, gp_num)
 			VALUES (#{gp_idx},#{user_idx},#{gp_uid},#{gp_zipcode},#{gp_addr},#{gp_name},#{gp_email},#{gp_total}, #{gp_num})
 		</insert>
+		
+		<delete id="deleteRequest" parameterType="int">
+			delete from gpUser where user_idx=#{user_idx} AND gp_idx=#{gp_idx}
+		</delete>
 
 	</mapper>

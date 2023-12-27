@@ -49,5 +49,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where user_idx=#{user_idx}
 	</update>
 
-
+	
+	<select id="countGpAll" resultType="int" parameterType="kr.co.ezen.entity.Gp">
+		select count(*) from gp
+	</select>
+	
+	<select id="countTrAll" resultType="int" parameterType="kr.co.ezen.entity.Tr">
+		select count(*) from tr
+	</select>
+	
+	<select id="countGpUserAll" resultType="int" parameterType="kr.co.ezen.entity.GpUser">
+		select count(*) from gpUser
+	</select>
+	
+	
 </mapper>

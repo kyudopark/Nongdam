@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import kr.co.ezen.entity.Gp;
 import kr.co.ezen.entity.Tr;
 import kr.co.ezen.service.MainService;
 
@@ -26,7 +27,9 @@ public class HomeController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Model m) {	
 		List<Tr> trlist = mainservice.findTr();
+		List<Gp> gplist = mainservice.findGp();
 		m.addAttribute("trlist", trlist);
+		m.addAttribute("gplist", gplist);
 		return "main";
 	}
 	

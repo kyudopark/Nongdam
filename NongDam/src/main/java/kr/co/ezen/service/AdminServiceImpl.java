@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kr.co.ezen.entity.Criteria;
+import kr.co.ezen.entity.Gp;
+import kr.co.ezen.entity.GpUser;
+import kr.co.ezen.entity.Tr;
 import kr.co.ezen.entity.User;
 import kr.co.ezen.mapper.AdminMapper;
 
@@ -37,7 +40,23 @@ public class AdminServiceImpl  implements AdminService{
 	}
 
 
+	@Override
+	public int countGpAll(Gp gp) {
+		int countGp = adminMapper.countGpAll(gp);
+		return countGp;
+	}
 
+	@Override
+	public int countTrAll(Tr tr) {
+		int countTr = adminMapper.countTrAll(tr);
+		return countTr;
+	}
+
+	@Override
+	public int countGpUserAll(GpUser gpUser) {
+		int countGpUser = adminMapper.countGpUserAll(gpUser);
+		return countGpUser;
+	}
 	
 	
 	

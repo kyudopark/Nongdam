@@ -20,5 +20,6 @@ public interface GpService {
 	public void deleteByIdx(int gp_idx);
 	
 	public void request(GpUser gp);
+	public void deleteRequest(int user_idx, int gp_idx);
 	
 }

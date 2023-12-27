@@ -174,6 +174,7 @@ public class myPageController {
         int user_idx = uvo.getUser_idx();
         
         List<GpUser> gpUserList = gpService.findGpUserbyIdx(user_idx);
+        
 
         for (GpUser gpUser : gpUserList) {
             int gp_idx = gpUser.getGp_idx();
@@ -193,6 +194,14 @@ public class myPageController {
         
         return "myPage/gplist";
     }
+    
+    @RequestMapping(value = "/deleteRequest", method = RequestMethod.GET)
+    public String deleteRequest(@RequestParam("gp_idx") int gp_idx, @RequestParam("user_idx") int user_idx) {
+    	gpService.deleteRequest(user_idx, gp_idx);
+    	return "redirect:/myPage/gplist";
+    }
+    
+    
  
     @RequestMapping("/userImageUpdate")
     public String userImageUpdate(@RequestParam("user_profile")MultipartFile file,@RequestParam("user_nickname")String user_nickname,HttpSession session, HttpServletRequest request)

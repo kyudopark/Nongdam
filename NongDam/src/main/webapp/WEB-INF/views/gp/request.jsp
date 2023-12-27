@@ -80,8 +80,8 @@
 	            var addrParts = userAddr.split(',');
 
 	            if (addrParts.length === 2) {
-	                $('#gp_zipcode2').val(addrParts[0].trim());
-	                $('#gp_zipcode3').val(addrParts[1].trim());
+	                $('#gp_zipcode2').val(addrParts[0]);
+	                $('#gp_zipcode3').val(addrParts[1]);
 	                
 			        var addr2 = $("#gp_zipcode2").val();
 			        var addr3 = $("#gp_zipcode3").val();
@@ -104,9 +104,8 @@
 			var addr = $("#gp_zipcode2").val();
 			var addr2 = $("#gp_zipcode3").val();
 		        
-		    var fullAddress = addr + ',' + addr2;
-		        
-		    $("#gp_fulladdr").val(fullAddress);
+		    var fullAddress = addr + ',' + addr2;   
+		    $("#gp_addr").val(fullAddress);
 		});
 	});
 	
@@ -164,7 +163,7 @@
             <div class="row">
                 <!--썸네일-->
                 <div class="col-lg-7 col-12 p-0 bg-light" style="height: 280px;">
-                    <img src="${contextPath }/resources/image/gp/${vo.gp_thumb }" style="width: 100%; height: 100%;">
+                    <img src="${contextPath }/resources/image/gp/${vo.gp_thumb }" class="object-fit-cover w-100" style="height: 300px;">
                 </div>
                 <!--오른쪽-->
                 <div class="border-start col-lg-5 col-12 p-3">
@@ -198,7 +197,7 @@
             	<form method="post" action="${contextPath}/gp/request" id ="submitForm">  
 	            	<input type="hidden" id="gp_idx" name="gp_idx" value="${vo.gp_idx}"/>
 					<input type="hidden" id="user_idx" name="user_idx" value="${uvo.user_idx}"/>
-					<input type="hidden" id="gp_fulladdr" name="gp_addr" value=""/>
+					<input type="hidden" id="gp_addr" name="gp_addr" value=""/>
 					<input type="hidden" id="gp_uid" name="gp_uid" value=""/>
                 <!-- 수령자명 -->
                 <div class="mb-4 col-12 col-md-6 col-lg-5">
@@ -293,7 +292,7 @@
             <!-- 신청하기 버튼 -->
             <div class="container pt-5 pb-4 text-center">
                 <button class="btn btn-secondary" onclick="kakaoPay()"><i class="fa-solid fa-credit-card"></i> 결제</button>
-                <a class="btn btn-outline-secondary">취소</a>
+                <a href="javascript:history.go(-1)" class="btn btn-outline-secondary">취소</a>
             </div>
             
         </div>

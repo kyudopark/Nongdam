@@ -59,4 +59,10 @@ public class GpServiceImpl implements GpService{
 		gpMapper.request(gu);
 	}
 
+	@Override
+	public void deleteRequest(int user_idx, int gp_idx) {
+		gpMapper.deleteRequest(user_idx, gp_idx);
+		
+	}
+
 }

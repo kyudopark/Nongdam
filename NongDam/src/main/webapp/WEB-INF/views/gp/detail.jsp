@@ -87,7 +87,7 @@
             <div class="row">
                 <!--썸네일-->
                 <div class="col-lg-7 col-12 p-0 bg-light" style="height: 300px;">
-                    <img src="${contextPath }/resources/image/gp/${vo.gp_thumb }" style="width: 100%; height: 100%;">
+                    <img src="${contextPath }/resources/image/gp/${vo.gp_thumb }" class="object-fit-cover w-100" style="height: 300px;">
                 </div>
                 <!--오른쪽-->
                 <div class="border-start col-lg-5 col-12 p-3">
@@ -133,19 +133,26 @@
             	<c:if test="${diffDays <= 0 and diffDaysEnd > 0}">
                 	<button class="btn btn-secondary" data-btn = "request" >신청하기</button>
                 </c:if>
-                <button class="btn btn-outline-secondary" data-btn = "back" >목록으로</button>
+                <button class="btn btn-secondary" data-btn = "back" >목록으로</button>
                 
                 <c:if test="${uvo.user_id eq 'admin' }">
-                	<button class="btn btn-success" data-btn = "modify" >수정하기</button>
-                	<button class="btn btn-warning" data-btn = "delete">삭제하기</button>
+                	<button class="btn btn-warning" data-btn = "modify" >수정하기</button>
+                	<button class="btn btn-danger" data-btn = "delete">삭제하기</button>
                 </c:if>
             </div>
         </div>
     </div>
     
     <form id="fr" method="get">
-		<input type="hidden" id="gp_idx" name="gp_idx" value="${vo.gp_idx }"/>
-		<input type="hidden" id="user_idx" name="user_idx" value="${uvo.user_idx }"/>
+    	<input type="hidden" name="gp_idx" value="${vo.gp_idx }" />
+    	<input type="hidden" name="user_idx" value="${vo.user_idx }" />
+    	
+		<input type="hidden" name="page" value="${cri.page }"/>
+        <input type="hidden" name="perPageNum" value="${cri.perPageNum }"/>
+        <c:if test="${!empty cri.type }">
+	        <input type="hidden" name="type" value="${cri.type }"/>
+	        <input type="hidden" name="keyword" value="${cri.keyword }"/>
+        </c:if>
 	</form>
 
 	

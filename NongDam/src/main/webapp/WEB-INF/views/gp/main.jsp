@@ -59,6 +59,16 @@
 		         pageFrm.attr("method","get");
 		         pageFrm.submit();
 		     });
+	        
+	        $(".moving-list").click(function(e) {
+	        	e.preventDefault();
+	        	$("#pageFrm").attr('action','${contextPath}/gp/detail')
+				let p_gp_idx = $(this).attr("href");  // 페이지 번호 가져오기
+			    let t_gp_idx = "<input type='hidden' name='gp_idx' value='"+p_gp_idx+"'>";
+			    $("#pageFrm").append(t_gp_idx);
+			    $("#pageFrm").submit();  // 폼 서브밋
+	        
+	        });
 	  
 	    });
 	</script>
@@ -131,7 +141,7 @@
 		            <c:choose>
         				<c:when test="${pageCre.cri.type==null || pageCre.cri.type=='all' || (pageCre.cri.type=='progress' && diffDaysEnd >= 0) || (pageCre.cri.type=='complet' && diffDaysEnd < 0)}">
 			                <div class="col pb-4">
-			                    <a class="text-decoration-none" href="${contextPath}/gp/detail?gp_idx=${li.gp_idx}">
+			                    <a class="text-decoration-none moving-list" href="${li.gp_idx }">
 			                        <div class="card">
 			                            <img src="${contextPath }/resources/image/gp/${li.gp_thumb }" class="border-bottom rounded-2 bg-light w-100 object-fit-cover" height="200">
 			                            <div class="card-body">
@@ -210,12 +220,12 @@
 
 			</div>
 			<form id="pageFrm" action="${contextPath}/gp/main" method="get">
-				<input type="hidden" id="page" name="page" value="${pageCre.cri.page }"/>
-				<input type="hidden" id="perPageNum" name="perPageNum" value="${pageCre.cri.perPageNum }"/>
+				<input type="hidden" id="page" name="page" value="${pageCre.cri.page }" />
+				<input type="hidden" id="perPageNum" name="perPageNum" value="${pageCre.cri.perPageNum }" />
 				<c:if test="${!empty pageCre.cri.keyword}">
-					<input type="hidden" name="type" value="${ pageCre.cri.type}"/>
-					<input type="hidden" name="keyword" value="${ pageCre.cri.keyword}"/>
-                </c:if>
+					<input type="hidden" name="type" value="${pageCre.cri.type}" />
+					<input type="hidden" name="keyword" value="${pageCre.cri.keyword}" />
+				</c:if>
 			</form>
             <!-- 페이징 끝 -->
         </div>
