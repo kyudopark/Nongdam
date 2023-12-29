@@ -1,10 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
 	
-	<mapper namespace="kr.co.ezen.mapper.InfoMapper">
-	</mapper>
+<mapper namespace="kr.co.ezen.mapper.InfoMapper">
+	
+	<sql id="search">
+		<if test="type == 'user_nickname'">
+			where user_nickname like concat('%',#{keyword},'%')
+		</if> 
+		<if test="type == 'info_title'">
+			where info_title like concat('%',#{keyword},'%')
+		</if>
+	</sql>
+		
+	<select id="findAll" resultType="kr.co.ezen.entity.Info" parameterType="kr.co.ezen.entity.Criteria">
+		select info_title,info_content,info_date,info_tag,user_nickname,user_idx,info_idx,info_count from info natural join User
+		<include refid="search"/>
+		order by info_idx desc
+		limit #{pageStart}, #{perPageNum}
+	</select>
+	
+	<select id="findnew" resultType="kr.co.ezen.entity.Info" parameterType="kr.co.ezen.entity.Criteria">
+		select info_title,info_content,info_date,info_tag,user_nickname,user_idx,info_idx,info_count from info  
+		natural join User where info_tag="신규" order by info_idx desc
+		limit #{pageStart}, #{perPageNum}
+	</select>
+	
+	<select id="findtenure" resultType="kr.co.ezen.entity.Info" parameterType="kr.co.ezen.entity.Criteria">
+		select info_title,info_content,info_date,info_tag,user_nickname,user_idx,info_idx,info_count from info
+		natural join User where info_tag="현직" order by info_idx desc
+		limit #{pageStart}, #{perPageNum}	
+	</select>
+		
+	<select id="findBycount" resultType="kr.co.ezen.entity.Info" parameterType="kr.co.ezen.entity.Criteria">
+		select info_title,info_content,info_date,info_tag,user_nickname,user_idx,info_idx,info_count from info natural join User
+		<include refid="search"/>
+		order by info_count desc
+		limit #{pageStart}, #{perPageNum}
+	</select>
+	
+	<select id="findBycountnew" resultType="kr.co.ezen.entity.Info" parameterType="kr.co.ezen.entity.Criteria">
+		select info_title,info_content,info_date,info_tag,user_nickname,user_idx,info_idx,info_count from info natural join User
+		<include refid="search"/>
+		where info_tag="신규" order by info_count desc
+		limit #{pageStart}, #{perPageNum}
+	</select>
+	
+	<select id="findBycountenure" resultType="kr.co.ezen.entity.Info" parameterType="kr.co.ezen.entity.Criteria">
+		select info_title,info_content,info_date,info_tag,user_nickname,user_idx,info_idx,info_count from info natural join user
+		<include refid="search"/>
+		where info_tag="현직" order by info_count desc
+		limit #{pageStart}, #{perPageNum}
+	</select>
+	
+	
+	
+	<select id="findBydate" resultType="kr.co.ezen.entity.Info" parameterType="kr.co.ezen.entity.Criteria">
+		select info_title,info_content,info_date,info_tag,user_nickname,user_idx,info_idx,info_count from info natural join User
+		<include refid="search"/>
+		order by info_date desc
+		LIMIT #{pageStart}, #{perPageNum}
+	</select>
+	
+	<select id="findByidx" resultType="kr.co.ezen.entity.Info" parameterType="int">
+		select * from info where info_idx=#{info_idx} 
+	</select>
+	
+	<insert id="insert" parameterType="kr.co.ezen.entity.Info">
+		insert into info (
+			info_idx,info_title, info_content, info_date, info_tag, info_count, user_idx) 
+			values (#{info_idx}, #{info_title}, #{info_content}, now(), #{info_tag}, #{info_count}, #{user_idx})
+	</insert>
+	
+	<select id="GetUserIdx" resultType="int" parameterType="string">
+		select user_idx from User where user_nickname=#{user_nickname}
+	</select>
+	
+	<select id="totalCount" resultType="int" parameterType="kr.co.ezen.entity.Criteria">
+		select count(*) from info natural join User
+		<include refid="search"/>
+	</select>
+	
+	<update id="updatecnt" parameterType="int">
+		update info
+		set info_count = info_count + 1
+		where info_idx = #{info_idx}
+	</update>
+	
+	<delete id="deleteByIdx" parameterType="int">
+		delete from info where info_idx=#{info_idx}
+	</delete>
+	
+	<update id="updateByIdx" parameterType="kr.co.ezen.entity.Info">
+		update info set info_title=#{info_title}, info_content=#{info_content}, info_tag=#{info_tag}
+		where info_idx=#{info_idx}
+	</update>
+	
+</mapper>

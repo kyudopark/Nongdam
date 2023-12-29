@@ -1,10 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
 
 <html lang="ko" data-bs-theme="light">
@@ -38,60 +39,51 @@
     <!-- 파비콘 -->
     <link rel="icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
     <link rel="shortcut icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
-    
     <title>농담 | 농업 정보 커뮤니티</title>
-    
-</head>
+ 
 
-<script>
-
-$(document).ready(function() {
-  $('#modify').click(function() {
-        var selectedOption = $('#free_tag').val();
-        if (selectedOption === "") {
-             alert("말머리를 선택해주세요.");
-             return false; 
-        } else {
-             $.ajax({
-                type: 'POST',
-                url: 'modify', 
-                data:{free_idx: '${vo.free_idx}' },
-                contentType: 'application/json',
-                success: function(response) {
-                    alert('수정하시겠습니까?');
-                    location.href = '/ezen/free/main';
-                },
-                error: function(error) {
-                    console.error('글 수정 중 에러 발생:', error);
-                }
-             });
-         return true; // 선택한 경우 true 반환
-    }
+    <script>
+	
+    // select 요소의 변경 이벤트 처리
+    $("select[name=form-select]").change(function(){
+        console.log($(this).val()); // value값 가져오기
+        const selectedOptionText = $('select[name="form-select"] option:selected').text(); // text값 가져오기
     });
-});
 
+    
 </script>
 
+</head>
 <body>
+
+	<jsp:include page="../common/header.jsp"/>
+	<jsp:include page="../common/banner.jsp"/>
+	
+	
+	<body>
 
     <!-- 글 작성 div container-->
     <div class="container mt-5 mb-5">
-        <h4 class="mt-5 mb-5"> 게시글 수정</h4>
-        <form method="post">
+        <h4 class="mt-5 mb-5"> 게시글 작성</h4>
+       <form method="post" id="write">
+        <input type="hidden" name="user_idx" value="${uvo.user_idx }">
 
+         
             <!-- 말머리 있는 버전 -->
-            <div class="row">
-                <!-- 말머리 -->
-                <div class="col-12 col-md-3 mb-3">
-                    <select class="form-select" name="free_tag" id="free_tag">
-                        <option selected value="">말머리를 선택해주세요.</option>
-                        <option value="자유">자유</option>
-                        <option value="질문">질문</option>
-                    </select>
-                </div>
+           <div class="row">
+    <!-- 말머리 -->
+			    <div class="col-12 col-md-3 mb-3">
+			        <select class="form-select" name="info_tag" id="info_tag">
+			            <option value="">말머리를 선택.</option>
+			            <option value="신규">신규</option>
+			            <option value="현직">현직</option>
+			        </select>
+			    </div>
                 <!--제목-->
                 <div class="col-12 col-md-9 form-group mb-3">
-                    <input type="text" id="title" name="free_title" value="${vo.free_title }" class="form-control">
+                    <input type="text" id="info_title" name="info_title"
+                    class="form-control" placeholder="제목을 입력하세요.">
+
                 </div>
             </div>
 
@@ -99,8 +91,9 @@ $(document).ready(function() {
             <div class="form-group mt-5 mb-3">
                 <!-- 실제 에디터 박스-->
                 <!-- id는 변경하지 마세요 -->
-                <textarea id="editor" name="free_content">
-                    <p>${vo.free_content }</p>
+                <textarea id="editor" name="info_content">
+                    <p></p>
+                    <p></p>
                     <p></p>
                     <p></p>
                 </textarea>
@@ -111,22 +104,34 @@ $(document).ready(function() {
                         .catch( error => {
                             console.error( error );
                     });
+                    
                 </script>
             </div>
-
+            
             <!-- 글 작성하기 버튼-->
             <div class="text-center">
-                <button type="sumbit" class="btn btn-secondary" id="modify">글 수정하기</button>
+                <button id="check" type="sumbit" class="btn btn-secondary" >글 작성하기</button>
                 <a href="javascript:history.go(-1)" class="btn btn-outline-secondary">취소</a>
             </div>
         </form>
-    </div>
+    </div>    
     
-    <script>
- 
+  <script>
+    $(document).ready(function() {
+        $('#check').on('click', function() {
+            var selectedOption = $('#info_tag').val();
+            if (selectedOption == "") {
+                alert("말머리를 선택해주세요.");
+                return false; // 선택하지 않았을 경우 false 반환
+            }
+            return true; // 선택한 경우 true 반환
+        });
+    });
 </script>
-    
     <!-- ============================================== -->
 
+</body>
+	
+	<jsp:include page="../common/footer.jsp"/>
 </body>
 </html>

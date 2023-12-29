@@ -7,17 +7,17 @@ import lombok.Data;
 @Data
 public class Info {
 	
-	
 	private int info_idx;  
-	private int info_title;
-	private int info_content;
-	private int info_date;
-	private Date user_idx;
+	private String info_title;
+	private String info_content;
+	private Date info_date;
+	private int user_idx;
 	private String info_tag;
 	private int info_count;
+	private int info_boomup;
+	private String info_imgpath;
 	
-	//join
-	
+//join
 	private String user_nickname;
 	
 }

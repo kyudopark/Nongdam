@@ -22,10 +22,15 @@ info_date datetime not null,
 user_idx int,
 info_tag varchar(15),
 info_count int,
-
+info_boomup int,
+info_imgpath varchar(255),
  primary key(info_idx),
  FOREIGN KEY (user_idx) REFERENCES User (user_idx)
  )
 
  Drop table info;
 
+ select * from info;
+ 
+ commit;
+ 

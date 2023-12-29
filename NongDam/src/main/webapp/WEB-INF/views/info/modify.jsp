@@ -47,7 +47,7 @@
 
 $(document).ready(function() {
   $('#modify').click(function() {
-        var selectedOption = $('#free_tag').val();
+        var selectedOption = $('#info_tag').val();
         if (selectedOption === "") {
              alert("말머리를 선택해주세요.");
              return false; 
@@ -55,11 +55,11 @@ $(document).ready(function() {
              $.ajax({
                 type: 'POST',
                 url: 'modify', 
-                data:{free_idx: '${vo.free_idx}' },
+                data:{free_idx: '${vo.info_idx}' },
                 contentType: 'application/json',
                 success: function(response) {
                     alert('수정하시겠습니까?');
-                    location.href = '/ezen/free/main';
+                    location.href = '/ezen/info/main';
                 },
                 error: function(error) {
                     console.error('글 수정 중 에러 발생:', error);
@@ -83,15 +83,15 @@ $(document).ready(function() {
             <div class="row">
                 <!-- 말머리 -->
                 <div class="col-12 col-md-3 mb-3">
-                    <select class="form-select" name="free_tag" id="free_tag">
+                    <select class="form-select" name="info_tag" id="info_tag">
                         <option selected value="">말머리를 선택해주세요.</option>
-                        <option value="자유">자유</option>
-                        <option value="질문">질문</option>
+                        <option value="신규">신규</option>
+                        <option value="현직">현직</option>
                     </select>
                 </div>
                 <!--제목-->
                 <div class="col-12 col-md-9 form-group mb-3">
-                    <input type="text" id="title" name="free_title" value="${vo.free_title }" class="form-control">
+                    <input type="text" id="title" name="info_title" value="${vo.info_title }" class="form-control">
                 </div>
             </div>
 
@@ -99,8 +99,8 @@ $(document).ready(function() {
             <div class="form-group mt-5 mb-3">
                 <!-- 실제 에디터 박스-->
                 <!-- id는 변경하지 마세요 -->
-                <textarea id="editor" name="free_content">
-                    <p>${vo.free_content }</p>
+                <textarea id="editor" name="info_content">
+                    <p>${vo.info_content }</p>
                     <p></p>
                     <p></p>
                 </textarea>

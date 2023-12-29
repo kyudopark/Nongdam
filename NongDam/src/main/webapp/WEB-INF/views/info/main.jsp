@@ -72,20 +72,17 @@
 
   	    $("#type").change(function() {
   	        var selectValue = this.value;
-  	        var url = "/ezen/free/main"; // 기본 URL
+  	        var url = "/ezen/info/main"; // 기본 URL
 
   	        if (selectValue === 'count') {
-  	            url = "/ezen/free/main/sort";
+  	            url = "/ezen/info/main/sort";
   	        }
 
   	        // 선택한 값에 따라 URL에 type명 추가하여 이동
-  	        window.location.href = url + "?type=" + selectValue +"&tag="+ tag;
+  	        window.location.href = url + "?type=" + selectValue +"&tag="+tag;
   	    });
   	    
   	    });
-  	  
-		  	
-  	  
   	  </script>
   	  
 </head>
@@ -105,9 +102,9 @@
           <div class="nav nav-tabs" id="nav-tab" role="tablist">
                         <!--  class="nav-link(기본) active(선택된 값) text-body(텍스트 색 지정)"-->
                         <!-- 필요한 경우 button을 a 태그로 바꾸어도 괜찮습니다. (단, a태그로 바꾸는 경우 type=button 삭제하세요 )-->
-               <a href= "/ezen/free/main?tag=" class="nav-link text-body active" role="tab" aria-controls="nav-home" aria-selected="true">전체</a>
-               <a href="/ezen/free/main?tag=free" class="nav-link text-body" role="tab" aria-controls="nav-profile" aria-selected="true">자유</a>
-               <a href="/ezen/free/main?tag=question" class="nav-link text-body" role="tab" aria-controls="nav-contact" aria-selected="true">질문</a>
+               <a href= "/ezen/info/main?tag=" class="nav-link text-body active" role="tab" aria-controls="nav-home" aria-selected="true">전체</a>
+               <a href="/ezen/info/main?tag=new" class="nav-link text-body" role="tab" aria-controls="nav-profile" aria-selected="true">신규</a>
+               <a href="/ezen/info/main?tag=tenure" class="nav-link text-body" role="tab" aria-controls="nav-contact" aria-selected="true">종사자</a>
           </div>
       </nav>
         
@@ -134,24 +131,24 @@
 	               
 	            <c:forEach var="li" items="${li}">
 				    <tr>
-				        <td><span class="text-muted">${li.free_idx}</span></td>
-				        <td><a class="text-decoration-none tr-list-click" href="${contextPath}/free/detail?free_idx=${li.free_idx}">[${li.free_tag}] ${li.free_title }</span></td>
+				        <td><span class="text-muted">${li.info_idx}</span></td>
+				        <td><a class="text-decoration-none tr-list-click" href="${contextPath}/info/detail?info_idx=${li.info_idx}">[${li.info_tag}] ${li.info_title }</span></td>
 				        <td class="d-none d-md-table-cell">
 				        <c:set var="now" value="<%=new java.util.Date() %>"></c:set>
-						<c:set var="targetDate" value="${li.free_date}" />
+						<c:set var="targetDate" value="${li.info_date}" />
 
 				<c:choose>
 				    <c:when test="${now.time - targetDate.time < 24 * 60 * 60 * 1000}">
-				        <fmt:formatDate value="${li.free_date}" pattern="HH시 mm분" />
+				        <fmt:formatDate value="${li.info_date}" pattern="HH시 mm분" />
 				    </c:when>
 				    <c:otherwise>
-				        <fmt:formatDate value="${li.free_date}" pattern="yyyy년 MM월 dd일" />
+				        <fmt:formatDate value="${li.info_date}" pattern="yyyy년 MM월 dd일" />
 				    </c:otherwise>
 				</c:choose>
 				
 				        <td class="d-none d-md-table-cell">${li.user_nickname }</td>
-				        <td class="d-none d-md-table-cell">${li.free_boomup }</td>
-				       <td class="d-none d-md-table-cell">${li.free_count}</td>
+				        <td class="d-none d-md-table-cell">${li.info_boomup }</td>
+				       <td class="d-none d-md-table-cell">${li.info_count}</td>
 				    </tr>
 				    
 				</c:forEach>
@@ -166,7 +163,7 @@
                             	<form method="get">
                                 <div class="input-group" >
                                     <select class="btn btn-outline-secondary dropdown-toggle" name="type">
-                                        <option class="dropdown-item" value="free_title">제목</option>
+                                        <option class="dropdown-item" value="info_title">제목</option>
 										<option class="dropdown-item" value="user_nickname">작성자</option>
                                     </select >
                                     <input type="text" name="keyword" class="form-control" placeholder="검색" value="${cri.keyword }">
@@ -178,8 +175,8 @@
                             <!-- 글쓰기 버튼(2) -->
                             
                             
-                           <c:if test="${!empty uvo }">
-                            	<a class="text-decoration-none" href="${contextPath}/free/write">
+                           <c:if test="${ uvo.user_admin== true }">
+                            	<a class="text-decoration-none" href="${contextPath}/info/write">
                             	<button class="btn btn-outline-secondary" id="a3button"> 글쓰기</button>
                            	</a>
                            </c:if> 	
@@ -221,7 +218,7 @@
             </nav>
         </div>	
         
-        	<form id="pageFrm" action="${contextPath}/free/main" method="get">
+        	<form id="pageFrm" action="${contextPath}/info/main" method="get">
         		
 				<input type="hidden" id="user_idx" name="user_idx" value="1"/>
 				<input type="hidden" id="page" name="page" value="${pageCre.cri.page }"/>

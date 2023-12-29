@@ -3,7 +3,7 @@ package kr.co.ezen.entity;
 
 import java.util.Date;
 
-import org.springframework.format.annotation.DateTimeFormat;
+
 
 import lombok.Data;
 
@@ -15,9 +15,10 @@ public class Free {
 	private String free_title;
 	private String free_content;
 	private Date free_date;
-	private String user_idx;
+	private int user_idx;
 	private String free_tag;
 	private int free_count;
+	private int free_boomup;
 	
 	//조인
 	
