@@ -19,7 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		
 	<select id="findAll" resultType="kr.co.ezen.entity.Free" parameterType="kr.co.ezen.entity.Criteria">
 	
-		select free_title,free_content,free_date,free_tag,user_nickname,user_idx,free_idx,free_count from free natural join user
+		select free_title,free_content,free_date,free_tag,user_nickname,user_idx,free_idx,free_count from free natural join User
 		<include refid="search"/>
 		order by free_idx desc
 		limit #{pageStart}, #{perPageNum}
@@ -28,19 +28,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 		<select id="findfr" resultType="kr.co.ezen.entity.Free" parameterType="kr.co.ezen.entity.Criteria">
 	        select free_title,free_content,free_date,free_tag,user_nickname,user_idx,free_idx,free_count from free  
-	         natural join user where free_tag="자유" order by free_idx desc
+	         natural join User where free_tag="자유" order by free_idx desc
 	        limit #{pageStart}, #{perPageNum}
 		</select>
 	
 		<select id="findqu" resultType="kr.co.ezen.entity.Free" parameterType="kr.co.ezen.entity.Criteria">
 	        select free_title,free_content,free_date,free_tag,user_nickname,user_idx,free_idx,free_count from free 
-	        natural join user where free_tag="질문" order by free_idx desc
+	        natural join User where free_tag="질문" order by free_idx desc
 	        limit #{pageStart}, #{perPageNum}
 		</select>
 		
 		<select id="findBycount" resultType="kr.co.ezen.entity.Free" parameterType="kr.co.ezen.entity.Criteria">
 		
-			 select free_title,free_content,free_date,free_tag,user_nickname,user_idx,free_idx,free_count from free natural join user
+			 select free_title,free_content,free_date,free_tag,user_nickname,user_idx,free_idx,free_count from free natural join User
 			<include refid="search"/>
 			order by free_count desc
 			limit #{pageStart}, #{perPageNum}
@@ -48,7 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		
 		<select id="findBycountfr" resultType="kr.co.ezen.entity.Free" parameterType="kr.co.ezen.entity.Criteria">
 		
-			 select free_title,free_content,free_date,free_tag,user_nickname,user_idx,free_idx,free_count from free natural join user
+			 select free_title,free_content,free_date,free_tag,user_nickname,user_idx,free_idx,free_count from free natural join User
 			<include refid="search"/>
 			where free_tag="자유" order by free_count desc
 			limit #{pageStart}, #{perPageNum}
@@ -56,7 +56,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		
 		<select id="findBycountqu" resultType="kr.co.ezen.entity.Free" parameterType="kr.co.ezen.entity.Criteria">
 		
-			 select free_title,free_content,free_date,free_tag,user_nickname,user_idx,free_idx,free_count from free natural join user
+			 select free_title,free_content,free_date,free_tag,user_nickname,user_idx,free_idx,free_count from free natural join User
 			<include refid="search"/>
 			where free_tag="질문" order by free_count desc
 			limit #{pageStart}, #{perPageNum}
@@ -77,8 +77,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<insert id="insert" parameterType="kr.co.ezen.entity.Free">
 	    insert into free (
-	        free_idx, free_title, free_content, free_date, free_tag, free_count, user_idx, free_boomup) 
-	        values (#{free_idx}, #{free_title}, #{free_content}, now(), #{free_tag}, #{free_count}, #{user_idx}, #{free_boomup})
+	        free_idx, free_title, free_content, free_date, free_tag, free_count, user_idx) 
+	        values (#{free_idx}, #{free_title}, #{free_content}, now(), #{free_tag}, #{free_count}, #{user_idx})
 	</insert>
 	
 	<select id="GetUserIdx" resultType="kr.co.ezen.entity.Free" parameterType="int">
@@ -115,9 +115,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		resultType="kr.co.ezen.entity.FreeComment">
 			select free_parent_idx,free_comment_idx,user_idx,user_nickname,free_comment_time,free_comment_content,free_comment_useable
 			from freeComment natural join User where free_idx=#{free_idx}
-
-		select * from freeComment as f left outer join User as u on f.user_idx= u.user_idx
-			where free_idx=#{free_idx}
 
 			order by free_parent_idx desc, free_comment_idx
 		</select> <!-- freeComment와 User조인 free_idx와 일치하는 값을 가지고 온다. -->

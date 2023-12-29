@@ -15,7 +15,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</sql>
 		
 	<select id="findAll" resultType="kr.co.ezen.entity.Info" parameterType="kr.co.ezen.entity.Criteria">
-		select info_title,info_content,info_date,info_tag,user_nickname,user_idx,info_idx,info_count from info natural join user
+		select info_title,info_content,info_date,info_tag,user_nickname,user_idx,info_idx,info_count from info natural join User
 		<include refid="search"/>
 		order by info_idx desc
 		limit #{pageStart}, #{perPageNum}
@@ -23,25 +23,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="findnew" resultType="kr.co.ezen.entity.Info" parameterType="kr.co.ezen.entity.Criteria">
 		select info_title,info_content,info_date,info_tag,user_nickname,user_idx,info_idx,info_count from info  
-		natural join user where info_tag="신규" order by info_idx desc
+		natural join User where info_tag="신규" order by info_idx desc
 		limit #{pageStart}, #{perPageNum}
 	</select>
 	
 	<select id="findtenure" resultType="kr.co.ezen.entity.Info" parameterType="kr.co.ezen.entity.Criteria">
 		select info_title,info_content,info_date,info_tag,user_nickname,user_idx,info_idx,info_count from info
-		natural join user where info_tag="현직" order by info_idx desc
+		natural join User where info_tag="현직" order by info_idx desc
 		limit #{pageStart}, #{perPageNum}	
 	</select>
 		
 	<select id="findBycount" resultType="kr.co.ezen.entity.Info" parameterType="kr.co.ezen.entity.Criteria">
-		select info_title,info_content,info_date,info_tag,user_nickname,user_idx,info_idx,info_count from info natural join user
+		select info_title,info_content,info_date,info_tag,user_nickname,user_idx,info_idx,info_count from info natural join User
 		<include refid="search"/>
 		order by info_count desc
 		limit #{pageStart}, #{perPageNum}
 	</select>
 	
 	<select id="findBycountnew" resultType="kr.co.ezen.entity.Info" parameterType="kr.co.ezen.entity.Criteria">
-		select info_title,info_content,info_date,info_tag,user_nickname,user_idx,info_idx,info_count from info natural join user
+		select info_title,info_content,info_date,info_tag,user_nickname,user_idx,info_idx,info_count from info natural join User
 		<include refid="search"/>
 		where info_tag="신규" order by info_count desc
 		limit #{pageStart}, #{perPageNum}
@@ -57,7 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	
 	<select id="findBydate" resultType="kr.co.ezen.entity.Info" parameterType="kr.co.ezen.entity.Criteria">
-		select info_title,info_content,info_date,info_tag,user_nickname,user_idx,info_idx,info_count from info natural join user
+		select info_title,info_content,info_date,info_tag,user_nickname,user_idx,info_idx,info_count from info natural join User
 		<include refid="search"/>
 		order by info_date desc
 		LIMIT #{pageStart}, #{perPageNum}
@@ -69,8 +69,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<insert id="insert" parameterType="kr.co.ezen.entity.Info">
 		insert into info (
-			info_idx,info_title, info_content, info_date, info_tag, info_count, user_idx, info_boomup) 
-			values (#{info_idx}, #{info_title}, #{info_content}, now(), #{info_tag}, #{info_count}, #{user_idx}, #{info_boomup})
+			info_idx,info_title, info_content, info_date, info_tag, info_count, user_idx) 
+			values (#{info_idx}, #{info_title}, #{info_content}, now(), #{info_tag}, #{info_count}, #{user_idx})
 	</insert>
 	
 	<select id="GetUserIdx" resultType="int" parameterType="string">
