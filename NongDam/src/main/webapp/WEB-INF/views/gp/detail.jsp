@@ -58,7 +58,7 @@
 	  			} else if(btn == 'modify') {
 	  				fData.attr("action", "${contextPath }/gp/modify");
 	  			} else if(btn == 'back') {
-	  				fData.find("#idx").remove();
+	  				fData.find("#gp_idx").remove();
 	  				fData.attr("action", "${contextPath }/gp/main");
 	  			} else if(btn == 'delete') {
 	  				let result = confirm('해당 공동구매 게시글을 삭제하시겠습니까?');

@@ -49,7 +49,13 @@
 <script type="text/javascript"
 	src="${contextPath }/resources/common/js/common.js"></script>
 <!-- Chart.js -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- datepicker -->
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <meta name="농담" content="안녕하세요, 농업 정보 커뮤니티 농담입니다." />
 
@@ -61,119 +67,91 @@
 
 <title>농담 | 농업 정보 커뮤니티</title>
 
-	<script type="text/javascript">
-	$(document).ready(function () {
-	    const ctx = document.getElementById('myChart').getContext('2d');
-	  
-	    // Initialize the chart
-	    let myChart = new Chart(ctx, {
-	        type: 'doughnut',
-	        data: {
-	            labels: ['Red', 'Blue', 'Green'],
-	            datasets: [{
-	                label: '# of Votes',
-	                data: [${gp.gpCount}, ${tr.trCount}, ${gpUser.gpUserCount}],
-	                borderWidth: 1
-	            }]
-	        },
-	        options: {
-	            responsive: false,
-	            scales: {
-	                y: {
-	                    max: 50
-	                }
-	            }
-	        }
-	    });
+<script type="text/javascript">
+    $(document).ready(function () {
+        // 전역으로 데이터를 정의
+        var gpData = ${gp.gpCount};
+        var trData = ${tr.trCount};
 
-	    $('#lineButton').on('click', function() {
-	        // Destroy the existing chart
-	        myChart.destroy();
+        // Chart를 그릴 캔버스 요소를 가져옴
+        const ctx = document.getElementById('myChart').getContext('2d');
 
-	        // Create a new chart as a line chart
-	        const newChart = new Chart(ctx, {
-	            type: 'line',
-	            data: {
-	                labels: ['1:1거래', 'Blue', 'Green'],
-	                datasets: [{
-	                    label: '# of Votes',
-	                    data: [${gp.gpCount}, ${tr.trCount}, ${gpUser.gpUserCount}],
-	                    borderWidth: 1
-	                }]
-	            },
-	            options: {
-	                responsive: false,
-	                scales: {
-	                    y: {
-	                        max: 50
-	                    }
-	                }
-	            }
-	        });
+        // datepicker 초기화
+        $("#datepicker").datepicker({
+		    changeMonth: true,
+		    changeYear: true,
+		    showButtonPanel: true,
+		    closeText: '확인',
+		    dateFormat: 'yy-mm-dd',
+		    defaultDate: new Date('2023-07-19'),
+		    onSelect: function(dateText, inst) {
+		        // 선택한 날짜를 컨트롤러로 전달하고 +3일, -3일의 범위에 있는 데이터를 가져와 차트 갱신
+		        var formattedDate = $.datepicker.formatDate('yy-mm-dd', new Date(dateText));
+		        updateChartData(formattedDate);
+		    }
+		});
 
-	        // Update the reference to the current chart
-	        myChart = newChart;
-	    });
+        // 초기 차트 생성
+        let myChart = createChart();
 
-	    $('#doughnutButton').on('click', function() {
-	        // Destroy the existing chart
-	        myChart.destroy();
+        // 추가된 함수: 선택한 날짜를 컨트롤러로 전달하고 +3일, -3일의 범위에 있는 데이터를 가져와 차트 갱신
+        function updateChartData(selectedDate) {
+            $.ajax({
+                type: "GET",
+                url: "${contextPath}/admin/main",
+                data: { selectedDate: selectedDate },
+                success: function (response) {
+                    // 성공 시 처리 (response에서 데이터를 활용하여 표시)
+                    console.log(response);
 
-	        // Create a new chart as a doughnut chart
-	        const newChart = new Chart(ctx, {
-	            type: 'doughnut',
-	            data: {
-	                labels: ['Red', 'Blue', 'Green'],
-	                datasets: [{
-	                    label: '# of Votes',
-	                    data: [${gp.gpCount}, ${tr.trCount}, ${gpUser.gpUserCount}],
-	                    borderWidth: 1
-	                }]
-	            },
-	            options: {
-	                responsive: false,
-	                scales: {
-	                    y: {
-	                        max: 50
-	                    }
-	                }
-	            }
-	        });
-	
-	        // Update the reference to the current chart
-	        myChart = newChart;
-	    });
-	    
-	    $('#barButton').on('click', function() {
-	        // Destroy the existing chart
-	        myChart.destroy();
+                    // 각 엔터티에 대한 데이터를 추출
+                    gpData = response.gp.gpCount;
+                    trData = response.tr.trCount;
+                    var labels = response.labels;
 
-	        // Create a new chart as a doughnut chart
-	        const newChart = new Chart(ctx, {
-	            type: 'bar',
-	            data: {
-	                labels: ['Red', 'Blue', 'Green'],
-	                datasets: [{
-	                    label: '# of Votes',
-	                    data: [${gp.gpCount}, ${tr.trCount}, ${gpUser.gpUserCount}],
-	                    borderWidth: 1
-	                }]
-	            },
-	            options: {
-	                responsive: false,
-	                scales: {
-	                    y: {
-	                        max: 50
-	                    }
-	                }
-	            }
-	        });
+                    // 가져온 데이터를 기반으로 차트 갱신
+                    updateChart(myChart, 'line', labels, [gpData, trData]);
+                },
+                error: function (error) {
+                    // 에러 처리
+                    console.error(error);
+                }
+            });
+        }
 
-	        // Update the reference to the current chart
-	        myChart = newChart;
-	    });
-	});
-	</script>
+        // 추가된 함수: 차트를 업데이트하는 함수
+        function updateChart(chart, type, labels, data) {
+            chart.data.labels = labels;
+            chart.data.datasets[0].data = data;
+            chart.config.type = type;
+            chart.update();
+        }
+
+        // 추가된 함수: 차트를 생성하는 함수
+        function createChart() {
+            const ctx = document.getElementById('myChart').getContext('2d');
+            return new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['공동구매', '1:1거래'],
+                    datasets: [{
+                        data: [gpData, trData],
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: false,
+                    scales: {
+                        y: {
+                            max: 50
+                        }
+                    }
+                }
+            });
+        }
+    });
+</script>
 
 
 </head>
@@ -213,49 +191,48 @@
                 </div>
             </div>
             <!-- 왼쪽 메뉴바 ========================================= -->
-            <!-- 오른편 화면 -->
-            <div class="col-12 col-md-9">
-                <div class="container">
-                    <div class="border rounded-2 p-4 container">
-		            	<div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 ">
-							<div class="col-6">
-								<canvas id="myChart" width="550" height="350" role="img"></canvas>
+            <!-- 오른쪽 내용 -->
+			     <!-- 오른쪽 내용 -->
+			<div class="col-12 col-md-9">
+			    <div class="container">
+			        <div class="border rounded-2 p-4 container">
+			            <!-- 차트와 짧은 텍스트 -->
+			            <div class="row">
+			                <!-- 차트 -->
+			                <div class="col-md-7">
+			                    <canvas id="myChart" width="500" height="350" role="img"></canvas>
+			                </div>
+			                <!-- 짧은 텍스트 -->
+			                <div class="border-start col-md-4">
+			                    <div class="row mt-4">
+			                        <div class="col-12">
+			                        	<form method="get">
+			                            	날짜 선택 <input type="hidden" id="dateSelect">
+			                            </form>
+			                            <div id="datepicker"></div>
+			                        </div>
+			                    </div>
+			                </div>
+			                <!-- 긴 텍스트 입력 폼 -->
+			                <div class="col-md-12 mt-4">
+							    <div class="mb-3">
+							        <label for="Count1" class="form-label">1:1 거래 게시판 게시글 수 : <span id="trCount">${tr.trCount}</span></label><br>
+							        <label for="Count2" class="form-label">공동구매 게시판 게시글 수 : <span id="gpCount">${gp.gpCount}</span></label><br>
+							    </div>
 							</div>
-						</div>
-						<button id="barButton" class="btn btn-secondary">막대</button>
-						<button id="lineButton" class="btn btn-secondary">라인</button>
-						<button id="doughnutButton" class="btn btn-secondary">도넛</button>
-                    </div>
-                </div>
-            </div>
-            <!-- 오른쪽 화면 끝 -->
-        </div>
-    </div>
+			            </div>
+			        </div>
+			    </div>
+			</div>
+		</div>
+	</div>
     <!-- 마이페이지 끝 -->
 
 
 
 
-
-	<jsp:include page="../common/footer.jsp" />
 	
-
-
-<script type="text/javascript">
-    
-    
-    function readURL(input) {
-    	  if (input.files && input.files[0]) {
-    	    var reader = new FileReader();
-    	    reader.onload = function(e) {
-    	      document.getElementById('userProfilePreview').src = e.target.result;
-    	    };
-    	    reader.readAsDataURL(input.files[0]);
-    	  } else {
-    	    document.getElementById('userProfilePreview').src = "${contextPath }/resources/image/common/thumbnail-profile-seed.svg";
-    	  }
-    	}
-</script>
+	<jsp:include page="../common/footer.jsp" />
 
 </body>
 </html>

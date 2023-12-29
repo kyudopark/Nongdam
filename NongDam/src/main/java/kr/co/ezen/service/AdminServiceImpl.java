@@ -39,7 +39,6 @@ public class AdminServiceImpl  implements AdminService{
 		adminMapper.deleteByCheckbox(selectedUsers);
 	}
 
-
 	@Override
 	public int countGpAll(Gp gp) {
 		int countGp = adminMapper.countGpAll(gp);

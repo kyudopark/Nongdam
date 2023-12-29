@@ -195,6 +195,18 @@ public class myPageController {
         return "myPage/gplist";
     }
     
+    @RequestMapping(value = "/updateAddr", method = RequestMethod.POST)
+    public String updateAddr(GpUser gpUser, @RequestParam("gp_zipcode") String gp_zipcode, @RequestParam("gp_addr") String gp_addr, 
+    						@RequestParam("gp_idx") int gp_idx, @RequestParam("user_idx") int user_idx) {
+    	gpUser.setGp_idx(gp_idx);
+    	gpUser.setUser_idx(user_idx);
+    	gpUser.setGp_zipcode(gp_zipcode);
+    	gpUser.setGp_addr(gp_addr);
+    	
+    	gpService.updateAddr(gpUser);
+    	return "redirect:/myPage/gplist";
+    }
+    
     @RequestMapping(value = "/deleteRequest", method = RequestMethod.GET)
     public String deleteRequest(@RequestParam("gp_idx") int gp_idx, @RequestParam("user_idx") int user_idx) {
     	gpService.deleteRequest(user_idx, gp_idx);

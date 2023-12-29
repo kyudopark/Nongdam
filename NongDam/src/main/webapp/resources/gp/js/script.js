@@ -16,17 +16,16 @@ function execDaumPostcode() {
         new daum.Postcode( {
           oncomplete: function( data ) {
             document.getElementById( 'gp_zipcode' ).value = data.zonecode;
-            document.getElementById( 'gp_zipcode2' ).value = data.address;
-            document.getElementById( 'gp_zipcode3' ).focus();
+            document.getElementById( 'addr1' ).value = data.address;
+            document.getElementById( 'addr2' ).focus();
           }
         } ).open();
       }
       function execDaumPostcodeReset() {
         document.getElementById( 'gp_zipcode' ).value = null;
-        document.getElementById( 'gp_zipcode2' ).value = null;
-        document.getElementById( 'gp_zipcode3' ).value = null;
+        document.getElementById( 'addr1' ).value = null;
+        document.getElementById( 'addr2' ).value = null;
       }
-      
       
       
       

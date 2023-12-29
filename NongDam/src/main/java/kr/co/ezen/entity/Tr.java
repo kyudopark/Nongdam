@@ -18,4 +18,6 @@ public class Tr {
 	private Date tr_time;
 	
 	private int trCount;
+	private Date StartDate;
+	private Date endDate;
 }

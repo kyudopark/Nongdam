@@ -80,11 +80,11 @@
 	            var addrParts = userAddr.split(',');
 
 	            if (addrParts.length === 2) {
-	                $('#gp_zipcode2').val(addrParts[0]);
-	                $('#gp_zipcode3').val(addrParts[1]);
+	                $('#addr1').val(addrParts[0]);
+	                $('#addr2').val(addrParts[1]);
 	                
-			        var addr2 = $("#gp_zipcode2").val();
-			        var addr3 = $("#gp_zipcode3").val();
+			        var addr2 = $("#addr1").val();
+			        var addr3 = $("#addr2").val();
 			        
 			        var fullAddress = addr2 + ',' + addr3;
 			        
@@ -94,15 +94,15 @@
 	            }
 	        } else {
 	            $('#gp_zipcode').val("");
-	            $('#gp_zipcode2').val("");
-	            $('#gp_zipcode3').val("");
+	            $('#addr1').val("");
+	            $('#addr2').val("");
 	        }
 	    });
 	 	
 		// 신규 배송지 입력 function
-		$("#gp_zipcode2, #gp_zipcode3").on('input', function() {
-			var addr = $("#gp_zipcode2").val();
-			var addr2 = $("#gp_zipcode3").val();
+		$("#addr1, #addr2").on('input', function() {
+			var addr = $("#addr1").val();
+			var addr2 = $("#addr2").val();
 		        
 		    var fullAddress = addr + ',' + addr2;   
 		    $("#gp_addr").val(fullAddress);
@@ -279,12 +279,8 @@
                                 </div>
                             </div>
                         </div>
-                        <input type="text" class="form-control mb-2" id="gp_zipcode2" placeholder="주소" readonly>
-                        <input type="text" class="form-control" id="gp_zipcode3" placeholder="상세 주소">
-                        <div class="mt-2 form-check d-flex justify-content-end gap-1">
-                            <input class="form-check-input" type="checkbox" value="updateAddr" id="updateAddr" name="updateAddr">
-                            <label class="form-check-label" for="updateAddr"></label>기본 배송지로 설정</label>
-                          </div>
+                        <input type="text" class="form-control mb-2" id="addr1" placeholder="주소" readonly>
+                        <input type="text" class="form-control" id="addr2" placeholder="상세 주소">
                     </div>
                 </div>
             </div>

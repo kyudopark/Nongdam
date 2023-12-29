@@ -13,7 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="type == 'progress'">
 				where gp_title like concat('%',#{keyword},'%')
 			</if>
-			<if test="type == 'complet'">
+			<if test="type == 'complete'">
 				where gp_title like concat('%',#{keyword},'%')
 			</if>
 		</sql>
@@ -44,8 +44,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</select>
 		
 		<insert id="insert" parameterType="kr.co.ezen.entity.Gp">
-			insert into gp (gp_title,gp_content,gp_price,gp_date_start, gp_date_last, gp_thumb, user_idx)
-			VALUES (#{gp_title}, #{gp_content},#{gp_price},#{gp_date_start},#{gp_date_last},#{gp_thumb}, #{user_idx})
+			insert into gp (gp_title,gp_content,gp_price, gp_date, gp_date_start, gp_date_last, gp_thumb, user_idx)
+			VALUES (#{gp_title}, #{gp_content},#{gp_price}, now(), #{gp_date_start},#{gp_date_last},#{gp_thumb}, #{user_idx})
 		</insert>
 		
 		
@@ -64,6 +64,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			insert into gpUser (gp_idx, user_idx,gp_uid, gp_zipcode, gp_addr, gp_name, gp_email, gp_total, gp_num)
 			VALUES (#{gp_idx},#{user_idx},#{gp_uid},#{gp_zipcode},#{gp_addr},#{gp_name},#{gp_email},#{gp_total}, #{gp_num})
 		</insert>
+		
+		<update id="updateAddr" parameterType="kr.co.ezen.entity.GpUser">
+			update gpUser set gp_zipcode=#{gp_zipcode}, gp_addr=#{gp_addr}
+			where user_idx=#{user_idx} AND gp_idx=#{gp_idx}
+		</update>
 		
 		<delete id="deleteRequest" parameterType="int">
 			delete from gpUser where user_idx=#{user_idx} AND gp_idx=#{gp_idx}

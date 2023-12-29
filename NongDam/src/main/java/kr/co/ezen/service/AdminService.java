@@ -13,8 +13,9 @@ public interface AdminService {
 	public void deleteByIdx(int user_idx);
 	public void updateAdminStatus(User user);
 	public void deleteByCheckbox(List<Integer> selectedUsers);
-
+	
 	public int countGpAll(Gp gp);
 	public int countTrAll(Tr tr);
 	public int countGpUserAll(GpUser gpUser);
+	
 }

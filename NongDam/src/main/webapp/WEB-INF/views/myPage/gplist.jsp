@@ -46,22 +46,31 @@
     
     <script type="text/javascript">
     $(document).ready(function () {
+    	// 세부내역 hide
         $(window).on('load', function() {
             $(".info-section").hide();
         });
+		// 세부내역 개별 toggle
+        $(document).on("click", "[id^='info_']", function() {
+            var index = $(this).attr("id").split("_")[1];
+            
+            
+            var userAddr = $("#gp_addr_" + index).val();
+            var addrParts = userAddr.split(',');
 
-        $("#info").on("click", function () {
-            $(".info-section").toggle();
+            if (addrParts.length === 2) {
+            	$("#addr1_" + index).val(addrParts[0]);
+            	$("#addr2_" + index).val(addrParts[1]);
+              
+            }
+            
+            $(".info-section").eq(index).toggle();
         });
         
-        var userAddr = $('#gp_addr').val();
-        var addrParts = userAddr.split(',');
-
-        if (addrParts.length === 2) {
-            $('#addr1').val(addrParts[0]);
-            $('#addr2').val(addrParts[1]);
-        }
-
+        // 기존 주소 불러오기
+        
+	
+        // delete문
         $('button').on('click',function(e){
         	var btn = $(this).data('btn'); // 내가 현재 클릭한 버튼 -> data-btn
         	
@@ -74,10 +83,44 @@
 				}
         	}
         });
+        
+        
 	});
-
-	</script>
+	
+    function submitForm(index) {
+    	let result = confirm('배송지를 변경하시겠습니까?');
+    	
+    	if(result == false) {
+    		return;
+    	} else {
+    		var addr1 = $("#addr1_" + index).val();
+    		var addr2 = $("#addr2_" + index).val();
+    		var fullAddress = addr1 + ',' + addr2;
+    		$("#gp_addr_" + index).val(fullAddress);
+		    
+    		document.getElementById('submitForm_' + index).submit();
+        }
+    }
     
+ // myPage용 다음 우편번호 입력 api
+    function execDaumPostcode(index) {
+           new daum.Postcode({
+               oncomplete: function (data) {
+                   document.getElementById('gp_zipcode_' + index).value = data.zonecode;
+                   document.getElementById('addr1_' + index).value = data.address;
+                   document.getElementById('addr2_' + index).focus();
+               }
+           }).open();
+       }
+
+       function execDaumPostcodeReset(index) {
+           document.getElementById('gp_zipcode_' + index).value = null;
+           document.getElementById('addr1_' + index).value = null;
+           document.getElementById('addr2_' + index).value = null;
+       }
+        
+	</script>
+	
     <title>농담 | 농업 정보 커뮤니티</title>
     
 </head>
@@ -135,22 +178,7 @@
                         <!-- 공동구매 -->
                         <div class="mt-2 mb-4 pb-4">
                             <h4 class="ms-2 mb-4 text-body-secondary"><i class="fa-solid fa-tag me-2"></i> 공동구매 신청 내역</h4>
-                            <c:forEach var="gpUserList" items="${gpUserList }">
-								
-	                            <c:set var="currentDate" value="<%= new java.util.Date() %>"/>
-								<c:set var="startDate" value="${gpUserList.gp_date_start }"/>
-								<c:set var="endDate" value="${gpUserList.gp_date_last }"/>
-									
-								<c:set var="diffMillis" value="${startDate.time - currentDate.time}"/>
-								<c:set var="diffDays" value="${diffMillis / (24 * 60 * 60 * 1000)}"/>
-									                       
-								<c:set var="diffMillisEnd" value="${endDate.time - currentDate.time}"/>
-								<c:set var="diffDaysEnd" value="${diffMillisEnd / (24 * 60 * 60 * 1000)}"/>
-								
-								<input type="hidden" id="gp_addr" value="${gpUserList.gp_addr }"  />
-								<input type="hidden" id="gp_idx" value="${gpUserList.gp_idx }"  />
-								<input type="hidden" id="user_idx" value="${uvo.user_idx }"  />
-								
+                            
                             <!-- 맨 윗줄 -->
                             <div class="d-flex flex-row flex-wrap pt-2 pb-2 border">
                                 <div class="d-none d-lg-block col-1 text-center">
@@ -167,6 +195,22 @@
                                 </div>
                             </div>
                             <!-- 맨 윗줄 끝 =============================================== -->
+                            
+                            <c:forEach var="gpUserList" items="${gpUserList }" varStatus="loop">
+								
+	                            <c:set var="currentDate" value="<%= new java.util.Date() %>"/>
+								<c:set var="startDate" value="${gpUserList.gp_date_start }"/>
+								<c:set var="endDate" value="${gpUserList.gp_date_last }"/>
+									
+								<c:set var="diffMillis" value="${startDate.time - currentDate.time}"/>
+								<c:set var="diffDays" value="${diffMillis / (24 * 60 * 60 * 1000)}"/>
+									                       
+								<c:set var="diffMillisEnd" value="${endDate.time - currentDate.time}"/>
+								<c:set var="diffDaysEnd" value="${diffMillisEnd / (24 * 60 * 60 * 1000)}"/>
+								
+								<input type="hidden" id="gp_idx" value="${gpUserList.gp_idx }"  />
+								<input type="hidden" id="user_idx" value="${uvo.user_idx }"  />
+								
                             <!-- 목록 하나 -->
                             <div class="d-flex flex-row flex-wrap justify-content-center align-items-center pt-3 pb-3 border border-top-0 bg-body-tertiary">
                                 <div class="d-none d-lg-block col-1 text-center">
@@ -206,7 +250,7 @@
                                     ~ <fmt:formatDate value="${gpUserList.gp_date_last }" pattern="YYYY-MM-dd "/>
                                 </div>
                                 <div class="col-6 col-lg-3 text-center">
-                                    <button type="button" class="btn btn-sm btn-secondary" id="info">세부내역</button>
+                                    <button type="button" class="btn btn-sm btn-secondary" id="info_${loop.index}">세부내역</button>
                                     <c:choose>
 										<c:when test="${diffDaysEnd > 0}">
 											<button class="btn btn-sm btn-secondary" data-btn="delete">취소하기</button> 
@@ -219,45 +263,61 @@
                             </div>
                             <!-- 목록 하나 끝 =============================================== -->
                             <!-- 목록의 세부내역 버튼을 클릭했을 때 나오는 배송지(세부내역) -->
-                            <div class="p-3 pt-2 pb-2 border border-top-0 info-section">
-                                <div class="p-2 pt-3 pb-3">
-                                    <h6 class="mb-3">
-                                        배송지 설정
-                                    </h6>
-                                    <!-- 성명 -->
-                                    <div class="row align-items-center pb-2">
-                                        <div class="col-12 col-sm-2">
-                                            성명
-                                        </div>
-                                        <div class="col-12 col-sm-5">
-                                            <input type="text" placeholder="성명" class="form-control" value="${gpUserList.gp_name }">
-                                        </div>
-                                    </div>
-                                    <!-- 배송지 -->
-                                    <div class="row mb-2">
-                                        <label class="form-label col-12 col-sm-2">배송지</label>
-                                        <div class="mb-4 col-12 col-sm-10">
-                                            <div class="form-group">
-                                                <div class="row mb-2">
-                                                    <div class="col-5">
-                                                        <!-- 우편번호. readonly로 되어있으나 풀어도 됩니다 -->
-                                                        <input type="text" class="form-control" id="gp_zipcode" placeholder="00000" readonly value="${gpUserList.gp_zipcode }">
-                                                    </div>
-                                                    <div class="col-7">
-                                                        <!-- 우편번호 찾기 버튼. -->
-                                                        <button type="button" class="btn btn-secondary" onclick="execDaumPostcode()">우편번호 찾기</button>
-                                                        <button type="button" class="btn btn-secondary" onclick="execDaumPostcodeReset()">초기화</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <input type="text" class="form-control mb-2" id="addr1" placeholder="주소">
-                                            <input type="text" class="form-control" id="addr2" placeholder="상세 주소">
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-content-end">
-                                        <button class="btn btn-sm btn-outline-secondary me-1"><i class="fa-solid fa-gear"></i> 수정하기</button>
-                                    </div>
-                                </div>
+                            <div class="p-3 pt-2 pb-2 border border-top-0 info-section" id="infoSection_${loop.index}">
+	                                <div class="p-2 pt-3 pb-3">
+	                                    <h6 class="mb-3">
+	                                        배송지 설정
+	                                    </h6>
+	                                    <form method="post" action="${contextPath}/myPage/updateAddr" id="submitForm_${loop.index}">
+		                            		<input type="hidden" id="gp_idx" name="gp_idx" value="${gpUserList.gp_idx}"/>
+											<input type="hidden" id="user_idx" name="user_idx" value="${gpUserList.user_idx}"/>
+	                                    <!-- 성명 -->
+	                                    <div class="row align-items-center pb-2">
+	                                        <div class="col-12 col-sm-2">
+	                                            성명
+	                                        </div>
+	                                        <div class="col-12 col-sm-5">
+	                                            <input type="text" placeholder="성명" class="form-control" value="${gpUserList.gp_name }">
+	                                        </div>
+	                                    </div>
+	                                    <!-- 배송지 -->
+	                                    <div class="row mb-2">
+	                                        <label class="form-label col-12 col-sm-2">배송지</label>
+	                                        <div class="mb-4 col-12 col-sm-10">
+	                                            <div class="form-group">
+	                                                <div class="row mb-2">
+	                                                    <div class="col-5">
+	                                                        <!-- 우편번호. readonly로 되어있으나 풀어도 됩니다 -->
+	                                                        <input type="text" class="form-control" id="gp_zipcode_${loop.index}" name="gp_zipcode" placeholder="00000" readonly value="${gpUserList.gp_zipcode }">
+	                                                    </div>
+	                                                    <div class="col-7">
+	                                                        <!-- 우편번호 찾기 버튼. -->
+	                                                        <button type="button" class="btn btn-secondary" onclick="execDaumPostcode(${loop.index})">우편번호 찾기</button>
+	                                                        <button type="button" class="btn btn-secondary" onclick="execDaumPostcodeReset(${loop.index})">초기화</button>
+	                                                    </div>
+	                                                </div>
+	                                            </div>
+	                                            <input type="hidden" id="gp_addr_${loop.index}" name="gp_addr" value="${gpUserList.gp_addr }"/>
+												<input type="text" class="form-control mb-2" id="addr1_${loop.index}" placeholder="주소">
+												<input type="text" class="form-control" id="addr2_${loop.index}" placeholder="상세 주소">
+	                                        </div>
+	                                    </div>
+	                                    </form>
+	                                    <div class="d-flex justify-content-end">
+											<c:choose>
+												<c:when test="${diffDaysEnd > 0}">
+													<button class="btn btn-sm btn-outline-secondary me-1 update-btn" data-btn="updateAddr" onclick="submitForm(${loop.index})">
+				                                    	<i class="fa-solid fa-gear"></i> 수정하기
+													</button>
+												</c:when>
+												<c:when test="${diffDaysEnd < 0}">
+													<button class="btn btn-sm btn-outline-secondary me-1 update-btn" data-btn="updateAddr" onclick="submitForm(${loop.index})" disabled="disabled">
+				                                    	<i class="fa-solid fa-gear"></i> 수정하기
+													</button>
+												</c:when>
+											</c:choose>
+										</div>
+	                                </div>
                             </div>
                             
                             <!-- 세부내역 끝 =============================================== -->

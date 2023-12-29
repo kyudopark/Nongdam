@@ -48,19 +48,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		update User set user_admin=${user_admin}
 		where user_idx=#{user_idx}
 	</update>
-
 	
-	<select id="countGpAll" resultType="int" parameterType="kr.co.ezen.entity.Gp">
-		select count(*) from gp
+	<select id="countGpAll" resultType="int" parameterType="java.util.Map">
+	   <!-- 공동구매 수 조회 쿼리 -->
+	   SELECT IFNULL(COUNT(*), 0) AS COUNT, DATE_FORMAT(gp_date, '%Y-%m-%d') AS gp_date 
+	   FROM gp 
+	   WHERE gp_date BETWEEN '2023-07-19' AND '2024-01-17'
 	</select>
 	
-	<select id="countTrAll" resultType="int" parameterType="kr.co.ezen.entity.Tr">
-		select count(*) from tr
+	<select id="countTrAll" resultType="int" parameterType="java.util.Map">
+	   <!-- 1:1거래 수 조회 쿼리 -->
+	   SELECT IFNULL(COUNT(*), 0) AS COUNT, DATE_FORMAT(tr_time, '%Y-%m-%d') AS tr_time 
+	   FROM tr 
+	   WHERE tr_time BETWEEN '2023-07-19' AND '2024-01-17'
 	</select>
 	
 	<select id="countGpUserAll" resultType="int" parameterType="kr.co.ezen.entity.GpUser">
 		select count(*) from gpUser
 	</select>
-	
 	
 </mapper>

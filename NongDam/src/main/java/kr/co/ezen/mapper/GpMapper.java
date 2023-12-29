@@ -18,6 +18,7 @@ public interface GpMapper {
 	public void deleteByIdx(int gp_idx);
 	public void insert(Gp vo);
 	public void request(GpUser gu);
+	public void updateAddr(GpUser gpUser);
 	public void deleteRequest(@Param("user_idx")int user_idx, @Param("gp_idx")int gp_idx);
 
 }

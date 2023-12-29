@@ -86,9 +86,9 @@
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
             <!--  class="nav-link(기본) active(선택된 값) text-body(텍스트 색 지정)"-->
             <!-- 필요한 경우 button을 a 태그로 바꾸어도 괜찮습니다. (단, a태그로 바꾸는 경우 type=button 삭제하세요 )-->
-            <button class="nav-link text-body ${pageCre.cri.type=='all' ? 'active':''}" data-bs-toggle="tab" type="button" role="tab" data-tab-type="all" aria-controls="nav-all" aria-selected="${pageCre.cri.type=='all' ? 'true':'false'}">전체</button>
-			<button class="nav-link text-body ${pageCre.cri.type=='progress' ? 'active':''}" data-bs-toggle="tab" type="button" role="tab" data-tab-type="progress" aria-controls="nav-progress" aria-selected="${pageCre.cri.type=='progress' ? 'true':'false'}">진행</button>
-			<button class="nav-link text-body ${pageCre.cri.type=='complet' ? 'active':''}" data-bs-toggle="tab" type="button" role="tab" data-tab-type="complet" aria-controls="nav-complet" aria-selected="${pageCre.cri.type=='complet' ? 'true':'false'}">완료</button>
+        	<a href="../gp/main?type=all" class="nav-link text-body ${pageCre.cri.type=='all' ? 'active':''}" role="tab" aria-controls="nav-all" aria-selected="${pageCre.cri.type=='all' ? 'true':'false'}">전체</a>
+            <a href="../gp/main?type=progress" class="nav-link text-body ${pageCre.cri.type=='progress' ? 'active':''}" role="tab" aria-controls="nav-progress" aria-selected="${pageCre.cri.type=='progress' ? 'true':'false'}">진행</a>
+            <a href="../gp/main?type=complete" class="nav-link text-body ${pageCre.cri.type=='complete' ? 'active':''}" role="tab" aria-controls="nav-complete" aria-selected="${pageCre.cri.type=='complet' ? 'true':'false'}">완료</a>
         </div>
     </nav>
     <!--카드형식 div container-->
@@ -196,13 +196,11 @@
             <!-- 카드 게시판 영역 끝 -->
 
             <!-- 페이징 -->
-            <div class="mt-3">			
+			<div class="mt-3">
 				<nav class="d-flex justify-content-center">
 					<ul class="pagination">
 						<c:if test="${pageCre.prev }">
-							<li class="page-item disabled">
-								<a class="page-link text-secondary" href="${pageCre.startPage-1}">&laquo;</a>
-							</li>
+							<li class="page-item disabled"><a class="page-link text-secondary" href="${pageCre.startPage-1}">&laquo;</a></li>
 						</c:if>
 						<c:forEach var="pageNum" begin="${pageCre.startPage }" end="${pageCre.endPage }">
 							<li class="page-item  ${pageCre.cri.page==pageNum? 'active text-secondary' :'' }">
@@ -210,9 +208,7 @@
 							</li>
 						</c:forEach>
 						<c:if test="${pageCre.next }">
-							<li class="page-item">
-								<a class="page-link text-secondary" href="${pageCre.endPage+1}">&raquo;</a>
-							</li>
+							<li class="page-item"><a class="page-link text-secondary" href="${pageCre.endPage+1}">&raquo;</a></li>
 						</c:if>
 					</ul>
 				</nav>

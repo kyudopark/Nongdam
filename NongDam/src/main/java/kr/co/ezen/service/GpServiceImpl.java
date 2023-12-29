@@ -65,4 +65,10 @@ public class GpServiceImpl implements GpService{
 		
 	}
 
+	@Override
+	public void updateAddr(GpUser gpUser) {
+		gpMapper.updateAddr(gpUser);
+		
+	}
+
 }
