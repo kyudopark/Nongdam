@@ -35,7 +35,7 @@
 							<img
 								style="height: 24px; width: 24px; border-radius: 50%; "
 								class="object-fit-cover bg-body-secondary border"
-								src="${contextPath}/resources/image/myPage/${uvo.user_profile }"
+								src="${uvo.user_profile }"
 								alt="프로필 이미지" />
 							<span>${uvo.user_nickname }님</span>
 

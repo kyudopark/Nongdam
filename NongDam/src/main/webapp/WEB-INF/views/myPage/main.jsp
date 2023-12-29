@@ -128,13 +128,13 @@ nongsaroOpenApiRequest.callback = "http://localhost:8080/ezen/user/googlecallbac
                             <div class="d-flex flex-row gap-3 flex-wrap justify-content-center align-items-center">
 								<!-- img -->
 										<c:if test="${empty uvo.user_profile }">
-											<img  style="height: 100px; width: 100px; border-radius: 50%; margin-top:20px; margin-bottom: 20px;"
+											<img id="userProfilePreview" style="height: 100px; width: 100px; border-radius: 50%; margin-top:20px; margin-bottom: 20px;"
                                			 	class="object-fit-cover bg-body-secondary border" src="${contextPath }/resources/image/common/thumbnail-profile-seed.svg" alt="프로필 이미지x">
 											
         								</c:if>
 										<c:if test="${!empty uvo.user_profile }">
 											<img id="userProfilePreview" style="height: 100px; width: 100px; border-radius: 50%; margin-top:20px; margin-bottom: 20px;"
-                               				 class="object-fit-cover bg-body-secondary border" src="${contextPath}/resources/image/myPage/${uvo.user_profile }" alt="프로필 이미지"/>
+                               				 class="object-fit-cover bg-body-secondary border" src="${uvo.user_profile }" alt="프로필 이미지"/>
 										 	
         		
         								</c:if>
@@ -192,7 +192,7 @@ nongsaroOpenApiRequest.callback = "http://localhost:8080/ezen/user/googlecallbac
                                         <tr>
                                             <td>1:1 거래</td>
                                             <td class="text-start">
-                                                <a href="javascript:void(0)" class="text-decoration-none text-body" id="a4button">
+                                                <a href="${contextPath }/tr/detail?tr_idx=${li.tr_idx}" class="text-decoration-none text-body" id="a4button">
                                                     <!-- <span class="text-muted">[{태그명}]</span> -->
                                                    ${li.tr_title}
                                                 </a>
@@ -200,6 +200,39 @@ nongsaroOpenApiRequest.callback = "http://localhost:8080/ezen/user/googlecallbac
                                             
                                             
                                             <td class="text-muted d-none d-md-table-cell"><fmt:formatDate value="${li.tr_time }" pattern="YYYY-MM-dd "/></td> 
+                                        </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="pt-4 pb-4 mt-4 mb-4">
+                            <h4 class="ms-2 mb-4  text-body-secondary"><i class="fa-solid fa-pencil me-2"></i> 작성한 게시글</h4>
+                            <div>
+                                <table class="table table-hover mt-2 text-center mw-100">
+                                    <!-- 필요없는 열은 빼고 사용하세요. -->
+                                    <thead>
+                                        <tr class="table-dark">
+                                            <th>게시판</th>
+                                            <th>제목</th>
+                                            <th class=" d-none d-md-table-cell">날짜</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    	<c:forEach var="li2" items="${li2}">
+                                        <tr>
+                                            <td>자유</td>
+                                            <td class="text-start">
+                                                <a href="${contextPath }/free/detail?free_idx=${li2.free_idx}" class="text-decoration-none text-body" id="a4button"> 
+                                                
+                                                    <span class="text-muted">${li2.free_tag }</span>
+                                                   ${li2.free_title}
+                                                </a>
+                                            </td>
+                                            
+                                            
+                                            <td class="text-muted d-none d-md-table-cell"><fmt:formatDate value="${li2.free_date }" pattern="YYYY-MM-dd "/></td> 
                                         </tr>
                                         </c:forEach>
                                     </tbody>

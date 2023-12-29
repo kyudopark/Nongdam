@@ -1,26 +1,10 @@
 package kr.co.ezen.service;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Random;
-
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.mail.HtmlEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
 import kr.co.ezen.entity.User;
 import kr.co.ezen.mapper.UserMapper;
 
@@ -75,7 +59,7 @@ public class UserServiceImpl implements UserService {
 			 * msg += "<div align='center' style='border:1px solid black; '>"; msg +=
 			 * "<h3 style='color: blue;'>"; msg += user.getUser_id() +
 			 * "님의 임시 비밀번호 입니다. 비밀번호를 변경하여 사용하세요.</h3>"; msg += "<p>임시 비밀번호 : "; msg +=
-			 * user.getUser_pw() + "</p></div>";
+			 * user.getUser_pw() + "</p></dFiv>";
 			 */
 			
 			msg += "<div style='width: 100%; display: flex; justify-content: center; '>";
@@ -209,4 +193,20 @@ public class UserServiceImpl implements UserService {
 		userMapper.deleteNaverUser(uvo);
 	}
    //==================================
+
+	
+
+	@Override
+	public void insertGoogleUser(User user) {
+		userMapper.insertGoogleUser(user);
+		
+	}
+
+	@Override
+	public User findGoogleId(String userId) {
+		
+		return userMapper.findGoogleId(userId);
+	}
+
+	
 }

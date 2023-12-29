@@ -2,6 +2,7 @@ package kr.co.ezen.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,8 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import kr.co.ezen.entity.Free;
 import kr.co.ezen.entity.Gp;
 import kr.co.ezen.entity.GpUser;
+import kr.co.ezen.entity.Imgur;
 import kr.co.ezen.entity.Tr;
 
 import kr.co.ezen.entity.User;
@@ -48,11 +51,15 @@ public class myPageController {
 	    
 	    	User uvo = (User)session.getAttribute("uvo");
 	    	int user_idx =uvo.getUser_idx();
-	    	//테스트용
-	    	session.setMaxInactiveInterval(900);
+	    	
 	    	List<Tr> li=myPageService.findByIdx(user_idx);
 	        
 	        m.addAttribute("li", li);
+	        
+	        List<Free> li2=myPageService.findByIdx2(user_idx);
+	        
+	        m.addAttribute("li2", li2);
+	        
 	        return "myPage/main";
 	    
 	}
@@ -201,28 +208,26 @@ public class myPageController {
        String uploadPath = request.getServletContext().getRealPath("/resources/image/myPage");
        User uvo = (User)session.getAttribute("uvo");
        
+       
+       
        if (file != null && !file.isEmpty()) {
-           String originalFileName = file.getOriginalFilename();
-           String ext = originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
-           ext = ext.toUpperCase();
 
-           // 파일명 중복 처리
-           String fileName = originalFileName;
-           int count = 1;
-           while (new File(uploadPath + File.separator + fileName).exists()) {
-               String nameWithoutExtension = originalFileName.substring(0, originalFileName.lastIndexOf("."));
-               fileName = nameWithoutExtension + count + "." + ext;
-               count++;
-           }
+           // 썸네일 파일 저장
+           String thumbnailFileName = "thumbnail.png";
+           String thumbnailFilePath = uploadPath + File.separator + thumbnailFileName;
+           File thumbnailDest = new File(thumbnailFilePath);
+           file.transferTo(thumbnailDest);
 
-           // 파일 저장
-           String filePath = uploadPath + File.separator + fileName;
-           File dest = new File(filePath);
-           file.transferTo(dest);
+           // 썸네일 이미지 업로드
+           Imgur imgur = new Imgur();
+           String thumbnailImageUrl = imgur.requestUpload(Files.readAllBytes(thumbnailDest.toPath())); // 썸네일 이미지 업로드
+                                                                                // 서비스 호출 및 URL
+                                                                                // 받아오기
 
            // 데이터베이스에 필요한 정보 등록
-           uvo.setUser_profile(fileName);
+           uvo.setUser_profile(thumbnailImageUrl);
        }
+       
        
        userMapper.updateUserProfile(uvo);
        

@@ -198,7 +198,7 @@ $(function () {
 								<b class="d-block w-100 text-center">카카오 간편 로그인</b>
 							</div>
 						</a>
-						<a href="${googleLoginUrl }" class="text-decoration-none" 
+						<a href="${googleAuthUrl }" class="text-decoration-none" 
 						style="color:#797a98">
 							<div style="background-color:#f2f2f2; border-radius:12px;"
 							class="d-flex flex-row align-items-center justify-content-start mb-2 ps-2 pe-3">

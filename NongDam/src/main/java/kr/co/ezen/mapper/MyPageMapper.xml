@@ -5,37 +5,43 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-	
-	<mapper namespace="kr.co.ezen.mapper.MyPageMapper">
-		<select id="findByIdx" resultType="kr.co.ezen.entity.Tr" parameterType="int">
-			select tr_title, tr_time , tr_idx, user_idx from tr
-			where user_idx=#{user_idx}
-		</select>
-		<select id="findAll" resultType="kr.co.ezen.entity.User" parameterType="int">
-			select *from User where user_idx=#{user_idx}
-		
-		</select>
-		
-		<update id="updateUserInfo" parameterType="kr.co.ezen.entity.User">
+
+    <mapper namespace="kr.co.ezen.mapper.MyPageMapper">
+        <select id="findByIdx" resultType="kr.co.ezen.entity.Tr" parameterType="int">
+            select tr_title, tr_time , tr_idx, user_idx from tr
+            where user_idx=#{user_idx} 
+            limit 5;
+        </select>
+        <select id="findByIdx2" resultType="kr.co.ezen.entity.Free" parameterType="int">
+            select free_title, free_date , free_idx, user_idx , free_tag from free
+            where user_idx=#{user_idx}
+            limit 5;
+        </select>
+        <select id="findAll" resultType="kr.co.ezen.entity.User" parameterType="int">
+            select *from User where user_idx=#{user_idx}
+
+        </select>
+
+        <update id="updateUserInfo" parameterType="kr.co.ezen.entity.User">
         UPDATE User
         SET user_pw = #{user_pw},
             user_name = #{user_name},
             user_nickname = #{user_nickname},
             user_gender = #{user_gender},
-            
+
             user_zipcode = #{user_zipcode},
             user_addr = #{user_addr}
         WHERE user_idx = #{user_idx}
     </update>
-    	
-    	<delete id="deleteUserById" parameterType="int">
+
+        <delete id="deleteUserById" parameterType="int">
         DELETE FROM User WHERE user_idx = #{user_idx}
     </delete>
-    
-    
+
+
     <!-- <delete id="deleteUserByName" parameterType="int">
         DELETE FROM User WHERE user_idx = #{user_idx}
     </delete> -->
-    
-    	
-	</mapper>
+
+
+    </mapper>

@@ -21,4 +21,3 @@ select * from chat
 select * from chatRoom
 delete from chatroom where chatroom_idx=0
 delete from chat
-

@@ -103,5 +103,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 231226 네이버 로그인 관련 mapper end -->
 	
 	
+	<select id="findGoogleId" resultType="kr.co.ezen.entity.User">
+        SELECT * FROM User WHERE user_id = #{userId}
+    </select>
+
+    <insert id="insertGoogleUser" parameterType="kr.co.ezen.entity.User">
+        INSERT INTO User (user_id, user_pw, user_name, user_nickname, user_email,user_kakaologin)
+        VALUES (#{user_id}, #{user_pw}, #{user_name}, #{user_nickname}, #{user_email}, #{user_kakaologin})
+    </insert>
+	
 	
 </mapper>
