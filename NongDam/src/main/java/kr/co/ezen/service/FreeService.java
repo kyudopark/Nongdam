@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import kr.co.ezen.entity.Criteria;
 import kr.co.ezen.entity.Free;
 import kr.co.ezen.entity.FreeComment;
+import kr.co.ezen.entity.FreeHeart;
 import kr.co.ezen.entity.TrComment;
 
 public interface FreeService {
@@ -27,6 +28,9 @@ public interface FreeService {
 	//태그
 	public List<Free> findfr(Criteria cri);
 	public List<Free> findqu(Criteria cri);
+	//태그(조회수순)
+	public List<Free> findBycountfr(Criteria cri);
+	public List<Free> findBycountqu(Criteria cri);
 	
 	//조회수 증가 
 	public void updatecnt(int free_idx);
@@ -34,13 +38,17 @@ public interface FreeService {
 	public List<Free> findBydate(Criteria cri);
 	public List<Free> findBycount(Criteria cri);
 	
-	
+	//좋아요 
+	public int findLike(int free_idx, int user_idx);
+	public void likeUp(FreeHeart he);
+	public void likeDown(FreeHeart he);
 
 	public List<FreeComment> findAllComment(int free_idx);
-	public void insertComment(FreeComment dev);
-	public void insertReplyComment(FreeComment dev);
-	public void updateCommentByIdx(FreeComment dev);
-	public void deleteCommentByIdx(int free_comment_idx);
+	public void insertComment(FreeComment vo);
+	public void insertReplyComment(FreeComment vo);
+	public void updateCommentByIdx(FreeComment vo);
 	public void deleteCommentByfree_idx(int free_idx);
+	public void deleteCommentByIdx(int free_comment_idx);
+	
 	
 }

@@ -25,10 +25,6 @@
 	
 	<!-- 빈등록 -->
 	<context:component-scan base-package="kr.co.ezen.controller" />
-	
-	
-	
-	
 
 
 </beans:beans>

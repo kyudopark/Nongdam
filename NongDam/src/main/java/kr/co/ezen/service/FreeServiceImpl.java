@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import kr.co.ezen.entity.Criteria;
 import kr.co.ezen.entity.Free;
 import kr.co.ezen.entity.FreeComment;
+import kr.co.ezen.entity.FreeHeart;
 import kr.co.ezen.entity.TrComment;
 import kr.co.ezen.mapper.FreeMapper;
 
@@ -34,9 +35,9 @@ public class FreeServiceImpl implements FreeService {
 	@Override
 	public void insert(Free fr) {
 		freemapper.insert(fr);
-	
+		
 	}
-
+	
 	@Override
 	public int totalCount(Criteria cri) {
 		int Counet= freemapper.totalCount(cri);
@@ -73,21 +74,32 @@ public class FreeServiceImpl implements FreeService {
 	
 	@Override
 	public List<Free> findBydate(Criteria cri) {
-		List<Free> fd=freemapper.findqu(cri);
+		List<Free> fd=freemapper.findBydate(cri);
 		return fd;
 	}
 
 
 	@Override
 	public List<Free> findBycount(Criteria cri) {
-		List<Free> fc=freemapper.findqu(cri);
+		List<Free> fc=freemapper.findBycount(cri);
 		return fc;
+	}
+	
+	@Override
+	public List<Free> findBycountfr(Criteria cri) {
+		List<Free> cfr=freemapper.findBycountfr(cri);
+		return cfr;
 	}
 
 
+	@Override
+	public List<Free> findBycountqu(Criteria cri) {
+		List<Free> cqu=freemapper.findBycountqu(cri);
+		return cqu;
+	}
+
 	
-	
-	
+
 	@Override
 	public List<FreeComment> findAllComment(int free_idx) {
 		List<FreeComment> dev=freemapper.findAllComment(free_idx);
@@ -95,13 +107,13 @@ public class FreeServiceImpl implements FreeService {
 	}
 	
 	@Override
-	public void insertReplyComment(FreeComment dev) {
-		freemapper.insertReplyComment(dev);
+	public void insertReplyComment(FreeComment vo) {
+		freemapper.insertReplyComment(vo);
 		
 	}
 	@Override
-	public void updateCommentByIdx(FreeComment dev) {
-		freemapper.updateCommentByIdx(dev);
+	public void updateCommentByIdx(FreeComment vo) {
+		freemapper.updateCommentByIdx(vo);
 		
 	}
 
@@ -121,11 +133,29 @@ public class FreeServiceImpl implements FreeService {
 
 
 	@Override
-	public void insertComment(FreeComment dev) {
-		freemapper.insertComment(dev);
+	public void insertComment(FreeComment vo) {
+		freemapper.insertComment(vo);
 		
+	}
+	
+	//좋아요 
+
+
+	@Override
+	public int findLike(int free_idx, int user_idx) {
+		return freemapper.findLike(free_idx, user_idx);
+	}
+
+	@Override
+	public void likeUp(FreeHeart he) {
+		freemapper.likeUp(he);
+	}
+
+	@Override
+	public void likeDown(FreeHeart he) {
+		freemapper.likeDown(he);
 	}
 
 
-
+	
 }

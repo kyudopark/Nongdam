@@ -1,10 +1,11 @@
-	<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
 
 <html lang="ko" data-bs-theme="light">
@@ -38,8 +39,8 @@
     <!-- 파비콘 -->
     <link rel="icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
     <link rel="shortcut icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
-    
     <title>농담 | 농업 정보 커뮤니티</title>
+ 
 
     <script>
 	
@@ -66,7 +67,7 @@
     <div class="container mt-5 mb-5">
         <h4 class="mt-5 mb-5"> 게시글 작성</h4>
        <form method="post" id="write">
-            
+        <input type="hidden" name="user_idx" value="${uvo.user_idx }">
 
          
             <!-- 말머리 있는 버전 -->
@@ -114,9 +115,7 @@
                 <a href="javascript:history.go(-1)" class="btn btn-outline-secondary">취소</a>
             </div>
         </form>
-    </div>
-    
-    
+    </div>    
     
   <script>
     $(document).ready(function() {

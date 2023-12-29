@@ -18,5 +18,4 @@ public class FreeComment {
 	
 	private String user_nickname;
 	private String user_Profile;
-
 }
