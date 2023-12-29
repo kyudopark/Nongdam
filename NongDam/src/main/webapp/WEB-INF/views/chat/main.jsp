@@ -42,6 +42,7 @@
     
     <title>농담 | 농업 정보 커뮤니티</title>
     <script type="text/javascript">
+
 	var webSocket = new WebSocket('ws://localhost:8080/ezen/chat/user${uvo.user_idx}');
 
 	
@@ -75,7 +76,7 @@
                 <div class="fw-bold fs-5 d-flex gap-2 align-items-center">
                 	<!-- ~231222 laky -->
                     <i class="fa-solid fa-comments fa-xs" style="width: 18px;"></i>
-                    <div>채팅 리스트 ${uvo.user_name }</div>
+                    <div class="title-overflow-1"><span >${uvo.user_nickname }</span><span>님의 채팅 리스트</span></div>
                 </div>
                 
             </div>
@@ -84,6 +85,15 @@
     <!--채팅방 내부 -->
     <div id="viewDiv" class="bg-body container overflow-y-scroll p-0 pb-4 h-100" >
         <ol id="viewOl" class="list-group list-group-numbered">
+        	<c:if test="${empty crvo }">
+        		<li class="w-100 pt-3">
+        			<div class="text-center text-muted">
+	        			아직 채팅방이 없습니다.
+	        			<br>
+	        			1:1거래 게시판에서 채팅을 시작해보세요!
+        			</div>
+        		</li>
+        	</c:if>
             <c:forEach var="crvo" items="${crvo }">
 	            <!-- 상대 채팅 -->
 	            <li class="p-2 pt-3 pb-3 d-flex flex-column align-items-start border-bottom">

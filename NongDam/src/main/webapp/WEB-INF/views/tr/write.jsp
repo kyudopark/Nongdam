@@ -92,7 +92,7 @@ $(document).ready(function() {
                     style="height: 200px;">
                         <!-- 이미지 존재시 아래 img태그에 src추가 -->
                         <img id="thumbnail" class="object-fit-cover w-100 h-100" 
-                        src="#">    
+                        src="${contextPath }/resources/image/common/thumbnail.svg">    
                         <!-- 이미지 없을 때 아래 div 태그 보이게 -->
                         <div id="thumbnailPlaceholder" class="d-none"> 
                             썸네일을 등록해주세요. 

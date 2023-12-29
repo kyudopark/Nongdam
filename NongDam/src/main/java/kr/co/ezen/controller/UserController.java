@@ -1,31 +1,26 @@
 package kr.co.ezen.controller;
 
-import java.awt.List;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Random;
-import java.util.UUID;
 
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -33,30 +28,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.annotation.JsonInclude;
+
+
+import com.google.gson.Gson;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
 import kr.co.ezen.entity.KakaoDTO;
 import kr.co.ezen.entity.User;
-
+import kr.co.ezen.entity.VerifyRecaptcha;
 import kr.co.ezen.service.UserService;
-import lombok.AllArgsConstructor;
+
 
 @Controller
 @RequestMapping("/user/*")
-@AllArgsConstructor
+
+@CrossOrigin("*")
 public class UserController {
 	
 	
@@ -66,8 +62,10 @@ public class UserController {
 	@Autowired
     private UserService userService;
 	
-	@Autowired
-    GoogleLoginBO googleLoginBO;
+	
+	@Autowired 
+	GoogleLoginBO googleLoginBO;
+	
 	
 	@Autowired
 	JavaMailSenderImpl mailSender;
@@ -75,33 +73,45 @@ public class UserController {
 	@Autowired
 	KakaoLoginBO kakaoLoginBO;
 	
+
+	//231226===================
+	@Autowired
+	NaverLoginBO naverLoginBO;
+	//=========================
 	
+	
+	
+	private String apiResult = null;
+    
+
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String userLogin(HttpSession session, Model model) throws Exception{
     	String kakaoLoginUrl = kakaoLoginBO.requestCode(session);
     	model.addAttribute("kakaoLoginUrl",kakaoLoginUrl);
     	
-    	String googleLoginUrl = googleLoginBO.getGoogleAuthUrl();
-        model.addAttribute("googleLoginUrl", googleLoginUrl);
+    	
+    	
+		
+		
+		String googleAuthUrl = googleLoginBO.requestCode(session);
+	      
+		model.addAttribute("googleAuthUrl", googleAuthUrl);
+		 
+        
+        
+        //231226
+        
+		String state = naverLoginBO.getState();
+	    session.setAttribute("state", state);
+	    String naverLoginUrl = naverLoginBO.getRedirectApiURI(state);
+	    model.addAttribute("naverLoginUrl", naverLoginUrl);
+        //===================================================
+        
         return "user/login";
     }
     
-    @GetMapping(value = "/login/google")
-    public ResponseEntity<Object> moveGoogleInitUrl() {
-        String authUrl = googleLoginBO.googleInitUrl();
-        URI redirectUri = null;
-        try {
-            redirectUri = new URI(authUrl);
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.setLocation(redirectUri);
-            return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-
-        return ResponseEntity.badRequest().build();
-    }
+    
     
 
     @RequestMapping(value = "/signup", method = RequestMethod.GET)
@@ -127,7 +137,98 @@ public class UserController {
     	userService.findPw(response, user);
     }
     
-    //google 있던 자리
+    /*@RequestMapping("/googlecallback")
+    public String googlecallback(HttpSession session, @RequestParam("code") String code,@RequestParam(value = "state", required = false) String state) throws MalformedURLException {
+        // Google Access Token 및 사용자 정보 가져오기
+    	System.out.println("Received authorization code: " + code);
+        String apiURL = googleLoginBO.requestToken(code, state);
+        String access_token = "";
+        System.out.println(apiURL);
+        
+        try {
+  			URL url = new URL(apiURL);
+  			HttpURLConnection con = (HttpURLConnection)url.openConnection();
+  			con.setRequestMethod("GET");
+  			int responseCode = con.getResponseCode();
+  			BufferedReader br;
+  			System.out.println(responseCode);
+  			if(responseCode==200) { // 정상 호출
+  			  br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+  			} else {  // 에러 발생
+  			  br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+  			}
+  			String inputLine;
+  			StringBuffer res = new StringBuffer();
+  			while ((inputLine = br.readLine()) != null) {
+  			  res.append(inputLine);
+  			}
+  			br.close();
+  			if(responseCode==200) {
+  					
+  				 Gson gson = new Gson();
+                 JsonObject googleUser = gson.fromJson(res.toString(), JsonObject.class);
+                 access_token = googleUser.get("access_token").getAsString();
+
+                 User profile = googleLoginBO.getGoogleProfile(access_token);
+
+                 User uvoIsEx = userService.findGoogleId(profile);
+
+                 System.out.println(profile);
+
+                 if (uvoIsEx != null) {
+                     session.setAttribute("uvo", uvoIsEx);
+                 } else {
+                     userService.insertGoogleUser(profile);
+                     User uvo = userService.findGoogleId(profile);
+                     session.setAttribute("uvo", uvo);
+                 }
+  			}
+  	    } catch (Exception e) {
+  	      System.out.println(e);
+  	    }
+
+        
+
+        return "redirect:/";
+    }*/
+    
+    @RequestMapping("/googlecallback")
+    public String googlecallback(Model model, @RequestParam("code") String code, @RequestParam("state") String state,
+            HttpSession session) throws IOException {
+        String token = googleLoginBO.requestToken(session, code, state);
+        apiResult = googleLoginBO.requestProfile(token);
+        JSONObject full = new JSONObject(apiResult);
+
+        String userId = full.getBigInteger("id").toString();
+
+        // 사용자 ID로 DB에서 해당 사용자 정보 조회
+        User existingUser = userService.findGoogleId(userId);
+
+        if (existingUser == null) {
+            // 등록되지 않은 사용자일 경우, 새로 등록
+            User newUser = new User();
+            newUser.setUser_id(userId);
+            newUser.setUser_pw(full.getBigInteger("id").toString());
+            newUser.setUser_name(full.getString("name"));
+            newUser.setUser_nickname(full.getString("name"));
+            newUser.setUser_email(full.getString("email"));
+            newUser.setUser_kakaologin("G");
+
+            // 새로운 사용자 DB에 저장
+            userService.insertGoogleUser(newUser);
+
+            // 새로 등록된 사용자를 세션에 설정
+            session.setAttribute("uvo", newUser);
+
+            model.addAttribute("mem", newUser);
+        } else {
+            // 이미 등록된 사용자일 경우, 로그인 처리
+            session.setAttribute("uvo", existingUser);
+        }
+
+        return "redirect:/";
+    }
+
     
     
     @RequestMapping("/kakaocallback")
@@ -241,7 +342,7 @@ public class UserController {
     
     @PostMapping("/signup")
     public String memRegister(User user, String user_pw1, String user_pw2, RedirectAttributes rttr, HttpSession session) {
-        if (user.getUser_id() == null || user.getUser_id().equals("") ||
+        if (user.getUser_id() == null || user.getUser_id().equals("") || 
                 user_pw1 == null || user_pw1.equals("") ||
                 user_pw2 == null || user_pw2.equals("") ||
                 user.getUser_name() == null || user.getUser_name().equals("") ||
@@ -334,10 +435,36 @@ public class UserController {
   		String fromName = "농담 관리자";
   		String toMail = user_email;
   		String title = "농담 회원가입 인증 이메일 입니다.";
-  		String content = "<div align='center' style='border:1px solid black; font-family:verdana'>" +
-                "<h3 style='color: green;'>" +
-                "인증 코드는 " + checkNum + " 입니다. </h3>" +
-                "<p>해당 인증 코드를 인증 코드 확인란에 기입하여 주세요. </p></div>";
+  		
+  		
+  		String content = "<div style='width: 100%; display: flex; justify-content: center;'>" +
+  		        "<div style='max-width: 640px; border: 1px solid gainsboro; border-radius: 4px;margin-top: 20px;margin-bottom: 20px;'>" +
+  		        "<div style='background-color: gainsboro;'>" +
+  		        "<a href='#' style='border-radius: 4px;text-decoration: none;'>" +
+  		        "<h3 style='margin-top: 0; padding:10px ;color: gray;'>농담</h3>" +
+  		        "</a>" +
+  		        "</div>" +
+  		        "<div style='padding: 40px 20px 40px 20px;'>" +
+  		        "<h2 style='margin: 0;'>이메일 인증 코드</h2>" +
+  		        "<p style='color: gray;'>" +
+  		        "회원가입시 필요한 이메일 인증 코드입니다." +
+  		        "<br>" +
+  		        "아래의 코드를 복사해 인증 코드 확인란에 기입하여 주세요." +
+  		        "</p>" +
+  		        "<h2 style='background-color: whitesmoke; color: gray; padding: 10px;'>" +
+  		        checkNum +
+  		        "</h2>" +
+  		        "</div>" +
+  		        "<div style='padding:20px; border-top: 1px solid gainsboro; color: gray;'>" +
+  		        "본 이메일은 발신 전용 이메일이며," +
+  		        "문의에 대한 회신은 처리되지 않습니다. " +
+  		        "사이트 <b>농담</b>과 관련되어 문의하실 점이 있으시다면 " +
+  		        "<a href='#'>문의하기</a> 페이지를 이용해 주십시오." +
+  		        "</div>" +
+  		        "</div>" +
+  		        "</div>";
+  		
+  		
   		
   		
   		
@@ -357,22 +484,85 @@ public class UserController {
   		return checkNum;
   	}
 
+  	@ResponseBody
+	@RequestMapping(value = "/VerifyRecaptcha", method = RequestMethod.POST)
+	public int VerifyRecaptcha(HttpServletRequest request) {
+		// 시크릿 키를 캡챠를 받아올수 있는 Class에 보내서 그곳에서 값을 출력한다
+	    VerifyRecaptcha.setSecretKey("6LePKTkpAAAAAMVgafPHWD4wEEy5O8ejitcrzKnh");
+	    String gRecaptchaResponse = request.getParameter("recaptcha");
+	    try {
+	       if(VerifyRecaptcha.verify(gRecaptchaResponse))
+	          return 0; // 성공
+	       else return 1; // 실패
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return -1; //에러
+	    }
+	}
   	
   	
-
     
 
    
 
-  	
-  	
-  	
-  	
-  	
 
-	
+	//231226 naver로그인관련
+  	
+  	//콜백
+  	//user/naver-callback?code=&state=
+  	@RequestMapping("/naver-callback")
+  	public String navercallback(HttpSession session,String code, String state) {
 
-	
+  		String session_state = (String) session.getAttribute("state");
+  	    if (!state.equals(session_state)) {
+  	        System.out.println("세션에 저장된 state와 다른 값으로 반환되었습니다.");
+  	        session.removeAttribute("state");
+  	        return "redirect:/main";
+  	    }
+
+  	    String apiURL = naverLoginBO.getAuthorizationApiURI(code, state);
+  	    String access_token = "";
+  	    //String refresh_token = "";
+  	    try {
+  			URL url = new URL(apiURL);
+  			HttpURLConnection con = (HttpURLConnection)url.openConnection();
+  			con.setRequestMethod("GET");
+  			int responseCode = con.getResponseCode();
+  			BufferedReader br;
+  			if(responseCode==200) { // 정상 호출
+  			  br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+  			} else {  // 에러 발생
+  			  br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+  			}
+  			String inputLine;
+  			StringBuffer res = new StringBuffer();
+  			while ((inputLine = br.readLine()) != null) {
+  			  res.append(inputLine);
+  			}
+  			br.close();
+  			if(responseCode==200) {
+  				//res.toString() <= json형식의 access_token,refresh_token		
+  				Gson gson = new Gson();
+  				JsonObject naverUser = gson.fromJson(res.toString(), JsonObject.class);
+  				access_token = naverUser.get("access_token").getAsString();
+  				User profile = naverLoginBO.getNaverProfile(access_token);
+  				
+  				User uvoIsEx = userService.findNaverId(profile);
+  				
+  				if(uvoIsEx!=null){
+  					session.setAttribute("uvo", uvoIsEx);
+  				}else{
+	  				userService.insertNaverUser(profile);
+	  				User uvo = userService.findNaverId(profile);
+	  				session.setAttribute("uvo", uvo);
+  				}
+  			}
+  	    } catch (Exception e) {
+  	      System.out.println(e);
+  	    }
+  	    
+  	    return "redirect:/";
+  	}
     
   	
   	

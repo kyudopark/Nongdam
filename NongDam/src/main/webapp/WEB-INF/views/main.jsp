@@ -172,7 +172,7 @@
 									<img
 										class="border-bottom rounded-2 bg-light w-100 object-fit-cover"
 										height="200px"
-										src="${contextPath }/resources/image/tr/${trlist.tr_imgpath }">
+										src="${trlist.tr_imgpath }">
 								</c:if>
 								<c:if test="${empty trlist.tr_imgpath }">
 									<img src="${contextPath }/resources/image/common/thumbnail.svg"

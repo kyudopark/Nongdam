@@ -66,10 +66,52 @@
 	integrity="sha384-kYPsUbBPlktXsY6/oNHSUDZoTX6+YI51f63jCPEIPFP09ttByAdxd2mEjKuhdqn4"
 	crossorigin="anonymous"></script>
 
-<script>
-</script>
 
+<script src="https://www.google.com/recaptcha/api.js"></script>
 <script>
+
+
+$(function () {
+    $('#loginForm').submit(function (event) {
+        // 폼 제출을 막기 위해 기본 이벤트를 중단
+        event.preventDefault();
+
+        // 캡차 검증 후 제출 여부를 결정하는 함수
+        function submitFormIfCaptchaValid() {
+            // 캡차 검증 결과에 따라 동작 수행
+            switch (captcha) {
+                case 0:
+                    console.log("자동 가입 방지 봇 통과");
+                    // 캡차 통과 시 폼 서버로 제출
+                    $('#loginForm')[0].submit();
+                    break;
+                case 1:
+                    alert("자동 가입 방지 봇을 확인 한뒤 진행 해 주세요.");
+                    break;
+                default:
+                    alert("자동 가입 방지 봇을 실행 하던 중 오류가 발생 했습니다. [Error bot Code : " + Number(captcha) + "]");
+                    break;
+            }
+        }
+
+        // Ajax를 통한 캡차 검증
+        $.ajax({
+            url: '${contextPath}/user/VerifyRecaptcha',
+            type: 'post',
+            data: {
+                recaptcha: $("#g-recaptcha-response").val()
+            },
+            success: function (data) {
+                // 캡차 검증 결과를 전역 변수에 저장
+                captcha = data;
+
+                // 캡차 검증 후 폼 제출 여부를 결정하는 함수 호출
+                submitFormIfCaptchaValid();
+            }
+        });
+    });
+});
+
 </script>
 
 
@@ -117,12 +159,15 @@
 							<i class="fa-solid fa-right-to-bracket"></i> 로그인
 						</button>
 					</div>
+					
+				
 				</form>
+				
 				
 				<!-- form 영역 끝 -->
 
 				<!-- a 태그들 -->
-				<div class="ps-3 pe-3 text-center mb-3">
+				<div class="ps-3 pe-3 text-center mb-5">
 					<a href="${contextPath }/user/signup"
 						class="text-muted ps-3 pe-3 border-end">회원가입하기</a> <a
 						href="${contextPath }/user/findid"
@@ -130,31 +175,49 @@
 						href="${contextPath }/user/findpw" class="text-muted ps-3 pe-3">비밀번호
 						찾기</a>
 				</div>
-
+				<div class="g-recaptcha" data-sitekey="6LePKTkpAAAAAMrly0tV36TPjrmDBVwRJhKV01Ua"></div>	
+				
 				<!-- SNS 로그인 파트 -->
-				<div class="container mt-5">
+				<div class="container mt-4">
 					<!-- 한줄 -->
 					<div class="row align-items-center">
 						<hr class="col-4 mb-0" />
 						<span class="col-4 p-0">SNS 로그인</span>
 						<hr class="col-4 mb-0" />
 					</div>
-					<!-- 버튼 영역 -->
-					<div class="mt-4 mb-4">
-
-						
-						<a  href=${kakaoLoginUrl }>
-							<img
-							src="${contextPath }/resources/image/user/kakao_login_medium_narrow.png"
-							width="222" alt="카카오 로그인 버튼" />
+					
+					
+					<div class="mt-4 mb-4 text-decoration-none">
+						 <a href="${kakaoLoginUrl }" class="text-decoration-none "
+						style="color:#000000">
+							<div style="background-color:#FEE500;border-radius:12px;"
+							class="d-flex flex-row align-items-center justify-content-start mb-2 ps-2 pe-3">
+								<img
+								src="${contextPath }/resources/image/user/loginbtn-kakao-logo.png"
+								width="50px" />
+								<b class="d-block w-100 text-center">카카오 간편 로그인</b>
+							</div>
 						</a>
-						<a href=${googleLoginUrl }>
-							<img
-							src="${contextPath }/resources/image/user/web_neutral_rd_SI.svg"
-							width="222" alt="구글 로그인 버튼" />
+						<a href="${googleAuthUrl }" class="text-decoration-none" 
+						style="color:#797a98">
+							<div style="background-color:#f2f2f2; border-radius:12px;"
+							class="d-flex flex-row align-items-center justify-content-start mb-2 ps-2 pe-3">
+								<img
+								src="${contextPath }/resources/image/user/loginbtn-google-logo.svg"
+								style="width:50px;margin-left:2px" alt="구글 로그인 버튼" />
+								<b class="d-block w-100 text-center">구글 간편 로그인</b>
+							</div>
 						</a>
 
-
+						<a href="${naverLoginUrl }" class="text-decoration-none"
+						style="color:#FFFFFF">
+							<div style="background-color:#03C75A;border-radius:12px;"
+							class="d-flex flex-row align-items-center justify-content-start mb-2 ps-2 pe-3">
+								<img height="50" 
+								src="${contextPath }/resources/image/user/loginbtn-naver-logo.png"/>
+								<b class="d-block w-100 text-center">네이버 간편 로그인</b>
+							</div>
+						</a>
 
 
 					</div>

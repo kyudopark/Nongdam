@@ -74,8 +74,10 @@
 				let tr_comment_content = obj.tr_comment_content.replaceAll("\n", "<br/>");
 				//231206 포맷팅
 				date.setTime(obj.tr_comment_time);
-				fmtTime = date.toISOString().replace(/T/, ' ').replace(/\..+/, '');
+
 				
+				fmtTime = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate() + " " + String(date.getHours()).padStart(2, "0") + ":" + String(date.getMinutes()).padStart(2, "0"); 
+
 				commentList += "<div class='p-3 mt-3 mb-3 d-flex flex-nowrap gap-1'>";
 				// 답글여부
 				if(obj.tr_parent_idx != obj.tr_comment_idx){
@@ -85,7 +87,8 @@
 				
 				// 썸네일
 				if(obj.user_profile == null || obj.user_profile == ''){
-				commentList += "		<i class='fa-regular fa-user'></i>";
+				commentList +="			<img class='object-fit-cover' style='width: 22px; height: 22px; border-radius: 50%;'";
+				commentList += " 			src='${contextPath}/resources/image/common/thumbnail-profile-seed.svg'>"
 				}else{
 				commentList +="			<img class='object-fit-cover' style='width: 22px; height: 22px; border-radius: 50%;'";
 				commentList += " 			src='"+ obj.user_profile +"'>"
@@ -97,7 +100,7 @@
 				
 				commentList += 					obj.user_nickname;
 				if(${vo.user_idx} == obj.user_idx){
-				commentList += "				<span class='badge text-bg-secondary'>작성자</span>"
+				commentList += "				<span class='badge text-bg-secondary me-1'>작성자</span>"
 				}
 				commentList += "			</h6>";
 				commentList += "			<small class='text-secondary'> "+fmtTime+"</small>";
@@ -358,7 +361,7 @@
 	                		</c:if>
 	                </label>
 	            </div>
-	            <div>
+	            <div class="mt-1">
 	                <span id="commentFull" class="text-danger d-inline-block d-none">최대 글자수를 초과하였습니다.</span>
 	                <button type="button" <c:if test="${!empty uvo}"> onclick="insertComment()" </c:if>
 	                class="btn btn-sm btn-secondary d-inline-block">등록</button>

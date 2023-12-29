@@ -1,6 +1,7 @@
 package kr.co.ezen.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -20,6 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,6 +41,7 @@ import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import kr.co.ezen.entity.Criteria;
+import kr.co.ezen.entity.Imgur;
 import kr.co.ezen.entity.PageCre;
 import kr.co.ezen.entity.Tr;
 import kr.co.ezen.entity.TrComment;
@@ -92,45 +95,52 @@ public class TrController {
 
 	@PostMapping("/write")
 	public String write(@RequestParam("tr_imgpath") MultipartFile file, @RequestParam("tr_title") String tr_title,
-	                    @RequestParam("user_idx") String user_idx, @RequestParam("tr_content") String tr_content,
-	                    Model m,RedirectAttributes rttr, HttpServletRequest request) throws IOException {
+			@RequestParam("user_idx") String user_idx, @RequestParam("tr_content") String tr_content, Model m,
+			RedirectAttributes rttr, HttpServletRequest request) throws IOException {
 
-	    String uploadPath = request.getServletContext().getRealPath("/resources/image/tr");
-
-	    Tr vo = new Tr();
+		String uploadPath = request.getServletContext().getRealPath("/resources/image/tr");
+     	Tr vo = new Tr();
 	    vo.setTr_title(tr_title);
-	    vo.setTr_content(tr_content);
 	    vo.setUser_idx(user_idx);
-	
-	
+	    vo.setTr_content(tr_content);
+
 	    if (file != null && !file.isEmpty()) {
-	        String originalFileName = file.getOriginalFilename();
-	        String ext = originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
-	        ext = ext.toUpperCase();
+	    	String ckEditorFileName = file.getOriginalFilename();
+	    	String ext = ckEditorFileName.substring(ckEditorFileName.lastIndexOf(".") + 1).toUpperCase();
 
-	        // 파일명 중복 처리
-	        String fileName = originalFileName;
-	        int count = 1;
-	        while (new File(uploadPath + File.separator + fileName).exists()) {
-	            String nameWithoutExtension = originalFileName.substring(0, originalFileName.lastIndexOf("."));
-	            fileName = nameWithoutExtension + count + "." + ext;
-	            count++;
-	        }
+	    	// 썸네일 파일 저장
+	    	String thumbnailFileName = "thumbnail.png";
+	    	String thumbnailFilePath = uploadPath + File.separator + thumbnailFileName;
+	    	File thumbnailDest = new File(thumbnailFilePath);
+	    	file.transferTo(thumbnailDest);
 
-	        // 파일 저장
-	        String filePath = uploadPath + File.separator + fileName;
-	        File dest = new File(filePath);
-	        file.transferTo(dest);
+	    	// 썸네일 이미지 업로드
+	    	Imgur imgur = new Imgur();
+	    	String thumbnailImageUrl = imgur.requestUpload(Files.readAllBytes(thumbnailDest.toPath())); // 썸네일 이미지 업로드
+                                                                              // 서비스 호출 및 URL
 
-	        // 데이터베이스에 필요한 정보 등록
-	        vo.setTr_imgpath(fileName);
+	    	// 데이터베이스에 필요한 정보 등록
+	    	vo.setTr_imgpath(thumbnailImageUrl); // 썸네일 이미지 URL을 vo에 설정
+
+	    	// 원본 이미지 저장
+	    	String ckEditorFileNameWithoutExt = ckEditorFileName.substring(0, ckEditorFileName.lastIndexOf("."));
+	    	String ckEditorImageFileName = ckEditorFileNameWithoutExt + "_original." + ext;
+	    	String ckEditorFilePath = uploadPath + File.separator + ckEditorImageFileName;
+	    	File ckEditorDest = new File(ckEditorFilePath);
+	    	file.transferTo(ckEditorDest);
+
+	    	// 원본 이미지 업로드
+	    	String ckEditorImageUrl = imgur.requestUpload(Files.readAllBytes(ckEditorDest.toPath())); // 원본 이미지 업로드 서비스
+
 	    }
 
-	    trService.insert(vo);
-
+	    trService.insert(vo); // 데이터베이스에 저장
+	    System.out.println(vo.getTr_imgpath());
+	    System.out.println(vo.getTr_content());
 	    return "redirect:/tr/main";
 	}
 
+	
 	@GetMapping("/modify")
 	public String modify(Model m, @RequestParam("tr_idx") int tr_idx) {
 
@@ -140,139 +150,102 @@ public class TrController {
 	}
 
 	@PostMapping("/modify")
-	public String modify(@RequestParam("tr_imgpath") MultipartFile file, @RequestParam("tr_idx") int tr_idx,
-	                     @RequestParam("tr_title") String tr_title, @RequestParam("tr_content") String tr_content,
-	                     @RequestParam(value = "existing_image", required = false) String existingImage,
-	                     HttpServletRequest request, RedirectAttributes rttr,Criteria cri) throws IOException {
+	public String modify(@RequestParam("tr_imgpath") MultipartFile file,
+                       @RequestParam("tr_idx") int tr_idx,
+                       @RequestParam("tr_title") String tr_title,
+                       @RequestParam("tr_content") String tr_content,
+                       @RequestParam(value = "existing_image", required = false) String existingImage,
+                       HttpServletRequest request,
+                       RedirectAttributes rttr,
+                       Criteria cri) throws IOException {
 
-	    Tr existingTr = trService.findByIdx(tr_idx);
-	    String existingThumbnail = existingTr.getTr_imgpath();
+		Tr existingTr = trService.findByIdx(tr_idx);
+		String existingThumbnail = existingTr.getTr_imgpath();
 
-	    Tr vo = new Tr();
-	    vo.setTr_idx(tr_idx);
-	    vo.setTr_title(tr_title);
-	    vo.setTr_content(tr_content);
-	    
-	    
-	    rttr.addAttribute("tr_idx", tr_idx);
+		Tr vo = new Tr();
+		vo.setTr_idx(tr_idx);
+		vo.setTr_title(tr_title);
+		vo.setTr_content(tr_content);
 
-	    // 기존 이미지 삭제 로직은 유지됩니다.
-	    if (existingImage != null && !existingImage.isEmpty() && !file.isEmpty()) {
-	        String imagePath = request.getServletContext().getRealPath("resources/image/tr/") + existingImage;
-	        File existingFile = new File(imagePath);
+		rttr.addAttribute("tr_idx", tr_idx);
 
-	        if (existingFile.exists()) {
-	            if (existingFile.delete()) {
-	                System.out.println("기존 파일 삭제 성공");
-	            } else {
-	                System.out.println("기존 파일 삭제 실패");
-	            }
-	        } else {
-	            System.out.println("존재하지 않는 파일입니다.");
-	        }
-	    }
+		// 기존 이미지 삭제 로직은 유지됩니다.
+		if (existingImage != null && !existingImage.isEmpty() && !file.isEmpty()) {
+			String imagePath = request.getServletContext().getRealPath("/resources/image/tr/") + existingImage;
+			File existingFile = new File(imagePath);
 
-	    // 파일이 비어있지 않은 경우에만 업로드 진행
-	    if (file != null && !file.isEmpty()) {
-	        String originalFileName = file.getOriginalFilename();
-	        String ext = originalFileName.substring(originalFileName.lastIndexOf(".") + 1).toUpperCase();
+			if (existingFile.exists()) {
+				if (existingFile.delete()) {
+					System.out.println("기존 파일 삭제 성공");
+				} else {
+                   System.out.println("기존 파일 삭제 실패");
+               }
+           } else {
+               System.out.println("존재하지 않는 파일입니다.");
+           }
+       }
 
-	        // 파일명 중복 처리
-	        String fileName = originalFileName;
-	        int count = 1;
-	        String uploadPath = request.getServletContext().getRealPath("/resources/image/tr");
-	        String filePath = uploadPath + File.separator + fileName;
-	        File dest = new File(filePath);
-	        while (dest.exists()) {
-	            String nameWithoutExtension = originalFileName.substring(0, originalFileName.lastIndexOf("."));
-	            fileName = nameWithoutExtension + count + "." + ext;
-	            filePath = uploadPath + File.separator + fileName;
-	            dest = new File(filePath);
-	            count++;
-	        }
+       // 파일이 비어있지 않은 경우에만 업로드 진행
+       if (file != null && !file.isEmpty()) {
+    	   String ckEditorFileName = file.getOriginalFilename();
+           String ext = ckEditorFileName.substring(ckEditorFileName.lastIndexOf(".") + 1).toUpperCase();
 
-	        // 파일 저장
-	        file.transferTo(dest);
+           // 썸네일 파일 저장
+           String thumbnailFileName = "thumbnail.png";
+           String thumbnailFilePath = request.getServletContext().getRealPath("/resources/image/tr") + File.separator + thumbnailFileName;
+           File thumbnailDest = new File(thumbnailFilePath);
+           file.transferTo(thumbnailDest);
 
-	        // DB에 필요한 정보 업데이트
-	        vo.setTr_imgpath(fileName);
-	    } else {
-	        // 파일이 비어있으면 기존 이미지 경로를 유지
-	        vo.setTr_imgpath(existingThumbnail);
-	    }
+           // 썸네일 이미지 업로드
+           Imgur imgur = new Imgur();
+           String thumbnailImageUrl = imgur.requestUpload(Files.readAllBytes(thumbnailDest.toPath())); // 썸네일 이미지 업로드 서비스 호출 및 URL 받아오기
 
-	    trService.updateByIdx(vo);
+           // 데이터베이스에 필요한 정보 등록
+           vo.setTr_imgpath(thumbnailImageUrl); // 썸네일 이미지 URL을 vo에 설정
 
-	    return "redirect:/tr/detail";
-	}
+           // 원본 이미지 저장
+           String ckEditorFileNameWithoutExt = ckEditorFileName.substring(0, ckEditorFileName.lastIndexOf("."));
+           String ckEditorImageFileName = ckEditorFileNameWithoutExt + "_original." + ext;
+           String ckEditorFilePath = request.getServletContext().getRealPath("/resources/image/tr") + File.separator + ckEditorImageFileName;
+           File ckEditorDest = new File(ckEditorFilePath);
+           file.transferTo(ckEditorDest);
 
-	@ResponseBody
-	@RequestMapping(value = "fileupload.do")
-	public void communityImageUpload(HttpServletRequest req, HttpServletResponse resp,
-			MultipartHttpServletRequest multiFile) throws Exception {
-		JsonObject jsonObject = new JsonObject();
-		PrintWriter printWriter = null;
-		OutputStream out = null;
-		MultipartFile file = multiFile.getFile("upload");
+           // 원본 이미지 업로드
+           String ckEditorImageUrl = imgur.requestUpload(Files.readAllBytes(ckEditorDest.toPath())); // 원본 이미지 업로드 서비스 호출 및 URL 받아오기
 
-		if (file != null) {
-			if (file.getSize() > 0 && StringUtils.isNotBlank(file.getName())) {
-				if (file.getContentType().toLowerCase().startsWith("image/")) {
-					try {
+       }
 
-						String fileName = file.getOriginalFilename();
-						byte[] bytes = file.getBytes();
+       trService.updateByIdx(vo); // 데이터베이스에 저장
+       return "redirect:/tr/detail";
+   }
 
-						String uploadPath = req.getSession().getServletContext().getRealPath("/resources/image/tr");
-						System.out.println("uploadPath: " + uploadPath);
+	
+   @ResponseBody
+   @RequestMapping(value = "fileupload.do")
+   public String communityImageUpload(@RequestParam("upload") MultipartFile upload) {
+      JsonObject jsonObject = new JsonObject();
 
-						File uploadFile = new File(uploadPath);
-						if (!uploadFile.exists()) {
-							uploadFile.mkdir();
-						}
-						String fileName2 = UUID.randomUUID().toString();
-						uploadPath = uploadPath + "/" + fileName2 + fileName;
+      try {
+         if (upload != null && !upload.isEmpty() && upload.getContentType().toLowerCase().startsWith("image/")) {
+            Imgur imgurUploader = new Imgur();
+            byte[] bytes = upload.getBytes();
 
-						out = new FileOutputStream(new File(uploadPath));
-						out.write(bytes);
+            // 이미지를 imgur에 업로드하고 URL 받아오기
+            String imageUrl = imgurUploader.requestUpload(bytes);
 
-						printWriter = resp.getWriter();
-						String fileUrl = req.getContextPath() + "/resources/image/tr/" + fileName2 + fileName; // url경로
+            // CKEditor에 이미지 URL 반환
+            jsonObject.addProperty("uploaded", 1);
+            jsonObject.addProperty("url", imageUrl);
+         }
+      } catch (Exception e) {
+         e.printStackTrace();
+         // 업로드 실패 시 오류 반환
+         jsonObject.addProperty("uploaded", 0);
+         jsonObject.addProperty("error", "Failed to upload image");
+      }
 
-						System.out.println("fileUrl :" + fileUrl);
-
-						JsonObject json = new JsonObject();
-						json.addProperty("uploaded", 1);
-						json.addProperty("fileName", fileName);
-						json.addProperty("url", req.getContextPath() + "/resources/image/tr/" + fileName2 + fileName); // 파일명
-																														// 변경한
-																														// URL로
-																														// 설정
-						printWriter.print(json);
-						System.out.println(json);
-
-					} catch (IOException e) {
-						e.printStackTrace();
-						// 파일 업로드 실패 시 에러 응답
-						JsonObject errorJson = new JsonObject();
-						errorJson.addProperty("uploaded", 0);
-						errorJson.addProperty("error", "파일 업로드에 실패했습니다.");
-						printWriter.print(errorJson);
-					} finally {
-						// IO 자원 관리 - 닫아주기
-						if (out != null) {
-							out.close();
-						}
-						if (printWriter != null) {
-							printWriter.close();
-						}
-					}
-				}
-
-			}
-
-		}
-	}
+      return jsonObject.toString();
+   }
 
 	// --------------------------------------------------------
 

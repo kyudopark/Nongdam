@@ -141,7 +141,7 @@
 						<a class="text-decoration-none tr-list-click" href="${li.tr_idx}">
 							<div class="card">
 								<c:if test="${!empty li.tr_imgpath }">
-									<img src="${contextPath }/resources/image/tr/${li.tr_imgpath }"
+									<img src="${li.tr_imgpath }"
 										class="border-bottom rounded-2 bg-light w-100 object-fit-cover"
 										height="200">
 								</c:if>
