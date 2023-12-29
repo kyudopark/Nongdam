@@ -5,6 +5,66 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+
+<mapper namespace="kr.co.ezen.mapper.AdminMapper">
+
+	<sql id="search">
+		<if test="type == 'user_nickname'">
+			where user_nickname like concat('%',#{keyword},'%')
+		</if>
+		<if test="type == 'user_name'">
+			where user_name like concat('%',#{keyword},'%')
+		</if>
+		<if test="type == 'user_id'">
+			where user_id like concat('%',#{keyword},'%')
+		</if>
+	</sql>
+
+	<select resultType="kr.co.ezen.entity.User" id="findAll"
+		parameterType="kr.co.ezen.entity.Criteria">
+		select user_idx,user_id,user_nickname,user_name,user_admin from User
+		<include refid="search" />
+		order by user_idx desc
+	</select>
+
+	<delete id="deleteByIdx" parameterType="int">
+		delete from User where
+		user_idx=#{user_idx}
+	</delete>
+
+
+
+	<delete id="deleteByCheckbox" parameterType="java.util.List">
+		delete from user where user_idx in
+		<foreach item="item" collection="list" open="(" separator=","
+			close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+
+	<update id="updateAdminStatus"
+		parameterType="kr.co.ezen.entity.User">
+		update User set user_admin=${user_admin}
+		where user_idx=#{user_idx}
+	</update>
 	
-	<mapper namespace="kr.co.ezen.mapper.AdminMapper">
-	</mapper>
+	<select id="countGpAll" resultType="int" parameterType="java.util.Map">
+	   <!-- 공동구매 수 조회 쿼리 -->
+	   SELECT IFNULL(COUNT(*), 0) AS COUNT, DATE_FORMAT(gp_date, '%Y-%m-%d') AS gp_date 
+	   FROM gp 
+	   WHERE gp_date BETWEEN '2023-07-19' AND '2024-01-17'
+	</select>
+	
+	<select id="countTrAll" resultType="int" parameterType="java.util.Map">
+	   <!-- 1:1거래 수 조회 쿼리 -->
+	   SELECT IFNULL(COUNT(*), 0) AS COUNT, DATE_FORMAT(tr_time, '%Y-%m-%d') AS tr_time 
+	   FROM tr 
+	   WHERE tr_time BETWEEN '2023-07-19' AND '2024-01-17'
+	</select>
+	
+	<select id="countGpUserAll" resultType="int" parameterType="kr.co.ezen.entity.GpUser">
+		select count(*) from gpUser
+	</select>
+	
+</mapper>

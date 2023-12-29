@@ -16,6 +16,8 @@ public class Tr {
 	//추가
 	private String user_nickname;
 	private Date tr_time;
-
-
+	
+	private int trCount;
+	private Date StartDate;
+	private Date endDate;
 }

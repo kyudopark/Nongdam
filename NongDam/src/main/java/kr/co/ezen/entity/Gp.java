@@ -1,5 +1,6 @@
 package kr.co.ezen.entity;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -10,6 +11,8 @@ import lombok.Data;
 public class Gp {
 	
 	private int gp_idx;
+	private int user_idx;
+	
 	private String gp_title;
 	private String gp_product;
 	private String gp_content;
@@ -24,6 +27,9 @@ public class Gp {
 	
 	
 	private String gp_thumb;
-	private int user_idx;
 	
+	private int gpCount;
+	private Date StartDate;
+	private Date endDate;
+
 }

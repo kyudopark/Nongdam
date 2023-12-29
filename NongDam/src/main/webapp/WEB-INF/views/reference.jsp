@@ -32,6 +32,8 @@
     <link rel="stylesheet" href="${contextPath }/resources/common/css/style.css">
     <!-- 기본js -->
     <script type="text/javascript" src="${contextPath }/resources/common/js/common.js"></script>
+    <script type="text/javascript" src="${contextPath }/resources/common/js/darkmode.js"></script>
+    
     
     <meta name="농담" content="안녕하세요, 농업 정보 커뮤니티 농담입니다."/>
     

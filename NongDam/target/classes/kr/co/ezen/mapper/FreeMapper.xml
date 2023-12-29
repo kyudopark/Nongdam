@@ -108,12 +108,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	
 	
+
 	<!-- 댓글 -->
 	
 	<select id="findAllComment" parameterType="int"
 		resultType="kr.co.ezen.entity.FreeComment">
 			select free_parent_idx,free_comment_idx,user_idx,user_nickname,free_comment_time,free_comment_content,free_comment_useable
 			from freeComment natural join User where free_idx=#{free_idx}
+
+		select * from freeComment as f left outer join User as u on f.user_idx= u.user_idx
+			where free_idx=#{free_idx}
+
 			order by free_parent_idx desc, free_comment_idx
 		</select> <!-- freeComment와 User조인 free_idx와 일치하는 값을 가지고 온다. -->
 	

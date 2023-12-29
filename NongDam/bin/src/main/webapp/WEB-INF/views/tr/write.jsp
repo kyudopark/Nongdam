@@ -1,0 +1,178 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<c:set var="contextPath" value="${pageContext.request.contextPath }" />
+
+<html lang="ko" data-bs-theme="light">
+<head>
+    <!-- UTF-8 사용-->
+    <meta charset="UTF-8">
+    <!-- 기본 화면 보기 설정 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+    <!-- bootstrap 5.3.2 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+
+    <!--제이쿼리-->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    
+   
+    <!-- ck에디터4 -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/40.1.0/classic/ckeditor.js"></script>
+    
+
+    <!-- fontAwesome -->
+    <script src="https://kit.fontawesome.com/f34a67d667.js" crossorigin="anonymous"></script>
+    
+    <!-- 스타일시트 -->
+    <link rel="stylesheet" href="${contextPath }/resources/common/css/style.css">
+    <!-- 기본js -->
+    <script type="text/javascript" src="${contextPath }/resources/common/js/common.js"></script>
+    
+    <meta name="농담" content="안녕하세요, 농업 정보 커뮤니티 농담입니다."/>
+    
+    <!-- 파비콘 -->
+    <link rel="icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
+    <link rel="shortcut icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
+    
+    <title>농담 | 농업 정보 커뮤니티</title>
+	
+<script type="text/javascript">
+
+$(document).ready(function() {
+	  $('#write').submit(function(event) {
+    // title과 content 값 가져오기
+    var titleValue = $('#title').val();
+    var contentValue = $('#editor').val();
+
+    // title과 content 유효성 검사
+    if (titleValue.trim() === '') {
+      alert('제목을 입력해주세요.');
+      event.preventDefault();
+    }
+
+    if (contentValue.trim() === '') {
+      alert('내용을 입력해주세요.');
+      event.preventDefault();
+    }
+  });
+});
+
+</script>
+
+</head>
+<body>
+
+	<jsp:include page="../common/header.jsp"/>
+	<jsp:include page="../common/banner.jsp"/>
+	    <!-- 글 작성 div container-->
+    <div class="container mt-5 mb-5">
+        <h4 class="mt-5 mb-5"> 게시글 작성</h4>
+
+        <form  id="write"method="post" action="${contextPath }/tr/write" enctype="multipart/form-data" >
+            <input type="hidden" name="user_idx" value="${uvo.user_idx }">
+
+            <!--제목-->
+            <div class="form-group mb-3">
+                <input type="text" id="title" name="tr_title" 
+                 class="form-control" placeholder="제목을 입력하세요.">
+            </div>
+
+            <!-- 썸네일 -->
+            <div  class="row g-3 mb-3" >
+                <div class="col-12 col-md-5">
+                    <div class="rounded bg-light 
+                    d-flex justify-content-center align-items-center" 
+                    style="height: 200px;">
+                        <!-- 이미지 존재시 아래 img태그에 src추가 -->
+                        <img id="thumbnail" class="object-fit-cover w-100 h-100" 
+                        src="#">    
+                        <!-- 이미지 없을 때 아래 div 태그 보이게 -->
+                        <div id="thumbnailPlaceholder" class="d-none"> 
+                            썸네일을 등록해주세요. 
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-7">
+                    <!-- 공동구매 라인 -->
+                   
+                    <!-- 파일 업로드 input태그 -->
+                    <div class="mb-3">
+                        <label for="tr_imgpath" class="form-label">썸네일 올리기</label>
+                        <input class="form-control" type="file" id="tr_imgpath" name="tr_imgpath"  onchange="previewThumbnail(event)" >
+                    </div>
+                </div>
+            </div>
+			
+<!-- 미리보기 -->
+<script>
+    // 파일 선택 시 썸네일 미리보기 함수
+   document.getElementById('tr_imgpath').addEventListener('change', function(event) {
+    var input = event.target;
+    var thumbnail = document.getElementById('thumbnail');
+    var thumbnailPlaceholder = document.getElementById('thumbnailPlaceholder');
+
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+            thumbnail.src = e.target.result;
+            thumbnailPlaceholder.classList.add('d-none');
+            thumbnail.classList.remove('d-none');
+        };
+
+        reader.readAsDataURL(input.files[0]);
+    } else {
+        thumbnail.src = '#';
+        thumbnail.classList.add('d-none');
+        thumbnailPlaceholder.classList.remove('d-none');
+    }
+});
+</script>
+
+            <div class="form-group mt-5 mb-3">
+    <!-- 실제 에디터 박스 -->
+    <!-- id는 변경하지 마세요 -->
+    <textarea id="editor" name="tr_content">
+        <p>내용을 입력해주세요.</p>
+      
+    </textarea>
+    <!-- 스크립트문. 항상 에디터 박스 바로 뒤에 놓을 것-->
+</div>
+
+ <script>
+        ClassicEditor
+            .create(document.querySelector('#editor'), {
+                ckfinder: {
+                    uploadUrl: 'fileupload.do' 
+                }
+            })
+            .then(editor => {
+                console.log('Editor was initialized', editor);
+            })
+            .catch(error => {
+                console.error('There was an error initializing the editor', error);
+            });
+    </script>
+	</div>
+ 
+
+            <!-- 글 작성하기 버튼-->
+            <div class="text-center">
+                <button type="submit" class="btn btn-secondary" id="hk">글 작성하기</button>
+                <a href="javascript:history.go(-1)" class="btn btn-outline-secondary">취소</a>
+            </div>
+        </form>
+    </div>
+    <!-- ============================================== -->
+	 
+	<jsp:include page="../common/footer.jsp"/>
+</body>
+</html>

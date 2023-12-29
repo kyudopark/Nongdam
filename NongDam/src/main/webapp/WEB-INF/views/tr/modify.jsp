@@ -40,20 +40,43 @@
     <link rel="shortcut icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
     
     <title>농담 | 농업 정보 커뮤니티</title>
+    
+    <script type="text/javascript">
+
+$(document).ready(function() {
+	  $('#modify').submit(function(event) {
+    // title과 content 값 가져오기
+    var titleValue = $('#title').val();
+    var contentValue = $('#editor').val();
+
+    // title과 content 유효성 검사
+    if (titleValue.trim() === '') {
+      alert('제목을 입력해주세요.');
+      event.preventDefault();
+    }
+
+    if (contentValue.trim() === '') {
+      alert('내용을 입력해주세요.');
+      event.preventDefault();
+    }
+  });
+});
+</script>
 </head>
 <body>
 <jsp:include page="../common/header.jsp"/>
 	<jsp:include page="../common/banner.jsp"/>
+	
 	    <!-- 글 작성 div container-->
     <div class="container mt-5 mb-5">
         <h4 class="mt-5 mb-5"> 게시글 작성</h4>
-        <form method="post" enctype="multipart/form-data" >
+        <form id="modify"method="post" enctype="multipart/form-data" >
             <input type="hidden" name="tr_idx" value="${vo.tr_idx }">
 
             <!--제목-->
             <div class="form-group mb-3">
                 <input type="text" id="title" name="tr_title" 
-                 class="form-control" value="${vo.tr_title }">
+                 class="form-control" value="${vo.tr_title }" maxlength="20">
             </div>
 
             <!-- 말머리 있는 버전 -->
@@ -66,17 +89,14 @@
                     <div class="rounded bg-light 
                     d-flex justify-content-center align-items-center" 
                     style="height: 200px;">
-                    <c:if test="${!empty vo.tr_imgpath }">
                         <!-- 이미지 존재시 아래 img태그에 src추가 -->
-                        <img id="" class="object-fit-cover w-100 h-100" 
-                        src="${contextPath }/resources/image/tr/${vo.tr_imgpath}">    
-                        <!-- 이미지 없을 때 아래 div 태그 보이게 -->
-                    </c:if>
-                    <c:if test="${empty vo.tr_imgpath }">
-                        <div> 
-                            썸네일을 등록해주세요. 
+                        <img id="thumbnail" class="object-fit-cover w-100 h-100" 
+                        src="${vo.tr_imgpath}">    
+                  
+                        <div id="thumbnailPlaceholder" class="d-none"> 
+                            이미지를 등록해주세요
                         </div>
-                    </c:if>
+                 
                     </div>
                 </div>
 
@@ -86,10 +106,36 @@
                     <!-- 파일 업로드 input태그 -->
                     <div class="mb-3">
                         <label for="tr_imgpath" class="form-label">썸네일 올리기</label>
-                        <input class="form-control" type="file" id="tr_imgpath" name="tr_imgpath">
+                        <input class="form-control" type="file" id="tr_imgpath" name="tr_imgpath" onchange="previewThumbnail(event)">
+                        <input type="hidden" name="existing_image" value="${vo.tr_imgpath}">
+                        
                     </div>
                 </div>
-            </div>
+            </div>            
+<script>
+    // 파일 선택 시 썸네일 미리보기 함수
+    document.getElementById('tr_imgpath').addEventListener('change', function(event) {
+        var input = event.target;
+        var thumbnail = document.getElementById('thumbnail');
+        var thumbnailPlaceholder = document.getElementById('thumbnailPlaceholder');
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                thumbnail.src = e.target.result;
+                thumbnailPlaceholder.classList.add('d-none');
+                thumbnail.classList.remove('d-none');
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            thumbnail.src = '#';
+            thumbnail.classList.add('d-none');
+            thumbnailPlaceholder.classList.remove('d-none');
+        }
+    });
+</script>
 
 
             <!-- ckEditor -->
@@ -100,15 +146,21 @@
                     
                 
                 <!-- 스크립트문. 항상 에디터 박스 바로 뒤에 놓을 것-->
-                <script>
-                    ClassicEditor
-                        .create( document.querySelector( '#editor' ) )
-                        .catch( error => {
-                            console.error( error );
-                    });
-                </script>
-            </div>
-
+       <script>
+        ClassicEditor
+            .create(document.querySelector('#editor'), {
+                ckfinder: {
+                    uploadUrl: 'fileupload.do' 
+                }
+            })
+            .then(editor => {
+                console.log('Editor was initialized', editor);
+            })
+            .catch(error => {
+                console.error('There was an error initializing the editor', error);
+            });
+    </script>
+	 </div>
             <!-- 글 작성하기 버튼-->
             <div class="text-center">
                 <button type="submit" class="btn btn-secondary">글 작성하기</button>
@@ -116,6 +168,7 @@
             </div>
         </form>
     </div>
+   
     <!-- ============================================== -->
 	
 	<jsp:include page="../common/footer.jsp"/>

@@ -19,6 +19,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		#{user_nickname},#{user_gender}, #{user_email}, #{user_zipcode},
 		#{user_addr})
 	</insert>
+	
+	<select id="nickUser" parameterType="string" resultType="kr.co.ezen.entity.User">
+		SELECT * FROM User where user_nickname=#{user_nickname} 
+	</select>
 
 
 
@@ -61,4 +65,52 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="readUser" parameterType="string" resultType="kr.co.ezen.entity.User">
 		SELECT * FROM User WHERE user_id = #{user_id}
 	</select>
+	
+	
+   
+   
+   <select id="selectUserByKakaoLogin" parameterType="String" resultType="kr.co.ezen.entity.User">
+        SELECT * FROM User WHERE user_id = #{user_id}
+    </select>
+    
+    <insert id="kakaoUser" parameterType="kr.co.ezen.entity.User">
+		INSERT INTO User
+		(user_id, user_pw, user_name, user_nickname, user_email,user_kakaologin)VALUES (#{user_id}, #{user_id},  #{user_name},#{user_nickname}, #{user_email}, 'Y')
+	</insert>
+	
+	
+	
+	<update id="updateUserProfile" parameterType="kr.co.ezen.entity.User">
+ 		update User set user_profile =#{user_profile}
+ 		where user_nickname =#{user_nickname}
+ 	</update>
+	
+	
+	
+	
+	
+	<!--  231226 네이버 로그인 관련 mapper -->
+	<select id="findNaverId" parameterType="kr.co.ezen.entity.User" resultType="kr.co.ezen.entity.User">
+	select * from User where user_id=#{user_id} and user_kakaologin='N'
+	</select>
+	<insert  id="insertNaverUser" parameterType="kr.co.ezen.entity.User" >
+		insert into User (user_id,user_pw,user_name,user_nickname,user_gender,user_email,user_kakaologin,user_admin)
+		values (#{user_id},#{user_pw},#{user_name},#{user_nickname},#{user_gender},#{user_email},#{user_kakaologin},#{user_admin})
+	</insert>
+	<delete id="deleteNaverUser" parameterType="kr.co.ezen.entity.User">
+		delete from User where user_id=#{user_id} and user_kakaologin='N'
+	</delete>
+	<!-- 231226 네이버 로그인 관련 mapper end -->
+	
+	
+	<select id="findGoogleId" resultType="kr.co.ezen.entity.User">
+        SELECT * FROM User WHERE user_id = #{userId}
+    </select>
+
+    <insert id="insertGoogleUser" parameterType="kr.co.ezen.entity.User">
+        INSERT INTO User (user_id, user_pw, user_name, user_nickname, user_email,user_kakaologin)
+        VALUES (#{user_id}, #{user_pw}, #{user_name}, #{user_nickname}, #{user_email}, #{user_kakaologin})
+    </insert>
+	
+	
 </mapper>

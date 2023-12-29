@@ -32,6 +32,10 @@
     <link rel="stylesheet" href="${contextPath }/resources/common/css/style.css">
     <!-- 기본js -->
     <script type="text/javascript" src="${contextPath }/resources/common/js/common.js"></script>
+    <!-- gp/* js파일 -->
+    <script type="text/javascript" src="${contextPath }/resources/gp/js/script.js"></script>
+    
+    
     
     <meta name="농담" content="안녕하세요, 농업 정보 커뮤니티 농담입니다."/>
     
@@ -50,31 +54,22 @@
   			var btn = $(this).data('btn'); // 내가 현재 클릭한 버튼 -> data-btn
   			
   			if(btn == 'request') {
-  				fData.attr("action", "${contextPath }/gp/request");
-  			} else if(btn == 'modify') {
-  				fData.attr("action", "${contextPath }/gp/modify");
-  			} else if(btn == 'back') {
-  				fData.find("#idx").remove();
-  				fData.attr("action", "${contextPath }/gp/main");
-  			} else if(btn == 'delete') {
-  				let result = confirm('해당 공동구매 게시글을 삭제하시겠습니까?');
-  				if(result == false){
-  					return;
-  				} else {
-  					fData.attr("action", "${contextPath}/gp/deleteByIdx");
-  				}
-  			}
-  			fData.submit();
-  		});
-	        
-	        var bannerTitle = "공동구매 게시판";
-	        var bannerText1 = "다양한 제품들을 많은 사람들과 함께 싼 가격에 구매해보세요";
-	        var bannerText2 = "공동구매 게시글들은 문의 혹은 별도의 연락을 받아 게시글을 올려드리고 있습니다.";
-	        
-	        $("#banner-title").text(bannerTitle);
-	        $("#banner-content1").text(bannerText1);
-	        $("#banner-content2").text(bannerText2);
-	  
+	  				fData.attr("action", "${contextPath }/gp/request");
+	  			} else if(btn == 'modify') {
+	  				fData.attr("action", "${contextPath }/gp/modify");
+	  			} else if(btn == 'back') {
+	  				fData.find("#gp_idx").remove();
+	  				fData.attr("action", "${contextPath }/gp/main");
+	  			} else if(btn == 'delete') {
+	  				let result = confirm('해당 공동구매 게시글을 삭제하시겠습니까?');
+	  				if(result == false){
+	  					return;
+	  				} else {
+	  					fData.attr("action", "${contextPath}/gp/deleteByIdx");
+	  				}
+	  			}
+	  			fData.submit();
+  			});
 	    });
 	
 	</script>
@@ -91,8 +86,8 @@
         <div class="border rounded-2 container">
             <div class="row">
                 <!--썸네일-->
-                <div class="col-lg-7 col-12 p-0 bg-light" style="min-height: 280px;">
-                    <img src="" style="width: 100%; height: 100%;">
+                <div class="col-lg-7 col-12 p-0 bg-light" style="height: 300px;">
+                    <img src="${vo.gp_thumb }" class="object-fit-cover w-100" style="height: 300px;">
                 </div>
                 <!--오른쪽-->
                 <div class="border-start col-lg-5 col-12 p-3">
@@ -110,12 +105,23 @@
                     </p>
                     <p class="pt-3 fs-5">
                         <span class="fw-bolder">가격 </span>
-                        <span>${vo.gp_price}원</span>
+                        <span><fmt:formatNumber type="number" maxFractionDigits="3" value="${vo.gp_price}" />원</span>
                     </p>
                 </div>
             </div>
         </div>
     </div>
+    
+    <!-- 시작일 / 마감일 비교용 -->
+	<c:set var="currentDate" value="<%= new java.util.Date() %>"/>
+	<c:set var="startDate" value="${vo.gp_date_start }"/>
+	<c:set var="endDate" value="${vo.gp_date_last }"/>
+		
+	<c:set var="diffMillis" value="${startDate.time - currentDate.time}"/>
+	<c:set var="diffDays" value="${diffMillis / (24 * 60 * 60 * 1000)}"/>
+		                        
+	<c:set var="diffMillisEnd" value="${endDate.time - currentDate.time}"/>
+	<c:set var="diffDaysEnd" value="${diffMillisEnd / (24 * 60 * 60 * 1000)}"/>
 
     <!-- 글 조회 블럭 -->
     <div class="container mt-4 mb-5">
@@ -124,19 +130,31 @@
             <div class="container pt-5 pb-5 ck-content">${vo.gp_content }</div>
             <!-- 신청하기 버튼 -->
             <div class="container pt-5 pb-4 text-center">
-                <button class="btn btn-secondary" data-btn = "request" >신청하기</button>
-                <button class="btn btn-outline-secondary" data-btn = "back" >목록으로</button>
-                <button class="btn btn-success" data-btn = "modify" >수정하기</button>
-                <button class="btn btn-warning" data-btn = "delete">삭제하기</button>
+            	<c:if test="${diffDays <= 0 and diffDaysEnd > 0}">
+                	<button class="btn btn-secondary" data-btn = "request" >신청하기</button>
+                </c:if>
+                <button class="btn btn-secondary" data-btn = "back" >목록으로</button>
+                
+                <c:if test="${uvo.user_id eq 'admin' }">
+                	<button class="btn btn-warning" data-btn = "modify" >수정하기</button>
+                	<button class="btn btn-danger" data-btn = "delete">삭제하기</button>
+                </c:if>
             </div>
         </div>
     </div>
     
     <form id="fr" method="get">
-		<input type="hidden" id="gp_idx" name="gp_idx" value="${vo.gp_idx }"/>
+    	<input type="hidden" name="gp_idx" value="${vo.gp_idx }" />
+    	<input type="hidden" name="user_idx" value="${vo.user_idx }" />
+    	
+		<input type="hidden" name="page" value="${cri.page }"/>
+        <input type="hidden" name="perPageNum" value="${cri.perPageNum }"/>
+        <c:if test="${!empty cri.type }">
+	        <input type="hidden" name="type" value="${cri.type }"/>
+	        <input type="hidden" name="keyword" value="${cri.keyword }"/>
+        </c:if>
 	</form>
-	
-	
+
 	
 	<jsp:include page="../common/footer.jsp"/>
 </body>

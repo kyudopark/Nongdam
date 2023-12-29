@@ -32,6 +32,7 @@
     <link rel="stylesheet" href="${contextPath }/resources/common/css/style.css">
     <!-- 기본js -->
     <script type="text/javascript" src="${contextPath }/resources/common/js/common.js"></script>
+    <!-- gp/* js파일 -->
     <script type="text/javascript" src="${contextPath }/resources/gp/js/script.js"></script>
     <meta name="농담" content="안녕하세요, 농업 정보 커뮤니티 농담입니다."/>
     
@@ -51,40 +52,31 @@
 	            var page = $(this).attr("href");  // 페이지 번호 가져오기
 	            $("#page").val(page);  // 페이지 값 폼에 설정
 	            $("#pageFrm").submit();  // 폼 서브밋
-	        
-	            /* $('button').on('click',function(e){
-	    			var fData = $("#fr");
-	    			var btn = $(this).data('btn'); // 내가 현재 클릭한 버튼 -> data-btn
-	    			
-	    			if(btn == 'reply') {
-	    				fData.attr("action", "${root}/board/reply");
-	    			} else if(btn == 'modify') {
-	    				fData.attr("action", "${root}/board/modify");
-	    			} else if(btn == 'list') {
-	    				fData.find("#idx").remove();
-	    				fData.attr("action", "${root}/board/list");
-	    			}
-	    			fData.submit();
-	    		}); */
-	    		
-	            if(${!empty msgType}){
-	                $("#messageType").attr("class", "modal-content panel-warning");    
-	                $("#myMessage").modal("show");
-	              }
-	            
+				
 	        });
+	        
+	     // 파일 선택 시 썸네일 미리보기 함수
+	        document.getElementById('thumbImg').addEventListener('change', function(event) {
+	         var input = event.target;
+	         var thumbnail = document.getElementById('thumbnail');
+	         var thumbnailPlaceholder = document.getElementById('thumbnailPlaceholder');
 
-	        /* $("input[name=start]").on("change", function(e){
-	        	var valS = $("input[name=start]").val();
-	        	var tagS = "<input type='hidden' name='gp_date_start' value='"+valS+"'/>";
-	        	$("#writeForm").append(tagS);
-	        });
-	        
-	        $("input[name=last]").on("change", function(e){
-	        	var valL = $("input[name=last]").val();
-	        	var tagL = "<input type='hidden' name='gp_date_last' value='"+valL+"'/>";
-	        	$("#writeForm").append(tagL);
-	        }) */
+	         if (input.files && input.files[0]) {
+	             var reader = new FileReader();
+
+	             reader.onload = function(e) {
+	                 thumbnail.src = e.target.result;
+	                 thumbnailPlaceholder.classList.add('d-none');
+	                 thumbnail.classList.remove('d-none');
+	             };
+
+	             reader.readAsDataURL(input.files[0]);
+	         } else {
+	             thumbnail.src = '#';
+	             thumbnail.classList.add('d-none');
+	             thumbnailPlaceholder.classList.remove('d-none');
+	         }
+	     });
 	  
 	    });
 	
@@ -115,10 +107,10 @@
                     d-flex justify-content-center align-items-center" 
                     style="height: 200px;">
                         <!-- 이미지 존재시 아래 img태그에 src추가 -->
-                        <img class="object-fit-cover w-100 h-100" 
+                        <img id="thumbnail" class="object-fit-cover w-100 h-100" 
                         src="#">    
                         <!-- 이미지 없을 때 아래 div 태그 보이게 -->
-                        <div class="d-none"> 
+                        <div id="thumbnailPlaceholder" class="d-none"> 
                             썸네일을 등록해주세요. 
                         </div>
                     </div>
@@ -166,16 +158,22 @@
                 <!-- id는 변경하지 마세요 -->
                 <textarea id="editor" name="gp_content">
                     <p>내용을 입력해주세요.</p>
-                    <p></p>
-                    <p></p>
+
                 </textarea>
                 <!-- 스크립트문. 항상 에디터 박스 바로 뒤에 놓을 것-->
                 <script>
-                    ClassicEditor
-                        .create( document.querySelector( '#editor' ) )
-                        .catch( error => {
-                            console.error( error );
-                    });
+                ClassicEditor
+	                .create(document.querySelector('#editor'), {
+	                    ckfinder: {
+	                        uploadUrl: 'fileupload.do' 
+	                    }
+	                })
+	                .then(editor => {
+	                    console.log('Editor was initialized', editor);
+	                })
+	                .catch(error => {
+	                    console.error('There was an error initializing the editor', error);
+	                });
                 </script>
             </div>
 
@@ -186,24 +184,7 @@
             </div>
         </form>
     </div>
-    
-    <div id="myMessage" class="modal fade" role="dialog" >
-    <div class="modal-dialog">  
-      <!-- Modal content-->
-      <div id="messageType" class="modal-content panel-info">
-        <div class="modal-header panel-heading">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">${msgType}</h4>
-        </div>
-        <div class="modal-body">
-          <p>${msg}</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-      </div>  
-    </div>
-  </div>  
+      
     <!-- ============================================== -->
 	
 	<jsp:include page="../common/footer.jsp"/>

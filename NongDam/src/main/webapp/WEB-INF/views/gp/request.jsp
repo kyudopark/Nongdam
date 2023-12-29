@@ -30,8 +30,12 @@
     
     <!-- 스타일시트 -->
     <link rel="stylesheet" href="${contextPath }/resources/common/css/style.css">
+    
     <!-- 기본js -->
     <script type="text/javascript" src="${contextPath }/resources/common/js/common.js"></script>
+    
+    <!-- gp/* js파일 -->
+    <script type="text/javascript" src="${contextPath }/resources/gp/js/script.js"></script>
     
     <meta name="농담" content="안녕하세요, 농업 정보 커뮤니티 농담입니다."/>
     
@@ -42,15 +46,109 @@
     <!-- 카카오페이 결제 -->
 	<!-- iamport.payment.js -->
 	<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
-	<script type="text/javascript" src="${contextPath }/resources/gp/js/script.js"></script>
-	
+
 	<!-- 다음(카카오) 우편번호 -->
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+	
     <title>농담 | 농업 정보 커뮤니티</title>
-    
-    
-    
-    
+	
+	<script type="text/javascript">
+	$(document).ready(function () {
+		$(".page-link").on("click", function (e) {
+            e.preventDefault();  // 기본 이벤트 막기
+		});
+        
+		// 개수 * 가격 = 총 가격 구하는 function
+	 	$("#gp_num").on('input', function() {
+			var num = $("#gp_num").val();
+			var price = ${vo.gp_price};
+					
+			if (num !== null && $.isNumeric(num)) {
+				var totalPrice = price * num;
+				$("#gp_total_output").val(totalPrice); 
+			} else {
+		        $("#gp_total_output").val(0);
+		    }
+		});
+	 	
+		// 기존 주소지 사용 function
+	 	$('input[name="radio"]').change(function () {
+	        if ($('#inlineRadio1').is(':checked')) {
+	            $('#gp_zipcode').val($("#user_zipcode").val());
+	            var userAddr = $("#user_addr").val();
+	            var addrParts = userAddr.split(',');
+
+	            if (addrParts.length === 2) {
+	                $('#addr1').val(addrParts[0]);
+	                $('#addr2').val(addrParts[1]);
+	                
+			        var addr2 = $("#addr1").val();
+			        var addr3 = $("#addr2").val();
+			        
+			        var fullAddress = addr2 + ',' + addr3;
+			        
+			        $("#gp_addr").val(fullAddress);
+	            } else {
+	                console.error("Invalid address format");
+	            }
+	        } else {
+	            $('#gp_zipcode').val("");
+	            $('#addr1').val("");
+	            $('#addr2').val("");
+	        }
+	    });
+	 	
+		// 신규 배송지 입력 function
+		$("#addr1, #addr2").on('input', function() {
+			var addr = $("#addr1").val();
+			var addr2 = $("#addr2").val();
+		        
+		    var fullAddress = addr + ',' + addr2;   
+		    $("#gp_addr").val(fullAddress);
+		});
+	});
+	
+	// 카카오페이 결제 API function
+	function kakaoPay() {
+		if (confirm("구매 하시겠습니까?")) { // 구매 클릭시 한번 더 확인하기
+			IMP.init("imp01003550"); // 가맹점 식별코드
+			const randomNum = Math.random() * 1000
+			const randomNumFloor = Math.floor(randomNum)
+			IMP.request_pay({
+				pg: 'kakaopay', // PG사 코드표에서 선택
+				pay_method: 'card', // 결제 방식
+				merchant_uid: randomNumFloor, // 결제 고유 번호
+				name: $('#gp_title').text(), // 제품명
+				amount: $('#gp_total_output').val(), // 가격
+				//구매자 정보 ↓
+				buyer_email: $('#gp_email').val(),
+				buyer_name: $('#gp_name').val(),
+				buyer_addr: $('#gp_addr').val(),
+				buyer_postcode: $('#gp_zipcode').val()
+			}, function(rsp) { // callback
+				if (rsp.success) { //결제 성공시
+					console.log(rsp);
+					$("#gp_uid").val(rsp.merchant_uid);
+					$('#submitForm').submit();
+					if (response.status == 200) { // DB저장 성공시
+						alert('결제 완료!')
+						
+					} else { // 결제완료 후 DB저장 실패시
+						alert('error:[${response.status}]\n결제요청이 승인된 경우 관리자에게 문의바랍니다.');
+						// DB저장 실패시 status에 따라 추가적인 작업 가능성
+					}
+				} else if (rsp.success == false) { // 결제 실패시
+					alert(rsp.error_msg)
+				}
+			});
+		} else {
+			return false;
+		}
+	};
+	
+	
+	</script>
 </head>
 <body>
 
@@ -64,13 +162,13 @@
         <div class="border rounded-2 container">
             <div class="row">
                 <!--썸네일-->
-                <div class="col-lg-7 col-12 p-0 bg-light" style="min-height: 280px;">
-                    <img src="" style="width: 100%; height: 100%;">
+                <div class="col-lg-7 col-12 p-0 bg-light" style="height: 280px;">
+                    <img src="${vo.gp_thumb }" class="object-fit-cover w-100" style="height: 300px;">
                 </div>
                 <!--오른쪽-->
                 <div class="border-start col-lg-5 col-12 p-3">
                     <!-- 세줄까지 출력하고 싶다면 클래스명을 ...-3 으로 바꾸세요.-->
-                    <h4 class="title-overflow-2">${vo.gp_title}</h4>
+                    <h4 class="title-overflow-2" id = "gp_title">${vo.gp_title}</h4>
                     <p class="pt-0">
                         <div>
                             <span class="fw-bolder">신청 시작일 </span>
@@ -83,7 +181,7 @@
                     </p>
                     <p class="pt-3 fs-5">
                         <span class="fw-bolder">가격 </span>
-                        <span>${vo.gp_price}원</span>
+                        <span>${vo.gp_price} 원</span>
                     </p>
                 </div>
             </div>
@@ -96,14 +194,18 @@
             <h4 class="p-4 border-bottom">신청 폼</h4>
             
             <div class="container pt-5 pb-5 col-lg-10 ">
-                
+            	<form method="post" action="${contextPath}/gp/request" id ="submitForm">  
+	            	<input type="hidden" id="gp_idx" name="gp_idx" value="${vo.gp_idx}"/>
+					<input type="hidden" id="user_idx" name="user_idx" value="${uvo.user_idx}"/>
+					<input type="hidden" id="gp_addr" name="gp_addr" value=""/>
+					<input type="hidden" id="gp_uid" name="gp_uid" value=""/>
                 <!-- 수령자명 -->
                 <div class="mb-4 col-12 col-md-6 col-lg-5">
                     <label for="gp_name" class="form-label">
                         수령자명
                     </label>
                     <input type="text" class="form-control" 
-                        id="gp_name" placeholder="이름">
+                        id="gp_name" name="gp_name" placeholder="이름" value = "${uvo.user_name }">
                 </div>
                 <!-- 수령자 연락처 -->
                 <div class="mb-4 col-12 col-md-6 col-lg-5">
@@ -111,27 +213,27 @@
                         수령자 연락처
                     </label>
                     <input type="eamil" class="form-control" 
-                        id="gp_email" placeholder="이메일">
+                        id="gp_email" name = "gp_email" placeholder="이메일" value = "${uvo.user_email }">
                 </div>
                 <!-- 수량 -->
                 <div class="mb-4 col-4 col-md-3 col-lg-2">
-                    <label for="gp_email" class="form-label">
+                    <label for="gp_num" class="form-label">
                         수량
                     </label>
                     <div class="d-flex align-items-center gap-2">
                         <input type="text" class="form-control" 
-                            id="gp_product" placeholder="0~9">
+                            id="gp_num" name = "gp_num" placeholder="0~9">
                         <div></div>
                     </div>
                 </div>
                 <!-- 총 가격 -->
                 <div class="mb-4 col-5 col-md-4 col-lg-3">
-                    <label for="gp_price" class="form-label" id = "fullprice">
+                    <label for="gp_total" class="form-label">
                         총 가격
                     </label>
                     <div class="d-flex align-items-center gap-2">
                         <input type="text" readonly class="form-control" 
-                            id="gp_price" placeholder="-">
+                            id="gp_total_output" name="gp_total" placeholder="-">
                         <div>원</div>
                     </div>
                 </div>
@@ -139,6 +241,8 @@
                 <div class="mb-4">
                     <!-- 배송지 상단 라벨과 버튼 -->
                     <div class="d-flex flex-row flex-wrap justify-content-between">
+                    	<input type="hidden" id="user_zipcode" value="${uvo.user_zipcode}" />
+						<input type="hidden" id="user_addr" value="${uvo.user_addr}" />
                         <label class="form-label">배송지 입력</label>
                         <div class="d-inline-block">
                             <!-- 기존 배송지 사용 radio -->
@@ -165,7 +269,7 @@
                             <div class="row g-2">
                                 <div class="col-auto">
                                     <!-- 우편번호. readonly로 되어있으나 풀어도 됩니다 -->
-                                    <input type="text" class="form-control" id="user_zipcode" readonly>
+                                    <input type="text" class="form-control" id="gp_zipcode" name="gp_zipcode" readonly>
                                 </div>
                                 <div class="col-auto">
                                     <!-- 우편번호 찾기 버튼-->
@@ -175,27 +279,23 @@
                                 </div>
                             </div>
                         </div>
-                        <input type="text" class="form-control mb-2" id="user_zipcode2" placeholder="주소">
-                        <input type="text" class="form-control" id="user_zipcode3" placeholder="상세 주소">
-                        <div class="mt-2 form-check d-flex justify-content-end gap-1">
-                            <input class="form-check-input" type="checkbox" value="" id="asdf">
-                            <label class="form-check-label" for="asdf"></label>기본 배송지로 설정</label>
-                          </div>
+                        <input type="text" class="form-control mb-2" id="addr1" placeholder="주소" readonly>
+                        <input type="text" class="form-control" id="addr2" placeholder="상세 주소">
                     </div>
                 </div>
-
             </div>
+            </form>
             <!-- 신청하기 버튼 -->
             <div class="container pt-5 pb-4 text-center">
-                <button class="btn btn-secondary" onclick="kakaoPay()">즉시결제</button>
-                <a class="btn btn-outline-secondary">취소</a>
+                <button class="btn btn-secondary" onclick="kakaoPay()"><i class="fa-solid fa-credit-card"></i> 결제</button>
+                <a href="javascript:history.go(-1)" class="btn btn-outline-secondary">취소</a>
             </div>
+            
         </div>
     </div>
     <!-- 신청 폼 블럭 끝 -->
 	
-	
-	
+
 	<jsp:include page="../common/footer.jsp"/>
 </body>
 </html>

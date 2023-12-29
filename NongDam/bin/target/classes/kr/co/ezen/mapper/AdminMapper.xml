@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+	
+	<mapper namespace="kr.co.ezen.mapper.AdminMapper">
+	
+	<sql id="search">
+			<if test="type == 'user_nickname'">
+				where user_nickname like concat('%',#{keyword},'%')
+			</if>
+			<if test="type == 'user_name'">
+				where user_name like concat('%',#{keyword},'%')
+			</if>
+			<if test="type == 'user_id'">
+				where user_id like concat('%',#{keyword},'%')
+			</if>
+		</sql>
+	
+	<select resultType="kr.co.ezen.entity.User" id="findAll" 
+	parameterType="kr.co.ezen.entity.Criteria">
+	select user_idx,user_id,user_nickname,user_name,user_admin from user 
+	<include refid="search"/>
+		order by user_idx desc
+	</select>
+	
+	<delete id="deleteByIdx" parameterType="int">
+		delete from user where user_idx=#{user_idx}
+	</delete>
+
+	<update id="updateAdminStatus" parameterType="kr.co.ezen.entity.User">
+	update User set user_admin=${user_admin}
+	where user_idx=#{user_idx}
+	</update>
+	
+	
+	</mapper>

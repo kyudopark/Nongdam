@@ -32,6 +32,7 @@
     <link rel="stylesheet" href="${contextPath }/resources/common/css/style.css">
     <!-- 기본js -->
     <script type="text/javascript" src="${contextPath }/resources/common/js/common.js"></script>
+    <script type="text/javascript" src="${contextPath }/resources/gp/js/script.js"></script>
     
     <meta name="농담" content="안녕하세요, 농업 정보 커뮤니티 농담입니다."/>
     
@@ -40,6 +41,52 @@
     <link rel="shortcut icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
     
     <title>농담 | 농업 정보 커뮤니티</title>
+    
+    <script type="text/javascript">
+    $(document).ready(function() {
+  	  $('#modify').submit(function(event) {
+      // title과 content 값 가져오기
+      var titleValue = $('#gp_title').val();
+      var contentValue = $('#editor').val();
+
+      // title과 content 유효성 검사
+      if (titleValue.trim() === '') {
+        alert('제목을 입력해주세요.');
+        event.preventDefault();
+      }
+
+      if (contentValue.trim() === '') {
+        alert('내용을 입력해주세요.');
+        event.preventDefault();
+      }
+    });
+  });
+    
+    
+ // 파일 선택 시 썸네일 미리보기 함수
+    document.getElementById('thumbImg').addEventListener('change', function(event) {
+        var input = event.target;
+        var thumbnail = document.getElementById('thumbnail');
+        var thumbnailPlaceholder = document.getElementById('thumbnailPlaceholder');
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                thumbnail.src = e.target.result;
+                thumbnailPlaceholder.classList.add('d-none');
+                thumbnail.classList.remove('d-none');
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            thumbnail.src = '#';
+            thumbnail.classList.add('d-none');
+            thumbnailPlaceholder.classList.remove('d-none');
+        }
+    });
+    
+    </script>
     
 </head>
 <body>
@@ -52,7 +99,8 @@
 	<!-- 글 작성 div container-->
     <div class="container mt-5 mb-5">
         <h4 class="mt-5 mb-5">공동구매 게시글 작성</h4>
-        <form method="post" enctype="multipart/form-data">
+        <form id="modify" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="gp_idx" value="${vo.gp_idx }">
             
             <!--제목-->
             <div class="form-group mb-3">
@@ -67,11 +115,11 @@
                     d-flex justify-content-center align-items-center" 
                     style="height: 200px;">
                         <!-- 이미지 존재시 아래 img태그에 src추가 -->
-                        <img class="object-fit-cover w-100 h-100" 
-                        src="/resource/image/gp/${vo.gp_thumb }">    
+                        <img id="thumbnail" class="object-fit-cover w-100 h-100" 
+                        src="${vo.gp_thumb }">    
                         <!-- 이미지 없을 때 아래 div 태그 보이게 -->
-                        <div class="d-none"> 
-                            썸네일을 등록해주세요. 
+                        <div id="thumbnailPlaceholder" class="d-none"> 
+                            이미지를 등록해주세요
                         </div>
                     </div>
                 </div>
@@ -84,7 +132,6 @@
                             <input type="date"
                             class="form-control"
                             name="gp_date_start"
-                            value="<fmt:formatDate value="${vo.gp_date_start }" pattern="YYYY-MM-dd "/>"
                             data-placeholder="시작일 선택"
                             required
                             aria-required="true" >
@@ -93,7 +140,6 @@
                             <input type="date" 
                             class="form-control"
                             name="gp_date_last"
-                            value="<fmt:formatDate value="${vo.gp_date_last }" pattern="YYYY-MM-dd "/>"
                             data-placeholder="마감일 선택"
                             required
                             aria-required="true" >
@@ -101,8 +147,8 @@
                     </div>
                     <!-- 파일 업로드 input태그 -->
                     <div class="mb-3">
-                        <label for="gp_thumb" class="form-label">썸네일 올리기</label>
-                        <input class="form-control" type="file" id="gp_thumb">
+                        <label for="thumbImg" class="form-label">썸네일 올리기</label>
+                        <input class="form-control" type="file" id="thumbImg" name="thumbImg">
                     </div>
                     
                     <div class="md-3">
@@ -120,16 +166,21 @@
                 <!-- id는 변경하지 마세요 -->
                 <textarea id="editor" name="gp_content">
                     <p>${vo.gp_content }</p>
-                    <p></p>
-                    <p></p>
                 </textarea>
                 <!-- 스크립트문. 항상 에디터 박스 바로 뒤에 놓을 것-->
                 <script>
-                    ClassicEditor
-                        .create( document.querySelector( '#editor' ) )
-                        .catch( error => {
-                            console.error( error );
-                    });
+                ClassicEditor
+	                .create(document.querySelector('#editor'), {
+	                    ckfinder: {
+	                        uploadUrl: 'fileupload.do' 
+	                    }
+	                })
+	                .then(editor => {
+	                    console.log('Editor was initialized', editor);
+	                })
+	                .catch(error => {
+	                    console.error('There was an error initializing the editor', error);
+	                });
                 </script>
             </div>
 

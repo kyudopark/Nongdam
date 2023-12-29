@@ -53,6 +53,22 @@ body{
     -webkit-box-orient: vertical;
 }
 
+/* ezen/main 페이지 공동구매 슬라이드 화면 인디케이터 변경 */
+.carousel-indicators [data-bs-target] {
+  width: 10px;
+  height: 10px;
+  border-radius:5px;
+  text-indent: -999px;
+  cursor: pointer;
+  background-clip: padding-box;
+  border: 0;
+  transition: opacity .6s ease;
+}
+
+.carousel-indicators .active{
+	width: 40px;
+	height: 10px;
+}
 
 /* input type=date인 input 태그의 placeholder를 재정의 */
 input[type='date']::before {

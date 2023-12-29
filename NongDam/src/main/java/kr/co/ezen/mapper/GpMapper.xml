@@ -7,17 +7,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<mapper namespace="kr.co.ezen.mapper.GpMapper">
 	
 		<sql id="search">
+			<if test="type == 'all'">
+				where gp_title like concat('%',#{keyword},'%')
+			</if>
 			<if test="type == 'progress'">
 				where gp_title like concat('%',#{keyword},'%')
 			</if>
-			<if test="type == 'complet'">
+			<if test="type == 'complete'">
 				where gp_title like concat('%',#{keyword},'%')
 			</if>
 		</sql>
 		
 		<select resultType="kr.co.ezen.entity.Gp" id="findAll"
 			parameterType="kr.co.ezen.entity.Criteria">
-			select gp_title, gp_date, gp_date_start, gp_date_last, gp_idx, gp_thumb from gp
+			select gp_title, gp_date, gp_date_start, gp_date_last, user_idx, gp_idx, gp_thumb from gp natural join User
 			<include refid="search"/>
 			order by gp_idx
 		 	limit #{pageStart}, #{perPageNum}	
@@ -30,13 +33,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		
 		<select resultType="kr.co.ezen.entity.Gp" 
 		parameterType="int" id="findByIdx">
-			select gp_title, gp_price, gp_date_start, gp_date_last, gp_content, gp_idx, gp_thumb from gp
+			select gp_title, gp_price, gp_date_start, gp_date_last, gp_content, gp_idx, gp_thumb from gp natural join User
 			where gp_idx=#{gp_idx}
 		</select>
 		
+		<select resultType="kr.co.ezen.entity.GpUser" 
+		parameterType="int" id="findGpUserbyIdx">
+			select gp_idx, gp_uid, user_idx, gp_zipcode, gp_addr, gp_name, gp_email, gp_total, gp_num from gpUser
+			where user_idx=#{user_idx}
+		</select>
+		
 		<insert id="insert" parameterType="kr.co.ezen.entity.Gp">
-			insert into Gp (gp_title,gp_content,gp_price,gp_date_start, gp_date_last, gp_thumb)
-			VALUES (#{gp_title}, #{gp_content},#{gp_price},#{gp_date_start},#{gp_date_last},#{gp_thumb})
+			insert into gp (gp_title,gp_content,gp_price, gp_date, gp_date_start, gp_date_last, gp_thumb, user_idx)
+			VALUES (#{gp_title}, #{gp_content},#{gp_price}, now(), #{gp_date_start},#{gp_date_last},#{gp_thumb}, #{user_idx})
 		</insert>
 		
 		
@@ -48,6 +57,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		
 		<delete id="deleteByIdx" parameterType="int">
 			delete from gp where gp_idx=#{gp_idx}
+		</delete>
+		
+		
+		<insert id="request" parameterType="kr.co.ezen.entity.GpUser">
+			insert into gpUser (gp_idx, user_idx,gp_uid, gp_zipcode, gp_addr, gp_name, gp_email, gp_total, gp_num)
+			VALUES (#{gp_idx},#{user_idx},#{gp_uid},#{gp_zipcode},#{gp_addr},#{gp_name},#{gp_email},#{gp_total}, #{gp_num})
+		</insert>
+		
+		<update id="updateAddr" parameterType="kr.co.ezen.entity.GpUser">
+			update gpUser set gp_zipcode=#{gp_zipcode}, gp_addr=#{gp_addr}
+			where user_idx=#{user_idx} AND gp_idx=#{gp_idx}
+		</update>
+		
+		<delete id="deleteRequest" parameterType="int">
+			delete from gpUser where user_idx=#{user_idx} AND gp_idx=#{gp_idx}
 		</delete>
 
 	</mapper>

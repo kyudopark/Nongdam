@@ -74,8 +74,10 @@
 				let tr_comment_content = obj.tr_comment_content.replaceAll("\n", "<br/>");
 				//231206 포맷팅
 				date.setTime(obj.tr_comment_time);
-				fmtTime = date.toISOString().replace(/T/, ' ').replace(/\..+/, '');
+
 				
+				fmtTime = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate() + " " + String(date.getHours()).padStart(2, "0") + ":" + String(date.getMinutes()).padStart(2, "0"); 
+
 				commentList += "<div class='p-3 mt-3 mb-3 d-flex flex-nowrap gap-1'>";
 				// 답글여부
 				if(obj.tr_parent_idx != obj.tr_comment_idx){
@@ -85,7 +87,8 @@
 				
 				// 썸네일
 				if(obj.user_profile == null || obj.user_profile == ''){
-				commentList += "		<i class='fa-regular fa-user'></i>";
+				commentList +="			<img class='object-fit-cover' style='width: 22px; height: 22px; border-radius: 50%;'";
+				commentList += " 			src='${contextPath}/resources/image/common/thumbnail-profile-seed.svg'>"
 				}else{
 				commentList +="			<img class='object-fit-cover' style='width: 22px; height: 22px; border-radius: 50%;'";
 				commentList += " 			src='"+ obj.user_profile +"'>"
@@ -93,13 +96,19 @@
 				commentList += "	</div>";
 				commentList += "	<div class='w-100' id='comment"+obj.tr_comment_idx+"'>";
 				commentList += "		<div>";
-				commentList += " 			<h6 class='d-inline-block'>"+ obj.user_nickname +"</h6>";
-				commentList += "			<small class='text-secondary'>"+ fmtTime+"</small>";
+				commentList += " 			<h6 class='d-inline-block'>";
+				
+				commentList += 					obj.user_nickname;
+				if(${vo.user_idx} == obj.user_idx){
+				commentList += "				<span class='badge text-bg-secondary me-1'>작성자</span>"
+				}
+				commentList += "			</h6>";
+				commentList += "			<small class='text-secondary'> "+fmtTime+"</small>";
 				commentList += "		</div>";
 				if(obj.tr_comment_useable == 1){
 				commentList += "		<div class='pb-2'  id='comment_content"+obj.tr_comment_idx+"'>";
 				commentList += "			<div class='viewcommdiv text-break pb-1'>"+tr_comment_content+"</div>";
-				commentList += "			<c:if test='${empty uvo }'> ";
+				commentList += "			<c:if test='${!empty uvo }'> ";
 				commentList += " 				<div class='updatecommdiv pb-1'>";
 				commentList += "				<form>";
 				commentList += "					<textarea class='form-control'>"+obj.tr_comment_content+"</textarea>";
@@ -112,10 +121,12 @@
 				if(obj.tr_parent_idx == obj.tr_comment_idx){
 				commentList += "					<a href='javascript:replyCommentToggle("+obj.tr_comment_idx+")' class='text-secondary text-decoration-none'>답글</a>";
 				} //중첩
+				if(obj.user_idx == ${uvo.user_idx} || ${uvo.user_admin} == true){
+				if(obj.user_idx == ${uvo.user_idx}){
 				commentList += "  					<a href='javascript:updateCommentButton("+obj.tr_comment_idx+")' class='text-secondary text-decoration-none'>수정</a>";
+				}
 				commentList += "					<a href='javascript:deleteCommentByIdx("+obj.tr_comment_idx+")' class='text-secondary text-decoration-none'>삭제</a>";
-				commentList += "					<c:if test='${"+obj.user_idx +" eq uvo.user_idx }'>";
-				commentList += "					</c:if>";
+				}
 				commentList += "				</small>";
 				commentList += "			</c:if>";
 				commentList += "		</div>";
@@ -172,7 +183,7 @@
 		}
 		
 		function openChatByIdx(user_idx){
-		   window.open("${contextPath}/chat/list/"+user_idx,"채팅하기","width=400, height=500, left=100, top=50");
+		   window.open("${contextPath}/chat/enterRoom?user_corr_idx="+user_idx,"채팅","width=400, height=500, left=100, top=50");
 		}
 		
 		function deleteByIdx(tr_idx){
@@ -274,6 +285,9 @@
 			})
         }
         //-----------------------------------------------------
+        function mainfrm(){
+        	$('#mainfrm').submit();
+        }
 	</script>
 </head>
 <body>
@@ -285,7 +299,7 @@
 	<!-- 글 조회 div container-->
     <div class="container mt-5 mb-5">
         <div class="pt-3 pb-3">
-            <a class="text-muted" href="javascript:history.go(-1)"> &lt; 목록으로 </a>
+            <a class="text-muted" href="javascript:mainfrm()"> &lt; 목록으로 </a>
         </div>
         <!-- 글 제목 -->
         <div class="border-bottom">
@@ -311,24 +325,46 @@
 
         <!-- 기타 버튼 -->
         <div class="border-bottom text-end pb-3">
-            <a  href="${contextPath }/tr/modify?tr_idx=${vo.tr_idx}" class="btn btn-secondary">수정</a>
-            <button onclick="deleteByIdx(${vo.tr_idx})" class="btn btn-danger">삭제</button>
-            <a href="javascript:history.go(-1)" class="btn btn-secondary">리스트</a>
+	        <c:if test="${uvo.user_idx == vo.user_idx || uvo.user_admin == true}">
+	            <a href="${contextPath }/tr/modify?tr_idx=${vo.tr_idx}" class="btn btn-secondary">수정</a>
+	            <button onclick="deleteByIdx(${vo.tr_idx})" class="btn btn-danger">삭제</button>
+            </c:if>
+            <a href="javascript:mainfrm()" class="btn btn-secondary">리스트</a>
         </div>
+
+        <!-- tr/main으로 갈때 사용하는 폼 -->
+        <form action="${contextPath }/tr/main" method="get" id="mainfrm">
+        	<input type="hidden" name="page" value="${cri.page }"/>
+        	<input type="hidden" name="perPageNum" value="${cri.perPageNum }"/>
+        	<c:if test="${!empty cri.type }">
+        	<input type="hidden" name="type" value="${cri.type }"/>
+        	<input type="hidden" name="keyword" value="${cri.keyword }"/>
+        	</c:if>
+        </form>
+        
 
         <!-- 댓글 -->
         <form id="insertCommentForm">
-	        <input type="hidden" name="user_idx" value="1">
+	        <input type="hidden" name="user_idx" value="${uvo.user_idx }">
 	        <input type="hidden" id="tr_idx" name="tr_idx" value="${vo.tr_idx }">
 	        <div class="mt-3 text-end">
 	            <div class="text-start p-2">댓글 작성</div>
 	            <div class="form-floating">
-	                <textarea class="form-control" id="tr_comment_content" style="height: 100px" name="tr_comment_content"></textarea>
-	                <label for="tr_comment_content">댓글 내용</label>
+	                <textarea class="form-control" id="tr_comment_content" style="height: 100px" name="tr_comment_content"
+	                <c:if test="${empty uvo}">readonly="readonly"</c:if> ></textarea>
+	                <label for="tr_comment_content">
+	                		<c:if test="${!empty uvo}">
+	                		댓글 내용
+	                		</c:if>
+	                		<c:if test="${empty uvo}">
+	                		로그인하고 댓글을 달아보세요.
+	                		</c:if>
+	                </label>
 	            </div>
-	            <div>
+	            <div class="mt-1">
 	                <span id="commentFull" class="text-danger d-inline-block d-none">최대 글자수를 초과하였습니다.</span>
-	                <button type="button" onclick="insertComment()" class="btn btn-sm btn-secondary d-inline-block">등록</button>
+	                <button type="button" <c:if test="${!empty uvo}"> onclick="insertComment()" </c:if>
+	                class="btn btn-sm btn-secondary d-inline-block">등록</button>
 	            </div>
 	        </div>
         </form>
@@ -361,7 +397,7 @@
         <form id="replyCommentForm" method="post">
 	        <input type="hidden" id="retr_idx" name="tr_idx" value="${vo.tr_idx}">
 	        <input type="hidden" id="retr_parent_idx" name="tr_parent_idx" value="">
-	        <input type="hidden" id="reuser_idx" name="user_idx" value="1">
+	        <input type="hidden" id="reuser_idx" name="user_idx" value="${uvo.user_idx }">
 	        <input type="hidden" id="retr_comment_content" name="tr_comment_content" value="">
 	    </form>
 		<!--댓글이 있는 페이지에 있어야 하는 스크립트 영역 -->

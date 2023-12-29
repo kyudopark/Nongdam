@@ -34,16 +34,14 @@ public class GpServiceImpl implements GpService{
 		return gpDetail;
 	}
 	
-	@Override
-	public List<GpUser> findByUser(int user_idx) {
-		List<GpUser> cvo = gpMapper.findByUser(user_idx);
-		return cvo;
+	public List<GpUser> findGpUserbyIdx(int user_idx) {
+		List<GpUser> gpUserList = gpMapper.findGpUserbyIdx(user_idx);
+		return gpUserList;
 	}
 
 	@Override
 	public void insert(Gp vo) {
 		gpMapper.insert(vo);
-		
 	}
 	
 	@Override
@@ -54,6 +52,23 @@ public class GpServiceImpl implements GpService{
 	@Override
 	public void deleteByIdx(int gp_idx) {
 		gpMapper.deleteByIdx(gp_idx);
+	}
+	
+	@Override
+	public void request(GpUser gu) {
+		gpMapper.request(gu);
+	}
+
+	@Override
+	public void deleteRequest(int user_idx, int gp_idx) {
+		gpMapper.deleteRequest(user_idx, gp_idx);
+		
+	}
+
+	@Override
+	public void updateAddr(GpUser gpUser) {
+		gpMapper.updateAddr(gpUser);
+		
 	}
 
 }

@@ -7,4 +7,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	
 	<mapper namespace="kr.co.ezen.mapper.MainMapper">
+		<select resultType="kr.co.ezen.entity.Tr" id="findTr" >
+			select  tr_idx,tr_title,tr_time,user_nickname,tr_imgpath from tr natural join User
+			order by tr_time desc
+			limit 8
+		</select>
+		
+		<select resultType="kr.co.ezen.entity.Gp" id="findGp" >
+			select  gp_idx, gp_title, gp_date_start, gp_date_last, gp_price, gp_thumb from gp natural join User
+			order by gp_date_last desc
+			limit 4
+		</select>
+		
+		
+		
+		
 	</mapper>

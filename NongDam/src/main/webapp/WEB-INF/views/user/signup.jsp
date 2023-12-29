@@ -255,7 +255,7 @@ function passwordCheck(){
 	}
 	else{
 		$("#passMessage").html("");
-		$("#user_pw1").val(userPass1);	//서버에 일치하는 비번값 넘겨준다(hidden으로 - #memPassword)
+		$("#user_pw1").val(userPass1);	
 	}
 } 
 
@@ -268,7 +268,7 @@ function passwordCheck(){
 
 
 
-/* function mailCheck() {
+ function mailCheck() {
     var user_email = $("#user_email").val();
 
     $.ajax({
@@ -287,7 +287,7 @@ function passwordCheck(){
             alert("error");
         }
     });
-} */
+} 
 
 
 
@@ -491,14 +491,14 @@ function passwordCheck(){
 				<!-- Modal content-->
 				<div id="checkType" class="modal-content panel-info">
 					<div class="modal-header panel-heading">
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<button type="button" class="btn" data-bs-dismiss="modal">&times;</button>
 						<h4 class="modal-title"></h4>
 					</div>
 					<div class="modal-body">
 						<p id="checkMessage"></p>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="button" class="btn" data-bs-dismiss="modal">Close</button>
 					</div>
 				</div>
 			</div>
@@ -506,23 +506,23 @@ function passwordCheck(){
 
 
 		<!-- 실패 메세지를 출력(modal) -->
-		<div id="myMessage" class="modal fade" role="dialog">
-			<div class="modal-dialog">
-				<!-- Modal content-->
-				<div id="messageType" class="modal-content panel-info">
-					<div class="modal-header panel-heading">
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h4 class="modal-title">${msgType}</h4>
-					</div>
-					<div class="modal-body">
-						<p>${msg}</p>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					</div>
+	<div id="myMessage" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div id="messageType" class="modal-content panel-info">
+				<div class="modal-header panel-heading">
+					<button type="button" class="btn" data-bs-dismiss="modal">&times;</button>
+					<h4 class="modal-title">${msgType}</h4>
+				</div>
+				<div class="modal-body">
+					<p>${msg}</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn" data-bs-dismiss="modal">Close</button>
 				</div>
 			</div>
 		</div>
+	</div>
 	</div>
 	</div>
 	</div>

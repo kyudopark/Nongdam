@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+	<mapper namespace="kr.co.ezen.mapper.TrMapper">
+	
+		<sql id="search">
+			<if test="type == 'user_nickname'">
+				where user_nickname like concat('%',#{keyword},'%')
+			</if>
+			<if test="type == 'tr_title'">
+				where tr_title like concat('%',#{keyword},'%')
+			</if>
+		</sql>
+		
+		<select resultType="kr.co.ezen.entity.Tr" id="findAll"
+			parameterType="kr.co.ezen.entity.Criteria">
+			select tr_title,tr_content,tr_time,user_nickname,user_idx,tr_idx,tr_imgpath from tr natural join User
+			<include refid="search"/>
+			order by tr_idx desc
+		 	limit #{pageStart}, #{perPageNum}	
+		</select> 
+	
+	
+      	<!-- 231109 -->
+		<select id="totalCount" resultType="int" parameterType="kr.co.ezen.entity.Criteria">
+		   select count(*) from tr natural join User 
+		   <include refid="search"/>
+		</select>
+	
+	
+		<select resultType="kr.co.ezen.entity.Tr" 
+		parameterType="int" id="findByIdx">
+			select tr_title,tr_content,tr_time,user_nickname,user_idx,tr_idx,tr_imgpath from tr natural join User 
+			where tr_idx=#{tr_idx}
+		</select>
+		
+		<update id="updateByIdx" parameterType="kr.co.ezen.entity.Tr">
+			update tr set tr_title=#{tr_title},tr_content=#{tr_content},tr_imgpath=#{tr_imgpath}
+			where tr_idx=#{tr_idx}
+		</update>
+		
+		
+		<delete id="deleteByIdx" parameterType="int">
+			delete from Tr where tr_idx=#{tr_idx}
+		</delete>
+		
+		<insert id="insert" parameterType="kr.co.ezen.entity.Tr">
+			insert into Tr (tr_title,tr_content,user_idx,tr_imgpath)
+			    VALUES (#{tr_title}, #{tr_content},#{user_idx},#{tr_imgpath})
+		</insert>
+
+
+
+
+		<!-- laky -->
+		<!-- ============================================== -->
+		
+		<select id="findAllComment" parameterType="int"
+		resultType="kr.co.ezen.entity.TrComment">
+			select tr_parent_idx,tr_comment_idx,user_idx,user_nickname,tr_comment_time,tr_comment_content,tr_comment_useable
+			from trComment natural join User where tr_idx=#{tr_idx}
+			order by tr_parent_idx desc, tr_comment_idx
+		</select>
+		
+		<update id="updateCommentByIdx" parameterType="kr.co.ezen.entity.TrComment">
+			update trComment set tr_comment_content=#{tr_comment_content} where tr_comment_idx=#{tr_comment_idx}
+		</update>
+		
+		<update id="deleteCommentByIdx" parameterType="int">
+			update trComment set tr_comment_useable=0 where tr_comment_idx=#{tr_comment_idx}
+		</update>
+		
+		<delete id="deleteCommentByTr_idx" parameterType="int">
+			delete from tr_comment where tr_idx=#{tr_idx}
+		</delete>
+		
+		<insert id="insertComment" parameterType="kr.co.ezen.entity.TrComment">
+			<selectKey order="BEFORE" keyProperty="tr_parent_idx" resultType="int">
+				select IFNULL(max(tr_comment_idx)+1,1) as tr_parent_idx from trComment
+			</selectKey>
+			insert into trComment (tr_idx,tr_parent_idx,user_idx,tr_comment_content,tr_comment_useable) 
+			values (#{tr_idx},#{tr_parent_idx},#{user_idx},#{tr_comment_content},1)
+		</insert>
+		
+		<insert id="insertReplyComment" parameterType="kr.co.ezen.entity.TrComment">
+			insert into trComment (tr_idx,tr_parent_idx,user_idx,tr_comment_content,tr_comment_useable) 
+			values (#{tr_idx},#{tr_parent_idx},#{user_idx},#{tr_comment_content},1)
+		</insert>
+		
+		<!-- ============================================== -->
+	
+	</mapper>
