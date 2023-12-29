@@ -4,6 +4,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -38,6 +39,7 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import kr.co.ezen.entity.Criteria;
 import kr.co.ezen.entity.Gp;
 import kr.co.ezen.entity.GpUser;
+import kr.co.ezen.entity.Imgur;
 import kr.co.ezen.entity.PageCre;
 import kr.co.ezen.entity.Tr;
 import kr.co.ezen.service.GpService;
@@ -104,31 +106,39 @@ public class GpController {
 		vo.setGp_price(gp_price);
 
 		if (file != null && !file.isEmpty()) {
-	        String originalFileName = file.getOriginalFilename();
-	        String ext = originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
-	        ext = ext.toUpperCase();
+	    	String ckEditorFileName = file.getOriginalFilename();
+	    	String ext = ckEditorFileName.substring(ckEditorFileName.lastIndexOf(".") + 1).toUpperCase();
 
-	        // 파일명 중복 처리
-	        String fileName = originalFileName;
-	        int count = 1;
-	        while (new File(uploadPath + File.separator + fileName).exists()) {
-	            String nameWithoutExtension = originalFileName.substring(0, originalFileName.lastIndexOf("."));
-	            fileName = nameWithoutExtension + count + "." + ext;
-	            count++;
-	        }
+	    	// 썸네일 파일 저장
+	    	String thumbnailFileName = "thumbnail.png";
+	    	String thumbnailFilePath = uploadPath + File.separator + thumbnailFileName;
+	    	File thumbnailDest = new File(thumbnailFilePath);
+	    	file.transferTo(thumbnailDest);
 
-	        // 파일 저장
-	        String filePath = uploadPath + File.separator + fileName;
-	        File dest = new File(filePath);
-	        file.transferTo(dest);
+	    	// 썸네일 이미지 업로드
+	    	Imgur imgur = new Imgur();
+	    	String thumbnailImageUrl = imgur.requestUpload(Files.readAllBytes(thumbnailDest.toPath())); // 썸네일 이미지 업로드
+                                                                              // 서비스 호출 및 URL
 
-	        // 데이터베이스에 필요한 정보 등록
-	        vo.setGp_thumb(fileName);
+	    	// 데이터베이스에 필요한 정보 등록
+	    	vo.setGp_thumb(thumbnailImageUrl);
+
+	    	// 원본 이미지 저장
+	    	String ckEditorFileNameWithoutExt = ckEditorFileName.substring(0, ckEditorFileName.lastIndexOf("."));
+	    	String ckEditorImageFileName = ckEditorFileNameWithoutExt + "_original." + ext;
+	    	String ckEditorFilePath = uploadPath + File.separator + ckEditorImageFileName;
+	    	File ckEditorDest = new File(ckEditorFilePath);
+	    	file.transferTo(ckEditorDest);
+
+	    	// 원본 이미지 업로드
+	    	String ckEditorImageUrl = imgur.requestUpload(Files.readAllBytes(ckEditorDest.toPath())); // 원본 이미지 업로드 서비스
+
 	    }
 		
 		gpService.insert(vo);
 		return "redirect:/gp/main";
 	}
+	
 	
 	@GetMapping("/request")
 	public String request(@RequestParam("gp_idx") int gp_idx, Model m) {
@@ -185,36 +195,40 @@ public class GpController {
 	            System.out.println("존재하지 않는 파일입니다.");
 	        }
 	    }
+		
+		// 파일이 비어있지 않은 경우에만 업로드 진행
+		if (file != null && !file.isEmpty()) {
+	    	   String ckEditorFileName = file.getOriginalFilename();
+	           String ext = ckEditorFileName.substring(ckEditorFileName.lastIndexOf(".") + 1).toUpperCase();
 
-	    // 파일이 비어있지 않은 경우에만 업로드 진행
-	    if (file != null && !file.isEmpty()) {
-	        String originalFileName = file.getOriginalFilename();
-	        String ext = originalFileName.substring(originalFileName.lastIndexOf(".") + 1).toUpperCase();
+	           // 썸네일 파일 저장
+	           String thumbnailFileName = "thumbnail.png";
+	           String thumbnailFilePath = request.getServletContext().getRealPath("/resources/image/tr") + File.separator + thumbnailFileName;
+	           File thumbnailDest = new File(thumbnailFilePath);
+	           file.transferTo(thumbnailDest);
 
-	        // 파일명 중복 처리
-	        String fileName = originalFileName;
-	        int count = 1;
-	        String uploadPath = request.getServletContext().getRealPath("/resources/image/gp");
-	        String filePath = uploadPath + File.separator + fileName;
-	        File dest = new File(filePath);
-	        while (dest.exists()) {
-	            String nameWithoutExtension = originalFileName.substring(0, originalFileName.lastIndexOf("."));
-	            fileName = nameWithoutExtension + count + "." + ext;
-	            filePath = uploadPath + File.separator + fileName;
-	            dest = new File(filePath);
-	            count++;
-	        }
+	           // 썸네일 이미지 업로드
+	           Imgur imgur = new Imgur();
+	           String thumbnailImageUrl = imgur.requestUpload(Files.readAllBytes(thumbnailDest.toPath())); // 썸네일 이미지 업로드 서비스 호출 및 URL 받아오기
 
-	        // 파일 저장
-	        file.transferTo(dest);
+	           // 데이터베이스에 필요한 정보 등록
+	           vo.setGp_thumb(thumbnailImageUrl); // 썸네일 이미지 URL을 vo에 설정
 
-	        // DB에 필요한 정보 업데이트
-	        vo.setGp_thumb(fileName);
-	    } else {
-	        // 파일이 비어있으면 기존 이미지 경로를 유지
-	        vo.setGp_thumb(existingThumbnail);
-	    }
 
+	           // 원본 이미지 저장
+	           String ckEditorFileNameWithoutExt = ckEditorFileName.substring(0, ckEditorFileName.lastIndexOf("."));
+	           String ckEditorImageFileName = ckEditorFileNameWithoutExt + "_original." + ext;
+	           String ckEditorFilePath = request.getServletContext().getRealPath("/resources/image/tr") + File.separator + ckEditorImageFileName;
+	           File ckEditorDest = new File(ckEditorFilePath);
+	           file.transferTo(ckEditorDest);
+
+	           // 원본 이미지 업로드
+	           String ckEditorImageUrl = imgur.requestUpload(Files.readAllBytes(ckEditorDest.toPath())); // 원본 이미지 업로드 서비스 호출 및 URL 받아오기
+
+	       }
+		
+		
+		
 		gpService.updateByIdx(vo);
 		return "redirect:/gp/main";
 	}
@@ -225,72 +239,31 @@ public class GpController {
 		return "redirect:/gp/main";
 	}
 	
-	@ResponseBody
-	@RequestMapping(value = "fileupload.do")
-	public void communityImageUpload(HttpServletRequest req, HttpServletResponse resp,
-			MultipartHttpServletRequest multiFile) throws Exception {
-		JsonObject jsonObject = new JsonObject();
-		PrintWriter printWriter = null;
-		OutputStream out = null;
-		MultipartFile file = multiFile.getFile("upload");
+	 @ResponseBody
+	   @RequestMapping(value = "fileupload.do")
+	   public String communityImageUpload(@RequestParam("upload") MultipartFile upload) {
+	      JsonObject jsonObject = new JsonObject();
 
-		if (file != null) {
-			if (file.getSize() > 0 && StringUtils.isNotBlank(file.getName())) {
-				if (file.getContentType().toLowerCase().startsWith("image/")) {
-					try {
+	      try {
+	         if (upload != null && !upload.isEmpty() && upload.getContentType().toLowerCase().startsWith("image/")) {
+	            Imgur imgurUploader = new Imgur();
+	            byte[] bytes = upload.getBytes();
 
-						String fileName = file.getOriginalFilename();
-						byte[] bytes = file.getBytes();
+	            // 이미지를 imgur에 업로드하고 URL 받아오기
+	            String imageUrl = imgurUploader.requestUpload(bytes);
 
-						String uploadPath = req.getSession().getServletContext().getRealPath("/resources/image/gp");
-						System.out.println("uploadPath: " + uploadPath);
+	            // CKEditor에 이미지 URL 반환
+	            jsonObject.addProperty("uploaded", 1);
+	            jsonObject.addProperty("url", imageUrl);
+	         }
+	      } catch (Exception e) {
+	         e.printStackTrace();
+	         // 업로드 실패 시 오류 반환
+	         jsonObject.addProperty("uploaded", 0);
+	         jsonObject.addProperty("error", "Failed to upload image");
+	      }
 
-						File uploadFile = new File(uploadPath);
-						if (!uploadFile.exists()) {
-							uploadFile.mkdir();
-						}
-						String fileName2 = UUID.randomUUID().toString();
-						uploadPath = uploadPath + "/" + fileName2 + fileName;
-
-						out = new FileOutputStream(new File(uploadPath));
-						out.write(bytes);
-
-						printWriter = resp.getWriter();
-						String fileUrl = req.getContextPath() + "/resources/image/gp/" + fileName2 + fileName; // url경로
-
-						System.out.println("fileUrl :" + fileUrl);
-
-						JsonObject json = new JsonObject();
-						json.addProperty("uploaded", 1);
-						json.addProperty("fileName", fileName);
-						json.addProperty("url", req.getContextPath() + "/resources/image/gp/" + fileName2 + fileName); // 파일명
-																														// 변경한
-																														// URL로
-																														// 설정
-						printWriter.print(json);
-						System.out.println(json);
-
-					} catch (IOException e) {
-						e.printStackTrace();
-						// 파일 업로드 실패 시 에러 응답
-						JsonObject errorJson = new JsonObject();
-						errorJson.addProperty("uploaded", 0);
-						errorJson.addProperty("error", "파일 업로드에 실패했습니다.");
-						printWriter.print(errorJson);
-					} finally {
-						// IO 자원 관리 - 닫아주기
-						if (out != null) {
-							out.close();
-						}
-						if (printWriter != null) {
-							printWriter.close();
-						}
-					}
-				}
-
-			}
-
-		}
-	}
+	      return jsonObject.toString();
+	   }
 	
 }

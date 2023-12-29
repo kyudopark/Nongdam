@@ -143,7 +143,7 @@
 			                <div class="col pb-4">
 			                    <a class="text-decoration-none moving-list" href="${li.gp_idx }">
 			                        <div class="card">
-			                            <img src="${contextPath }/resources/image/gp/${li.gp_thumb }" class="border-bottom rounded-2 bg-light w-100 object-fit-cover" height="200">
+			                            <img src="${li.gp_thumb }" class="border-bottom rounded-2 bg-light w-100 object-fit-cover" height="200">
 			                            <div class="card-body">
 			                                <h5 class="card-title title-overflow-3">
 			                                    ${li.gp_title}

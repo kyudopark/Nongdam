@@ -87,7 +87,7 @@
             <div class="row">
                 <!--썸네일-->
                 <div class="col-lg-7 col-12 p-0 bg-light" style="height: 300px;">
-                    <img src="${contextPath }/resources/image/gp/${vo.gp_thumb }" class="object-fit-cover w-100" style="height: 300px;">
+                    <img src="${vo.gp_thumb }" class="object-fit-cover w-100" style="height: 300px;">
                 </div>
                 <!--오른쪽-->
                 <div class="border-start col-lg-5 col-12 p-3">
