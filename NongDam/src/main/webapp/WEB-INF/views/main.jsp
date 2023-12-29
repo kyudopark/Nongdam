@@ -105,9 +105,16 @@
 				            <c:forEach var="gplist" items="${gplist}" varStatus="loop">
 				                <div class="carousel-item ${loop.first ? 'active' : ''}">
 				                    <div class="row p-3">
-				                        <img class="col-12 col-sm-6 bg-light object-fit-cover p-0"
-				                            style="height: 240px"
-				                            src="${contextPath }/resources/image/gp/${gplist.gp_thumb }" />
+					                    <c:if test="${empty gplist.gp_thumb }">
+					                        <img class="col-12 col-sm-6 bg-light object-fit-cover p-0"
+					                            style="height: 240px"
+					                            src="${contextPath }/resources/image/common/thumbnail.svg" />
+			                            </c:if>
+			                            <c:if test="${!empty gplist.gp_thumb }">
+					                        <img class="col-12 col-sm-6 bg-light object-fit-cover p-0"
+					                            style="height: 240px"
+					                            src="${gplist.gp_thumb }" />
+			                            </c:if>
 				                        <div class="col-12 col-sm-6 pt-3">
 				                            <p class="fw-bolder">상품명 : ${gplist.gp_title}</p>
 				                            <p class="title-overflow-6">신청 시작일 : <fmt:formatDate value="${gplist.gp_date_start }" pattern="YYYY-MM-dd "/></p>
