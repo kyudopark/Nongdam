@@ -74,8 +74,10 @@
 				let tr_comment_content = obj.tr_comment_content.replaceAll("\n", "<br/>");
 				//231206 포맷팅
 				date.setTime(obj.tr_comment_time);
-				fmtTime = date.toISOString().replace(/T/, ' ').replace(/\..+/, '');
+
 				
+				fmtTime = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate() + " " + String(date.getHours()).padStart(2, "0") + ":" + String(date.getMinutes()).padStart(2, "0"); 
+
 				commentList += "<div class='p-3 mt-3 mb-3 d-flex flex-nowrap gap-1'>";
 				// 답글여부
 				if(obj.tr_parent_idx != obj.tr_comment_idx){

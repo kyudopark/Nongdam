@@ -42,6 +42,7 @@
     
     <title>농담 | 농업 정보 커뮤니티</title>
     <script type="text/javascript">
+
 	var webSocket = new WebSocket('ws://localhost:8080/ezen/chat/user${uvo.user_idx}');
 
 	
@@ -75,7 +76,7 @@
                 <div class="fw-bold fs-5 d-flex gap-2 align-items-center">
                 	<!-- ~231222 laky -->
                     <i class="fa-solid fa-comments fa-xs" style="width: 18px;"></i>
-                    <div>채팅 리스트 ${uvo.user_name }</div>
+                    <div class="title-overflow-1"><span >${uvo.user_nickname }</span><span>님의 채팅 리스트</span></div>
                 </div>
                 
             </div>

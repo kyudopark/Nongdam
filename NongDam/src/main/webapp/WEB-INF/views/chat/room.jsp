@@ -271,7 +271,7 @@
                 <div class="dropdown">
                     <a class="text-secondary" href="#" 
                     role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                       <i class="fa-solid fa-bars"></i>
+                       <i class="fa-solid fa-ellipsis-vertical ps-2 pe-2"></i>
                     </a>
                   
                     <ul class="dropdown-menu dropdown-menu-end">

@@ -85,11 +85,6 @@ public class NaverLoginBO {
 	public String getDeleteApiURL(String access_token) {
 		//접근 토큰 갱신 / 삭제 요청시 access_token 값은 URL 인코딩해야만 한다.
 
-		// 로그인 연동해제를 할 경우 입력한 토큰이 유효한 토큰일 경우 정상적으로 연동해제가 됩니다. 
-		// 주의 하실 점은 토큰이 유효하지 않을 경우에도 결과가 'success'값으로 리턴되므로 
-		// 토큰이 유효한지 먼저 검증한 다음 유효한 토큰으로 갱신하여 연동해제 처리를 하시면 됩니다. 
-		// 연동해제를 확인하려면 delete token 이후, 기존 발급 refresh token을 이용하여
-		// 더이상 token refresh를 할 수 없을 경우 정상 연동해지가 되었다고 판단하시는 방법이 있습니다.
 		String apiURL;
 		apiURL ="https://nid.naver.com/oauth2.0/token?grant_type=delete&";
 		apiURL += "client_id=" + clientId;
@@ -125,16 +120,16 @@ public class NaverLoginBO {
         uvo.setUser_id(id);
         uvo.setUser_pw(id);
         uvo.setUser_nickname(nickname);
-        uvo.setUser_gender(gender);
+        if(gender == "F") {
+        	uvo.setUser_gender("0");
+        }else {
+        	uvo.setUser_gender("1");
+        }
         uvo.setUser_name(name);
         uvo.setUser_email(email);
         uvo.setUser_kakaologin("N");
         uvo.setUser_admin(false);
         
-        System.out.println("가져온 사람의 id:"+uvo.getUser_id());
-        System.out.println("가져온 사람의 이름:"+uvo.getUser_name());
-        System.out.println("가져온 사람의 이메일:"+uvo.getUser_email());
-        System.out.println("N?:"+uvo.getUser_kakaologin());
         return uvo;
 	}
 	private static String get(String apiUrl, Map<String, String> requestHeaders){
