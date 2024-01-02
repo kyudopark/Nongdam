@@ -1,10 +1,5 @@
 package kr.co.ezen.controller;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.co.ezen.entity.Criteria;
+import kr.co.ezen.entity.Free;
 import kr.co.ezen.entity.Gp;
-import kr.co.ezen.entity.GpUser;
 import kr.co.ezen.entity.Tr;
 import kr.co.ezen.entity.User;
 import kr.co.ezen.service.AdminService;
@@ -33,69 +28,55 @@ public class AdminController {
 	private AdminService adminService;
 	
 	
-		@RequestMapping("/main")
-		public String main(Model m, Gp gp, Tr tr, GpUser gpUser, @RequestParam(required = false) String selectedDate) {
-		    // 기본 기간 설정
-		    gp.setStartDate(parseDate("2023-07-19"));
-		    gp.setEndDate(parseDate("2024-01-17"));
-		    tr.setStartDate(parseDate("2023-07-19"));
-		    tr.setEndDate(parseDate("2024-01-17"));
-	
-		    // 선택한 날짜가 있을 경우 해당 날짜로 설정
-		    if (selectedDate != null) {
-		        Date selectedDateObj = parseDate(selectedDate);
-		        gp.setStartDate(selectedDateObj);
-		        gp.setEndDate(selectedDateObj);
-		        tr.setStartDate(selectedDateObj);
-		        tr.setEndDate(selectedDateObj);
-		    }
-	
-		    // 날짜 범위에 해당하는 라벨 생성
-		    List<String> dateLabels = generateDateLabels(gp.getStartDate(), gp.getEndDate());
-	
-		    // Retrieve and update counts
-		    gp.setGpCount(adminService.countGpAll(gp));
-		    tr.setTrCount(adminService.countTrAll(tr));
-		    gpUser.setGpUserCount(adminService.countGpUserAll(gpUser));
-	
-		    // 데이터를 Model에 추가
-		    m.addAttribute("gp", gp);
-		    m.addAttribute("tr", tr);
-		    m.addAttribute("gpUser", gpUser);
-		    m.addAttribute("labels", dateLabels);
-	
-		    // 뷰 페이지 경로 반환
-		    return "admin/main";
-		}
+	@RequestMapping("/main")
+	public String main(Model m, Gp gp, Tr tr, Free free, @RequestParam(name = "selectedDate", required = false) String selectedDate) {
+		
+		gp.setGpCount(adminService.countGpAll());
+		tr.setTrCount(adminService.countTrAll());
+		free.setFreeCount(adminService.countFreeAll());
 
-		private List<String> generateDateLabels(Date startDate, Date endDate) {
-		    // startDate와 endDate 사이의 날짜를 생성하여 List에 추가
-		    List<String> dateLabels = new ArrayList<>();
-		    Calendar calendar = Calendar.getInstance();
-		    calendar.setTime(startDate);
+		m.addAttribute("gp", gp);
+		m.addAttribute("tr", tr);
+		m.addAttribute("free", free);
+		
+		// 선택된 날짜가 없으면 기본 데이터만 가져옴
+	    if (selectedDate != null && !selectedDate.isEmpty()) {
+	        // 선택된 날짜에 대한 데이터 가져오기
+	        Map<String, Integer> dateCounts = adminService.getCountsByDate(selectedDate);
 
-		    while (!calendar.getTime().after(endDate)) {
-		        dateLabels.add(new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime()));
-		        calendar.add(Calendar.DAY_OF_MONTH, 1);
-		    }
-
-		    return dateLabels;
-		}
+	        // 새로운 데이터 추가
+	        m.addAttribute("gpCountByDate", dateCounts.get("gpCount"));
+	        m.addAttribute("trCountByDate", dateCounts.get("trCount"));
+	        m.addAttribute("freeCountByDate", dateCounts.get("freeCount"));
+	    }
+	    
+		return "admin/main";
+	}
 	
-		private Date parseDate(String dateStr) {
-		    try {
-		        return new SimpleDateFormat("yyyy-MM-dd").parse(dateStr);
-		    } catch (ParseException e) {
-		        e.printStackTrace();
-		        // 예외 처리 로직 추가
-		        return null;
-		    }
-		}
+	@RequestMapping("/getCountsByDate")
+	public @ResponseBody Map<String, Object> getCountsByDate(@RequestParam(name = "date") String date) {
+	    Map<String, Object> resultMap = new HashMap<>();
+
+	    // 기존의 데이터
+	    Map<String, Integer> baseCounts = adminService.getCountsByDate(date);
+	    resultMap.put("baseCounts", baseCounts);
+
+	    // 전일과 다음날 데이터 가져오기
+	    Map<String, Integer> minus1DayCounts = adminService.getCountsByDate(date, -1);
+	    resultMap.put("minus1DayCounts", minus1DayCounts);
+	    
+	    Map<String, Integer> plus1DayCounts = adminService.getCountsByDate(date, 1);
+	    resultMap.put("plus1DayCounts", plus1DayCounts);
+	    
+	    resultMap.put("selectedDate", date); // 추가된 부분
+
+	    return resultMap;
+	}
 	
 	@RequestMapping("/userManage")
 	public String findAll(Model m,Criteria cri){
 		if (cri.getKeyword() == null) {
-			cri.setKeyword("");
+			cri.setKeyword("");	
 		}
 		
 		List<User> li = adminService.findAll(cri);

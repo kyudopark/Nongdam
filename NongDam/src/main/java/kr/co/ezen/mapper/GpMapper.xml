@@ -22,7 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			parameterType="kr.co.ezen.entity.Criteria">
 			select gp_title, gp_date, gp_date_start, gp_date_last, user_idx, gp_idx, gp_thumb from gp natural join User
 			<include refid="search"/>
-			order by gp_idx
+			order by gp_date desc
 		 	limit #{pageStart}, #{perPageNum}	
 		</select> 
 		
