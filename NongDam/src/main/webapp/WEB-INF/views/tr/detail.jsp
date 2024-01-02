@@ -76,7 +76,7 @@
 				date.setTime(obj.tr_comment_time);
 
 				
-				fmtTime = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate() + " " + String(date.getHours()).padStart(2, "0") + ":" + String(date.getMinutes()).padStart(2, "0"); 
+				fmtTime = date.getFullYear() + "-" + String((date.getMonth()+1)).padStart(2, "0") + "-" + String(date.getDate()).padStart(2, "0") + " " + String(date.getHours()).padStart(2, "0") + ":" + String(date.getMinutes()).padStart(2, "0"); 
 
 				commentList += "<div class='p-3 mt-3 mb-3 d-flex flex-nowrap gap-1'>";
 				// 답글여부

@@ -43,7 +43,7 @@
     <title>농담 | 농업 정보 커뮤니티</title>
     <script type="text/javascript">
 
-	var webSocket = new WebSocket('ws://localhost:8080/ezen/chat/user${uvo.user_idx}');
+	var webSocket = new WebSocket('ws://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/chat/user${uvo.user_idx}');
 
 	
 	//============================================
@@ -52,19 +52,17 @@
 	}
 	webSocket.onclose = function(e){
 		console.log("웹소켓 서버가 종료되었습니다.");
+		alert("웹소켓 서버가 종료되었습니다. 새로고침 또는 로그인을 다시 해주세요.");
 	}
 	webSocket.onerror = function(e){
 		console.log(e);
-		alert("오류로 인해 웹소켓 서버가 종료되었습니다. 새로고침 또는 로그인을 다시 해주세요.");
 	}
 	webSocket.onmessage = function(event){
 		update();
 	}
-	
 	function update(){
 		location.reload(true);
 	}
-	
 	
 	</script>
 </head>
