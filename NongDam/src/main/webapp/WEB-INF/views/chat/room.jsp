@@ -43,7 +43,7 @@
   
     
     <script type="text/javascript">
-	var webSocket = new WebSocket('ws://localhost:8080/ezen/chat/${chatroom_idx}');
+	var webSocket = new WebSocket('ws://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/chat/${chatroom_idx}');
 	
 	var insertdate;
 	function dateupdate(chat_time){
@@ -235,7 +235,6 @@
 		findlastuser(data.user_idx);
 		scroll();
 	}
-	
 	
 	</script>
     
