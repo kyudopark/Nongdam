@@ -152,12 +152,13 @@ $(document).ready(function () {
 	
  	// 버튼 클릭 시 차트 다시 그리기
     $("#refreshChartBtn").click(function () {
+    	myChart.destroy();
         createInitialChart();
     });
 
  	// 회원가입 방식 차트 다시 그리기
-    $("#refreshSignupMethodChartBtn").click(function () {
-        refreshSignupMethodChart();
+    $("#getCountBySignupMethod").click(function () {
+    	getCountBySignupMethod();
     });
  
     // 초기 차트 생성
@@ -249,7 +250,7 @@ $(document).ready(function () {
     		);
  	}
  
-    function refreshSignupMethodChart() {
+    function getCountBySignupMethod() {
         // 서버에 count 데이터 요청
         $.ajax({
             url: "${contextPath}/admin/getCountBySignupMethod",
@@ -345,7 +346,7 @@ $(document).ready(function () {
 								        </div>
 								        <div class="col-12 mt-2 text-center">
 								            <button id="refreshChartBtn" class="btn btn-primary">게시글 전체통계</button>
-								            <button id="refreshSignupMethodChartBtn" class="btn btn-primary" onclick="refreshSignupMethodChart()">회원가입 방식</button>
+								            <button id="getCountBySignupMethod" class="btn btn-primary" onclick="getCountBySignupMethod()">회원가입 방식</button>
 								        </div>
 								    </div>
 								</div>
