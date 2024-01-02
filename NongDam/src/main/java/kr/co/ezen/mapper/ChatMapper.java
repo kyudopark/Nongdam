@@ -2,8 +2,6 @@ package kr.co.ezen.mapper;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import kr.co.ezen.entity.Chat;
 import kr.co.ezen.entity.ChatRoom;
 
