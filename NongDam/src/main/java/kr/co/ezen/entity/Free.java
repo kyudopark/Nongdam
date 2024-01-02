@@ -23,6 +23,7 @@ public class Free {
 	//조인
 	
 	private String user_nickname;
+	private int freeCount;
 
 }
 
