@@ -24,4 +24,5 @@ public interface AdminService {
 	public Map<String, Integer> getCountsByDate(String date);
 	public Map<String, Integer> getCountsByDate(String date, int daysToAddOrSubtract);
 	public String getSelectedDate(String date, int daysToAddOrSubtract);
+	public Map<String, Long> getCountBySignupMethod();
 }

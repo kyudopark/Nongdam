@@ -56,6 +56,10 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <meta name="농담" content="안녕하세요, 농업 정보 커뮤니티 농담입니다." />
+    
+    <!-- bannerText.js -->
+    <script type="text/javascript"
+	src="${contextPath }/resources/common/js/admin/bannerText.js"></script>
 
     <!-- 파비콘 -->
     <link rel="icon" type="image/x-icon"
@@ -64,6 +68,13 @@
         href="${contextPath }/resources/image/common/favicon.ico" />
 
     <title>농담 | 농업 정보 커뮤니티</title>
+    
+    <style>
+    .ui-datepicker {
+		margin-left : auto;
+		margin-right: auto;
+		}
+    </style>
 
     <script type="text/javascript">
 $(document).ready(function () {
@@ -88,13 +99,6 @@ $(document).ready(function () {
                     'rgba(255, 206, 86, 1)'
                 ],
                 borderWidth: 1
-            }, {
-                label: '새로운 차트 데이터 (line)',
-                data: [0, 0, 0], // 초기 데이터 (0 또는 다른 기본값으로 설정)
-                type: 'line',
-                fill: false,
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 2
             }]
         };
 
@@ -114,6 +118,7 @@ $(document).ready(function () {
                 }
             }
         });
+        $("#chartDataInput").val("공동구매 게시판 게시글 총 갯수 : " + ${gp.gpCount} + "개, 1:1거래 게시판 총 게시글 수 : " + ${tr.trCount} + "개, 자유 게시판 총 게시글 수 : " + ${free.freeCount} +"개");
     }
 
     // datepicker 초기화
@@ -128,9 +133,33 @@ $(document).ready(function () {
             // 선택한 날짜를 컨트롤러로 전달하고 +3일, -3일의 범위에 있는 데이터를 가져와 차트 갱신
             var formattedDate = $.datepicker.formatDate('yy-mm-dd', new Date(dateText));
             updateChartData(formattedDate);
+        },
+        beforeShow: function (input, inst) {
+            var windowWidth = $(window).width();
+            var isMobile = windowWidth <= 767; // 예제에서는 767px 이하는 모바일로 간주
+
+            if (isMobile) {
+                inst.dpDiv.css({
+                    'position': 'absolute',
+                    'top': '50%',
+                    'left': '50%',
+                    'transform': 'translate(-50%, -50%)',
+                    'max-width': '100%'
+                });
+            }
         }
     });
+	
+ 	// 버튼 클릭 시 차트 다시 그리기
+    $("#refreshChartBtn").click(function () {
+        createInitialChart();
+    });
 
+ 	// 회원가입 방식 차트 다시 그리기
+    $("#refreshSignupMethodChartBtn").click(function () {
+        refreshSignupMethodChart();
+    });
+ 
     // 초기 차트 생성
     createInitialChart();
 
@@ -195,9 +224,10 @@ $(document).ready(function () {
                                             }
                                         }
                                     ]
-                                }
+                                },
                             }
                         });
+                        displayChartData(plusMinusData);
                     },
                     error: function (error) {
                         console.log("Error fetching plus/minus data:", error);
@@ -209,6 +239,49 @@ $(document).ready(function () {
             }
         });
     }
+    
+ // 데이터를 표시하는 함수 추가
+    function displayChartData(plusMinusData) {
+    	$("#chartDataInput").val(
+    		    "1:1 거래 - " + plusMinusData.minus1DayCounts.trCount + "개, " + plusMinusData.baseCounts.trCount + "개, " + plusMinusData.plus1DayCounts.trCount + "개 " +
+    		    "\n공동구매 - " + plusMinusData.minus1DayCounts.gpCount + "개, " + plusMinusData.baseCounts.gpCount + "개, " + plusMinusData.plus1DayCounts.gpCount + "개 " +
+    		    "\n자유 - " + plusMinusData.minus1DayCounts.freeCount + "개, " + plusMinusData.baseCounts.freeCount + "개, " + plusMinusData.plus1DayCounts.freeCount + "개"
+    		);
+ 	}
+ 
+    function refreshSignupMethodChart() {
+        // 서버에 count 데이터 요청
+        $.ajax({
+            url: "${contextPath}/admin/getCountBySignupMethod",
+            type: "GET",
+            success: function (data) {
+            	console.log(data);  // Log the data to the console for inspection
+                myChart.destroy();
+
+                // 'doughnut' 차트 데이터 생성
+                var newData = {
+                    labels: ['자체 회원가입', '소셜 로그인'],
+                    datasets: [{
+                        data: Object.values(data),
+                        backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)'],
+                        borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'],
+                        borderWidth: 1
+                    }]
+                };
+
+                // 새로운 'doughnut' 차트 생성
+                myChart = new Chart(context, {
+                    type: 'doughnut',
+                    data: newData
+                });
+                $("#chartDataInput").val("자체 회원가입: " + data.nullCount + "개, 소셜 로그인: " + data.notNullCount + "개");
+            },
+            error: function (error) {
+                console.log("Error fetching signup method data:", error);
+            }
+        });
+    }
+    
 });
 </script>
 
@@ -237,7 +310,7 @@ $(document).ready(function () {
                                 <div class="accordion-body p-0">
                                     <ul class="list-group list-group-flush rounded-bottom-2">
                                         <li class="list-group-item  bg-body-secondary">
-                                            <a class="text-decoration-none text-body" href="${contextPath }/admin/main">관리자페이지 메인</a>
+                                            <a class="text-decoration-none text-body" href="${contextPath }/admin/main">홈페이지 통계</a>
                                         </li>
                                         <li class="list-group-item">
                                             <a class="text-decoration-none text-body" href="${contextPath }/admin/userManage">회원정보 관리</a>
@@ -251,37 +324,41 @@ $(document).ready(function () {
                 <!-- 왼쪽 메뉴바 ========================================= -->
                 <!-- 오른쪽 내용 -->
                 <div class="col-12 col-md-9">
-                    <div class="container">
-                        <div class="border rounded-2 p-4 container">
-                            <!-- 차트와 짧은 텍스트 -->
-                            <div class="row">
-                                <!-- 차트 -->
-                                <div class="col-md-7">
-                                    <canvas id="myChart" width="500" height="350" role="img"></canvas>
+                	<h4 class="ms-2 mb-4 text-body-secondary">
+								<i class="fa-solid fa-chart-pie"></i> 게시글 전체 통계 / 일별 작성 게시글 통계 / 소셜 / 비소셜 로그인 비율 
+							</h4>
+		            <div class="container">
+		                <div class="border rounded-2 p-4 container">
+		                    <!-- 차트와 짧은 텍스트 -->
+		                    <div class="row">
+		                        <!-- 차트 -->
+		                        <div class="col-md-8">
+								    <canvas id="myChart" class="w-100" role="img"></canvas>
+								</div>
+								<div class="border-start col-md-4">
+								    <div class="row mt-4 justify-content-center">
+								        <div class="col-12 text-center">
+								            <form method="get">
+								                <label for="datepicker" class="form-label">날짜 선택</label>
+								            </form>
+								            <div id="datepicker"></div>
+								        </div>
+								        <div class="col-12 mt-2 text-center">
+								            <button id="refreshChartBtn" class="btn btn-primary">게시글 전체통계</button>
+								            <button id="refreshSignupMethodChartBtn" class="btn btn-primary" onclick="refreshSignupMethodChart()">회원가입 방식</button>
+								        </div>
+								    </div>
+								</div>
+								<div class="col-md-12 mt-4">
+									<div class="mb-3">
+							            <label for="chartDataInput" class="form-label">차트 Data 값 :</label>
+							            <input type="text" id="chartDataInput" class="form-control" readonly>
+							        </div>
                                 </div>
-                                <!-- 짧은 텍스트 -->
-                                <div class="border-start col-md-4">
-                                    <div class="row mt-4">
-                                        <div class="col-12">
-                                            <form method="get">
-                                                날짜 선택
-                                            </form>
-                                            <div id="datepicker"></div>
-										</div>
-                                    </div>
-                                </div>
-                                <!-- 긴 텍스트 입력 폼 -->
-                                <div class="col-md-12 mt-4">
-                                    <div class="mb-3">
-                                        <span for="Count1" class="form-label">1:1 거래 게시판 게시글 수 : ${gp.gpCount }</span><br>
-        								<span for="Count2" class="form-label">공동구매 게시판 게시글 수 : ${tr.trCount }</span><br>
-        								<span for="Count3" class="form-label">자유 게시판 게시글 수 : ${free.freeCount }</span><br>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
             </div>
         </div>
         <!-- 마이페이지 끝 -->

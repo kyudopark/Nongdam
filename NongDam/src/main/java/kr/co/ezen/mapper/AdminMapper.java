@@ -35,4 +35,7 @@ public interface AdminMapper {
 
     // 자유 게시글 날짜별 count 쿼리
 	public Map<String, Object> selectFreeCountsByDate(String date);
+	
+	 // 'user_kakaologin' 값에 따른 회원가입 방식별 count 가져오기
+	public Map<String, Long> getCountBySignupMethod();
 }

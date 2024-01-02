@@ -86,4 +86,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	        (SELECT COUNT(*) FROM free WHERE DATE(free_date) = #{date} + INTERVAL 1 DAY) AS count_plus_1_day
 	</select>
 	
+	<select id="getCountBySignupMethod" resultType="map">
+	    SELECT 
+	        COUNT(CASE WHEN user_kakaologin IS NULL THEN 1 END) AS nullCount,
+	        COUNT(CASE WHEN user_kakaologin IS NOT NULL THEN 1 END) AS notNullCount
+	    FROM User;
+	</select>
+	
 </mapper>

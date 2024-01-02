@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -72,6 +73,19 @@ public class AdminController {
 
 	    return resultMap;
 	}
+	
+	@GetMapping("/getCountBySignupMethod")
+	@ResponseBody
+	public Map<String, Object> getCountBySignupMethod() {
+	    Map<String, Object> result = new HashMap<>();
+	    Map<String, Long> counts = adminService.getCountBySignupMethod();
+
+	    // null 값에 대한 처리 추가
+	    counts.forEach((key, value) -> result.put(key, value != null ? value.intValue() : null));
+
+	    return result;
+	}
+	
 	
 	@RequestMapping("/userManage")
 	public String findAll(Model m,Criteria cri){

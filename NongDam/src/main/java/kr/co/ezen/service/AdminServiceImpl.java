@@ -111,4 +111,9 @@ public class AdminServiceImpl  implements AdminService{
         return selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 	
+	@Override
+	public Map<String, Long> getCountBySignupMethod() {
+	    return adminMapper.getCountBySignupMethod();
+	}
+	 
 }
