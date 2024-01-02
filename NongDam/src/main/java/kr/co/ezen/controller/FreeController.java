@@ -26,6 +26,7 @@ import kr.co.ezen.entity.Free;
 import kr.co.ezen.entity.FreeComment;
 import kr.co.ezen.entity.FreeHeart;
 import kr.co.ezen.entity.PageCre;
+import kr.co.ezen.entity.TrComment;
 import kr.co.ezen.mapper.FreeMapper;
 import kr.co.ezen.service.FreeService;
 
@@ -119,10 +120,6 @@ public class FreeController {
 		    return "free/write";
 		}
 
-		@GetMapping("insert")
-		public String checkinsert() {
-		    return "free/modify";
-		}
 
 		@PostMapping("/write")
 		public String write(Free fr, @RequestParam(required = false) Integer user_idx) {
@@ -134,7 +131,7 @@ public class FreeController {
 		@GetMapping("deleteByIdx")
 		public String deleteByIdx(@RequestParam("free_idx") int free_idx, Criteria cri, RedirectAttributes rttr) {
 		    freeservice.deleteByIdx(free_idx);
-		    freeservice.deleteCommentByfree_idx(free_idx);
+		    freeservice.deleteCommentByFree_idx(free_idx);
 		    return "redirect:/free/main";
 		}
 
@@ -151,47 +148,42 @@ public class FreeController {
 		    return "redirect:/free/main";
 		}
 		
-		//좋아요 관련
 
-		@PostMapping("likeUp")
-		@ResponseBody
-		public void likeUp(FreeHeart he) {
-			freeservice.likeUp(he);
-		}
 		
-		@PostMapping("likedown")
-		@ResponseBody
-		public void likedown(FreeHeart he) {
-			freeservice.likeDown(he);
-		}
-		
-	//댓글 관련 controller
-	
+	//======================================
+
+	// 231206 ---> 240102 댓글 tr에서 free로 넘기는작업
 	@PostMapping("/insertComment")
-	public @ResponseBody void insertComment(FreeComment comm) {
-		freeservice.insertComment(comm);
+	public @ResponseBody void insertComment(FreeComment cvo) {
+		freeservice.insertComment(cvo);
 	}
-	@GetMapping("/findAllComment")
-	public @ResponseBody List<FreeComment> findAllComment(int free_idx){
-		List<FreeComment> dev = freeservice.findAllComment(free_idx);
-		return dev;
+
+	@GetMapping("/getComment")
+	public @ResponseBody List<FreeComment> getComment(int free_idx) {
+		List<FreeComment> cvo = freeservice.findAllComment(free_idx);
+		return cvo;
 	}
-		
-	@PostMapping("/deleteCommentByIdx") 
+
+	@PostMapping("/deleteByIdx")
+	public @ResponseBody void deleteByIdx(int free_idx) {
+		freeservice.deleteByIdx(free_idx);
+		freeservice.deleteCommentByFree_idx(free_idx);
+	}
+
+	@PostMapping("/deleteCommentByIdx")
 	public @ResponseBody void deleteCommentByIdx(int free_comment_idx) {
 		freeservice.deleteCommentByIdx(free_comment_idx);
-}
-	
-	@PostMapping("/updateComment") 
-	public @ResponseBody void updateComment(FreeComment vo) {
-		freeservice.updateCommentByIdx(vo);
 	}
-	
+
 	@PostMapping("/insertReplyComment")
 	public @ResponseBody void insertReplyComment(FreeComment vo) {
-		
 		freeservice.insertReplyComment(vo);
-		System.out.println(vo.getFree_comment_content());
 	}
+
+	@PostMapping("/updateComment")
+	public @ResponseBody void updateComment(FreeComment cvo) {
+		freeservice.updateCommentByIdx(cvo);
+	}
+	//========================================================
 }
 

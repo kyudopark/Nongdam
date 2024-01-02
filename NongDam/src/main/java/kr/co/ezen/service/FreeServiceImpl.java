@@ -99,63 +99,39 @@ public class FreeServiceImpl implements FreeService {
 	}
 
 	
+	//====================
+	@Override
+	public List<FreeComment> findAllComment(int tr_idx) {
+		List<FreeComment> cvo = freemapper.findAllComment(tr_idx);
+		return cvo;
+	}
 
 	@Override
-	public List<FreeComment> findAllComment(int free_idx) {
-		List<FreeComment> dev=freemapper.findAllComment(free_idx);
-		return dev;
+	public void updateCommentByIdx(FreeComment cvo) {
+		freemapper.updateCommentByIdx(cvo);
 	}
+
+	@Override
+	public void deleteCommentByIdx(int tr_comment_idx) {
+		freemapper.deleteCommentByIdx(tr_comment_idx);
+	}
+
+	@Override
+	public void deleteCommentByFree_idx(int free_idx) {
+		freemapper.deleteByIdx(free_idx);
+	}
+
+	@Override
+	public void insertComment(FreeComment cvo) {
+		freemapper.insertComment(cvo);
+	}
+
+	@Override
+	public void insertReplyComment(FreeComment cvo) {
+		freemapper.insertReplyComment(cvo);
+	}
+	//========================================
 	
-	@Override
-	public void insertReplyComment(FreeComment vo) {
-		freemapper.insertReplyComment(vo);
-		
-	}
-	@Override
-	public void updateCommentByIdx(FreeComment vo) {
-		freemapper.updateCommentByIdx(vo);
-		
-	}
-
-
-	@Override
-	public void deleteCommentByIdx(int free_comment_idx) {
-		freemapper.deleteCommentByIdx(free_comment_idx);
-		
-	}
-
-
-	@Override
-	public void deleteCommentByfree_idx(int free_idx) {
-		freemapper.deleteCommentByIdx(free_idx);
-		
-	}
-
-
-	@Override
-	public void insertComment(FreeComment vo) {
-		freemapper.insertComment(vo);
-		
-	}
-	
-	//좋아요 
-
-
-	@Override
-	public int findLike(int free_idx, int user_idx) {
-		return freemapper.findLike(free_idx, user_idx);
-	}
-
-	@Override
-	public void likeUp(FreeHeart he) {
-		freemapper.likeUp(he);
-	}
-
-	@Override
-	public void likeDown(FreeHeart he) {
-		freemapper.likeDown(he);
-	}
-
 
 	
 }

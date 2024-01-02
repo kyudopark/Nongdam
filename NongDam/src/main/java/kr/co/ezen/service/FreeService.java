@@ -38,17 +38,12 @@ public interface FreeService {
 	public List<Free> findBydate(Criteria cri);
 	public List<Free> findBycount(Criteria cri);
 	
-	//좋아요 
-	public int findLike(int free_idx, int user_idx);
-	public void likeUp(FreeHeart he);
-	public void likeDown(FreeHeart he);
-
-	public List<FreeComment> findAllComment(int free_idx);
-	public void insertComment(FreeComment vo);
-	public void insertReplyComment(FreeComment vo);
-	public void updateCommentByIdx(FreeComment vo);
-	public void deleteCommentByfree_idx(int free_idx);
+	//댓글===================================
+	public List<FreeComment> findAllComment(int tr_idx);
+	public void updateCommentByIdx(FreeComment cvo);
 	public void deleteCommentByIdx(int free_comment_idx);
-	
-	
+	public void deleteCommentByFree_idx(int free_idx);
+	public void insertComment(FreeComment cvo);
+	public void insertReplyComment(FreeComment cvo);
+	//======================================
 }

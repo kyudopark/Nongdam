@@ -109,57 +109,40 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	
 
-	<!-- 댓글 -->
-	
-	<select id="findAllComment" parameterType="int"
-		resultType="kr.co.ezen.entity.FreeComment">
-			select free_parent_idx,free_comment_idx,user_idx,user_nickname,free_comment_time,free_comment_content,free_comment_useable
-			from freeComment natural join User where free_idx=#{free_idx}
-
-			order by free_parent_idx desc, free_comment_idx
-		</select> <!-- freeComment와 User조인 free_idx와 일치하는 값을 가지고 온다. -->
-	
-	<insert id="insertComment" parameterType="kr.co.ezen.entity.FreeComment">
-			<selectKey order="BEFORE" keyProperty="free_parent_idx" resultType="int">
-				select IFNULL(max(free_comment_idx)+1,1) as free_parent_idx from freeComment
-			</selectKey><!-- select key값을 가지고 온다. free_parent_idx의 새로운 값을 들고오기 위함.  -->
-			insert into freeComment (free_idx,free_parent_idx,user_idx,free_comment_content,free_comment_useable) 
-			values (#{free_idx},#{free_parent_idx},#{user_idx},#{free_comment_content},1)
-		</insert> <!-- freeComment테이블에 데이터 추가 -->
-	
-	<delete id="deleteCommentByIdx" parameterType="int">
-		update freeComment set free_comment_useable=0 where free_comment_idx=#{free_comment_idx}
-	</delete> <!-- comment_idx값과 일치하는 댓글만 삭제 -->
-	
-	<delete id="deleteCommentByFree_idx" parameterType="int">
-		delete from free_comment where free_idx=#{free_idx}
-	</delete> <!--free_idx값과 일치하는 모든 댓글 삭제 -->
-	
-	<update id="updateCommentByIdx" parameterType="kr.co.ezen.entity.FreeComment">
-			update freeComment set free_comment_content=#{free_comment_content}
-			where free_comment_idx=#{free_comment_idx}
-	</update>
+		<!-- 댓글 -->
+		
+		<select id="findAllComment" parameterType="int"
+			resultType="kr.co.ezen.entity.FreeComment">
+				select free_parent_idx,free_comment_idx,user_idx,user_nickname,free_comment_time,free_comment_content,free_comment_useable
+				from freeComment natural join User where free_idx=#{free_idx}
+				order by free_parent_idx desc, free_comment_idx
+		</select>
+		
+		<insert id="insertComment" parameterType="kr.co.ezen.entity.FreeComment">
+				<selectKey order="BEFORE" keyProperty="free_parent_idx" resultType="int">
+					select IFNULL(max(free_comment_idx)+1,1) as free_parent_idx from freeComment
+				</selectKey>
+				insert into freeComment (free_idx,free_parent_idx,user_idx,free_comment_content,free_comment_useable) 
+				values (#{free_idx},#{free_parent_idx},#{user_idx},#{free_comment_content},1)
+		</insert> 
+		
+		<delete id="deleteCommentByIdx" parameterType="int">
+			update freeComment set free_comment_useable=0 where free_comment_idx=#{free_comment_idx}
+		</delete> 
+		
+		<delete id="deleteCommentByFree_idx" parameterType="int">
+			delete from free_comment where free_idx=#{free_idx}
+		</delete> 
+		
+		<update id="updateCommentByIdx" parameterType="kr.co.ezen.entity.FreeComment">
+				update freeComment set free_comment_content=#{free_comment_content}
+				where free_comment_idx=#{free_comment_idx}
+		</update>
 	
 		<insert id="insertReplyComment" parameterType="kr.co.ezen.entity.FreeComment">
 			insert into freeComment (free_idx,free_parent_idx,user_idx,free_comment_content,free_comment_useable) 
 			values (#{free_idx},#{free_parent_idx},#{user_idx},#{free_comment_content},1)
 		</insert>
-	<!-- 추천 관련 기능 -->
-	
-	<!-- 좋아요를 눌렀는가 누르지 않았는가 -->
-	<select id="findLike" resultType="int">
-		select count(*) from freeHeart user_idx natural join User where free_idx = #{free_idx} and user_idx = #{user_idx}
-	</select>
-	
-	<!-- 좋아요 증가 -->
-	<insert id="likeUp" parameterType="kr.co.ezen.entity.FreeHeart">
-		insert into freeHeart (free_up_like,free_idx, user_idx, free_up_cont )
-		values((select * from (select max(free_up_like)+1 from freeHeart) next), #{free_idx},#{user_idx},1)
-	</insert>
-	<!-- 좋아요 정보 삭제 -->
-	 <delete id="likeDown">
-	  	delete from freeHeart where free_idx = #{free_idx} and user_idx = #{user_idx} 
-	  </delete>
-	
+
 	</mapper>
 	

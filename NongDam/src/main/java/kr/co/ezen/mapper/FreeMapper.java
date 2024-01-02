@@ -6,8 +6,6 @@ import java.util.List;
 import kr.co.ezen.entity.Criteria;
 import kr.co.ezen.entity.Free;
 import kr.co.ezen.entity.FreeComment;
-import kr.co.ezen.entity.FreeHeart;
-import kr.co.ezen.entity.TrComment;
 
 public interface FreeMapper {
 	
@@ -28,19 +26,17 @@ public interface FreeMapper {
 	public List<Free> findBycountfr(Criteria cri);
 	public List<Free> findBycountqu(Criteria cri);
 	
-	//댓글
+	//-------댓글-------------------------
+	
 	public List<FreeComment> findAllComment(int free_idx);
-	public void insertComment(FreeComment vo);
-	public void insertReplyComment(FreeComment vo);
-	public void updateCommentByIdx(FreeComment vo);
-	public void deleteCommentByfree_idx(int free_idx);
+	public void updateCommentByIdx(FreeComment cvo);
 	public void deleteCommentByIdx(int free_comment_idx);
+	public void deleteCommentByFree_idx(int free_idx);
+	public void insertComment(FreeComment cvo);
+	public void insertReplyComment(FreeComment cvo);
+		
 	
-	//좋아요 기능 
-	
-	public int findLike(int free_idx, int user_idx);
-	public void likeUp(FreeHeart he);
-	public void likeDown(FreeHeart he);
+
 	
 	
 	
