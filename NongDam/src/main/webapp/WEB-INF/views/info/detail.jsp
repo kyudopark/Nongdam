@@ -79,7 +79,7 @@
 	<!-- 글 조회 div container-->
     <div class="container mt-5 mb-5">
         <div class="pt-3 pb-3">
-             <a class="text-muted " href="${contextPath}/free/main"">목록으로</a>
+             <a class="text-muted " href="${contextPath}/info/main"">목록으로</a>
         </div>
         <!-- 글 제목 -->
         <div class="border-bottom">

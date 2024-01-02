@@ -73,11 +73,13 @@ $(document).ready(function() {
 </script>
 
 <body>
+<jsp:include page="../common/header.jsp"/>
+	<jsp:include page="../common/banner.jsp"/>
 
     <!-- 글 작성 div container-->
     <div class="container mt-5 mb-5">
         <h4 class="mt-5 mb-5"> 게시글 수정</h4>
-        <form method="post">
+        <form method="post" id="modify">
 
             <!-- 말머리 있는 버전 -->
             <div class="row">

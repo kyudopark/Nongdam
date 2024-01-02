@@ -104,7 +104,7 @@
                         <!-- 필요한 경우 button을 a 태그로 바꾸어도 괜찮습니다. (단, a태그로 바꾸는 경우 type=button 삭제하세요 )-->
                <a href= "/ezen/info/main?tag=" class="nav-link text-body active" role="tab" aria-controls="nav-home" aria-selected="true">전체</a>
                <a href="/ezen/info/main?tag=new" class="nav-link text-body" role="tab" aria-controls="nav-profile" aria-selected="true">신규</a>
-               <a href="/ezen/info/main?tag=tenure" class="nav-link text-body" role="tab" aria-controls="nav-contact" aria-selected="true">종사자</a>
+               <a href="/ezen/info/main?tag=tenure" class="nav-link text-body" role="tab" aria-controls="nav-contact" aria-selected="true">현직</a>
           </div>
       </nav>
         

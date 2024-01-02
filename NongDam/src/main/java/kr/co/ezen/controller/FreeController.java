@@ -125,9 +125,9 @@ public class FreeController {
 		}
 
 		@PostMapping("/write")
-		public String write(Free fr, @RequestParam(required = false) Integer user_idx) {
-		    fr.setUser_idx(user_idx); // Free 객체에 user_idx 값을 설정해줘야 함
-		    freeservice.insert(fr);
+		public String write(Free vo, @RequestParam(required = false) Integer user_idx) {
+		    vo.setUser_idx(user_idx); // Free 객체에 user_idx 값을 설정해줘야 함
+		    freeservice.insert(vo);
 		    return "redirect:/free/main";
 		}	
 

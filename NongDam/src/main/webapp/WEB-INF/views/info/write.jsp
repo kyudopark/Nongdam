@@ -65,7 +65,7 @@
     <!-- 글 작성 div container-->
     <div class="container mt-5 mb-5">
         <h4 class="mt-5 mb-5"> 게시글 작성</h4>
-       <form method="post" id="write">
+       <form method="post" id="write" enctype="multipart/form-data">
         <input type="hidden" name="user_idx" value="${uvo.user_idx }">
 
          
@@ -98,14 +98,20 @@
                     <p></p>
                 </textarea>
                 <!-- 스크립트문. 항상 에디터 박스 바로 뒤에 놓을 것-->
-                <script>
-                    ClassicEditor
-                        .create( document.querySelector( '#editor' ) )
-                        .catch( error => {
-                            console.error( error );
-                    });
-                    
-                </script>
+<script>
+        ClassicEditor
+            .create(document.querySelector('#editor'), {
+                ckfinder: {
+                    uploadUrl: 'fileupload.do' 
+                }
+            })
+            .then(editor => {
+                console.log('Editor was initialized', editor);
+            })
+            .catch(error => {
+                console.error('There was an error initializing the editor', error);
+            });
+    </script>
             </div>
             
             <!-- 글 작성하기 버튼-->
@@ -128,6 +134,8 @@
         });
     });
 </script>
+
+
     <!-- ============================================== -->
 
 </body>

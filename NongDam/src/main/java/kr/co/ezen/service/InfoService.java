@@ -21,7 +21,7 @@ public interface InfoService {
 	//삭제
 	public void deleteByIdx(int info_idx);
 	//수정
-	public void Modify(Info In);
+	public void updateByIdx(Info vo);
 	//태그
 	public List<Info> findnew(Criteria cri);
 	public List<Info> findtenure(Criteria cri);

@@ -51,8 +51,8 @@ public class InfoServiceImpl implements InfoService {
 	}
 
 	@Override
-	public void Modify(Info In) {
-		infomapper.Modify(In);
+	public void updateByIdx(Info vo) {
+		infomapper.updateByIdx(vo);
 		
 	}
 

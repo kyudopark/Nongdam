@@ -14,7 +14,7 @@ public interface InfoMapper {
 	public int totalCount(Criteria cre);
 	public void updatecnt(int info_idx);
 	public void deleteByIdx(int info_idx);
-	public void updaetByIdx(Info In);
+	public void updateByIdx(Info vo);
 	public void Modify(Info In);
 	public List<Info> findnew(Criteria cri);
 	public List<Info> findtenure(Criteria cri);
