@@ -88,13 +88,6 @@ $(document).ready(function () {
                     'rgba(255, 206, 86, 1)'
                 ],
                 borderWidth: 1
-            }, {
-                label: '새로운 차트 데이터 (line)',
-                data: [0, 0, 0], // 초기 데이터 (0 또는 다른 기본값으로 설정)
-                type: 'line',
-                fill: false,
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 2
             }]
         };
 
