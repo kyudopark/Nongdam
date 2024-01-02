@@ -102,30 +102,29 @@
 				    </p>
 				    <div id="carouselExample" class="carousel carousel-dark slide" data-bs-ride="carousel">
 				        <div class="carousel-inner">
-				            <c:forEach var="gplist" items="${gplist}" varStatus="loop">
-				                <div class="carousel-item ${loop.first ? 'active' : ''}">
-				                    <div class="row p-3">
-					                    <c:if test="${empty gplist.gp_thumb }">
-					                        <img class="col-12 col-sm-6 bg-light object-fit-cover p-0"
-					                            style="height: 240px"
-					                            src="${contextPath }/resources/image/common/thumbnail.svg" />
-			                            </c:if>
-			                            <c:if test="${!empty gplist.gp_thumb }">
-					                        <img class="col-12 col-sm-6 bg-light object-fit-cover p-0"
-					                            style="height: 240px"
-					                            src="${gplist.gp_thumb }" />
-			                            </c:if>
-				                        <div class="col-12 col-sm-6 pt-3">
-				                            <p class="fw-bolder">상품명 : ${gplist.gp_title}</p>
-				                            <p class="title-overflow-6">신청 시작일 : <fmt:formatDate value="${gplist.gp_date_start }" pattern="YYYY-MM-dd "/></p>
-				                            <p class="title-overflow-6">신청 마감일 : <fmt:formatDate value="${gplist.gp_date_last }" pattern="YYYY-MM-dd "/></p>
-				                            <p class="title-overflow-6">신청 가격 : ${gplist.gp_price }</p>
-				                            <a class="btn btn-outline-secondary" href="${contextPath }/gp/detail?gp_idx=${gplist.gp_idx}">게시글 더보기</a>
-				                        </div>
-				                    </div>
-				                </div>
-				            </c:forEach>
-				        </div>
+						    <c:forEach var="gplist" items="${gplist}" varStatus="loop">
+						        <div class="carousel-item ${loop.first ? 'active' : ''}">
+						            <div class="row p-3">
+						                <a href="${contextPath}/gp/detail?gp_idx=${gplist.gp_idx}" class="d-flex flex-column col-12 col-sm-6 bg-light object-fit-cover p-0" style="height: 240px">
+						                    <c:choose>
+						                        <c:when test="${empty gplist.gp_thumb }">
+						                            <img src="${contextPath }/resources/image/common/thumbnail.svg" class="w-100 h-100"/>
+						                        </c:when>
+						                        <c:otherwise>
+						                            <img src="${gplist.gp_thumb }" class="w-100 h-100"/>
+						                        </c:otherwise>
+						                    </c:choose>
+						                </a>
+						                <div class="col-12 col-sm-6 pt-3">
+						                    <p class="fw-bolder">상품명 : ${gplist.gp_title}</p>
+						                    <p class="title-overflow-6">신청 시작일 : <fmt:formatDate value="${gplist.gp_date_start }" pattern="YYYY-MM-dd "/></p>
+						                    <p class="title-overflow-6">신청 마감일 : <fmt:formatDate value="${gplist.gp_date_last }" pattern="YYYY-MM-dd "/></p>
+						                    <p class="title-overflow-6">신청 가격 : <fmt:formatNumber type="number" maxFractionDigits="3" value="${gplist.gp_price }" /></p>
+						                </div>
+						            </div>
+						        </div>
+						    </c:forEach>
+						</div>
 				        <a class="carousel-control-prev" href="#carouselExample" role="button" data-bs-slide="prev"></a>
 				        <a class="carousel-control-next" href="#carouselExample" role="button" data-bs-slide="next"></a>
 				        <div class="carousel-indicators mb-0">

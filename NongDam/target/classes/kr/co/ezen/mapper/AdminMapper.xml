@@ -49,22 +49,48 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where user_idx=#{user_idx}
 	</update>
 	
-	<select id="countGpAll" resultType="int" parameterType="java.util.Map">
-	   <!-- 공동구매 수 조회 쿼리 -->
-	   SELECT IFNULL(COUNT(*), 0) AS COUNT, DATE_FORMAT(gp_date, '%Y-%m-%d') AS gp_date 
-	   FROM gp 
-	   WHERE gp_date BETWEEN '2023-07-19' AND '2024-01-17'
+	<!-- 공동구매 게시글 수 조회 쿼리 -->
+    <select id="countGpAll" resultType="int">
+        select count(*) from gp
+    </select>
+    <!-- 1:1 거래 게시글 수 조회 쿼리 -->
+    <select id="countTrAll" resultType="int">
+        select count(*) from tr
+    </select>
+    
+    <select id="countFreeAll" resultType="int">
+        select count(*) from free
+    </select>
+    
+    <!-- 공동구매 게시글 날짜별 count 쿼리 -->
+	<select id="selectGpCountsByDate" resultType="map">
+	    SELECT
+	        (SELECT COUNT(*) FROM gp WHERE DATE(gp_date) = #{date} - INTERVAL 1 DAY) AS count_minus_1_day,
+	        (SELECT COUNT(*) FROM gp WHERE DATE(gp_date) = #{date}) AS count,
+	        (SELECT COUNT(*) FROM gp WHERE DATE(gp_date) = #{date} + INTERVAL 1 DAY) AS count_plus_1_day
 	</select>
 	
-	<select id="countTrAll" resultType="int" parameterType="java.util.Map">
-	   <!-- 1:1거래 수 조회 쿼리 -->
-	   SELECT IFNULL(COUNT(*), 0) AS COUNT, DATE_FORMAT(tr_time, '%Y-%m-%d') AS tr_time 
-	   FROM tr 
-	   WHERE tr_time BETWEEN '2023-07-19' AND '2024-01-17'
+	<!-- 1:1 거래 게시글 날짜별 count 쿼리 -->
+	<select id="selectTrCountsByDate" resultType="map">
+	    SELECT
+	        (SELECT COUNT(*) FROM tr WHERE DATE(tr_time) = #{date} - INTERVAL 1 DAY) AS count_minus_1_day,
+	        (SELECT COUNT(*) FROM tr WHERE DATE(tr_time) = #{date}) AS count,
+	        (SELECT COUNT(*) FROM tr WHERE DATE(tr_time) = #{date} + INTERVAL 1 DAY) AS count_plus_1_day
 	</select>
 	
-	<select id="countGpUserAll" resultType="int" parameterType="kr.co.ezen.entity.GpUser">
-		select count(*) from gpUser
+	<!-- 자유 게시글 날짜별 count 쿼리 -->
+	<select id="selectFreeCountsByDate" resultType="map">
+	    SELECT
+	        (SELECT COUNT(*) FROM free WHERE DATE(free_date) = #{date} - INTERVAL 1 DAY) AS count_minus_1_day,
+	        (SELECT COUNT(*) FROM free WHERE DATE(free_date) = #{date}) AS count,
+	        (SELECT COUNT(*) FROM free WHERE DATE(free_date) = #{date} + INTERVAL 1 DAY) AS count_plus_1_day
+	</select>
+	
+	<select id="getCountBySignupMethod" resultType="map">
+	    SELECT 
+	        COUNT(CASE WHEN user_kakaologin IS NULL THEN 1 END) AS nullCount,
+	        COUNT(CASE WHEN user_kakaologin IS NOT NULL THEN 1 END) AS notNullCount
+	    FROM User;
 	</select>
 	
 </mapper>
