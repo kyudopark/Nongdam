@@ -58,23 +58,18 @@
 
 	<jsp:include page="../common/header.jsp"/>
 	<jsp:include page="../common/banner.jsp"/>
-	
-	
-	<body>
 
     <!-- 글 작성 div container-->
     <div class="container mt-5 mb-5">
-        <h4 class="mt-5 mb-5"> 게시글 작성</h4>
-       <form method="post" id="write">
-        <input type="hidden" name="user_idx" value="${uvo.user_idx }">
+       <h4 class="mt-5 mb-5"> 게시글 작성</h4>
+       <form method="post" id="write" enctype="multipart/form-data">
+        	<input type="hidden" name="user_idx" value="${uvo.user_idx }">
 
-         
-            <!-- 말머리 있는 버전 -->
-           <div class="row">
-    <!-- 말머리 -->
+           	<!-- 말머리 있는 버전 -->
+           	<div class="row">
+    		<!-- 말머리 -->
 			    <div class="col-12 col-md-3 mb-3">
 			        <select class="form-select" name="info_tag" id="info_tag">
-			            <option value="">말머리를 선택.</option>
 			            <option value="신규">신규</option>
 			            <option value="현직">현직</option>
 			        </select>
@@ -92,20 +87,25 @@
                 <!-- 실제 에디터 박스-->
                 <!-- id는 변경하지 마세요 -->
                 <textarea id="editor" name="info_content">
-                    <p></p>
-                    <p></p>
+                    <p>내용을 작성하세요.</p>
                     <p></p>
                     <p></p>
                 </textarea>
                 <!-- 스크립트문. 항상 에디터 박스 바로 뒤에 놓을 것-->
-                <script>
-                    ClassicEditor
-                        .create( document.querySelector( '#editor' ) )
-                        .catch( error => {
-                            console.error( error );
-                    });
-                    
-                </script>
+				<script>
+			        ClassicEditor
+			            .create(document.querySelector('#editor'), {
+			                ckfinder: {
+			                    uploadUrl: 'fileupload.do' 
+			                }
+			            })
+			            .then(editor => {
+			                console.log('Editor was initialized', editor);
+			            })
+			            .catch(error => {
+			                console.error('There was an error initializing the editor', error);
+			            });
+			    </script>
             </div>
             
             <!-- 글 작성하기 버튼-->
@@ -116,21 +116,8 @@
         </form>
     </div>    
     
-  <script>
-    $(document).ready(function() {
-        $('#check').on('click', function() {
-            var selectedOption = $('#info_tag').val();
-            if (selectedOption == "") {
-                alert("말머리를 선택해주세요.");
-                return false; // 선택하지 않았을 경우 false 반환
-            }
-            return true; // 선택한 경우 true 반환
-        });
-    });
-</script>
-    <!-- ============================================== -->
 
-</body>
+    <!-- ============================================== -->
 	
 	<jsp:include page="../common/footer.jsp"/>
 </body>

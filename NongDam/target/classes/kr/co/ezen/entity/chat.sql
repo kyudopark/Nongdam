@@ -24,3 +24,21 @@ delete from chat
 delete from freeComment
 
 select * from info
+
+select * from infoLike
+
+create table infoLike(
+info_idx int,
+user_idx int
+)
+
+drop table info
+create table info(
+	info_idx int,
+	info_title varchar(255),
+	info_content text,
+	info_date datetime,
+	user_idx int,
+	info_tag varchar(20),
+	info_count int
+)

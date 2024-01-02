@@ -326,7 +326,9 @@
         <!-- 기타 버튼 -->
         <div class="border-bottom text-end pb-3">
 	        <c:if test="${uvo.user_idx == vo.user_idx || uvo.user_admin == true}">
+	         	<c:if test="${uvo.user_idx == vo.user_idx }">
 	            <a href="${contextPath }/tr/modify?tr_idx=${vo.tr_idx}" class="btn btn-secondary">수정</a>
+	            </c:if>
 	            <button onclick="deleteByIdx(${vo.tr_idx})" class="btn btn-danger">삭제</button>
             </c:if>
             <a href="javascript:mainfrm()" class="btn btn-secondary">리스트</a>

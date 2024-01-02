@@ -15,16 +15,11 @@ public interface FreeMapper {
 	public int totalCount(Criteria cre);
 	public void updatecnt(int free_idx);
 	public void deleteByIdx(int free_idx);
-	public void updaetByIdx(Free fr);
+	public void updateByIdx(Free fr);
 	public Free read(int free_idx);
-	public Free GetUserIdx(String user_nickname);
+	public Free getUserIdx(String user_nickname);
 	public void Modify(Free fr);
-	public List<Free> findfr(Criteria cri);
-	public List<Free> findqu(Criteria cri);
-	public List<Free> findBydate(Criteria cri);
-	public List<Free> findBycount(Criteria cri);
-	public List<Free> findBycountfr(Criteria cri);
-	public List<Free> findBycountqu(Criteria cri);
+
 	
 	//-------댓글-------------------------
 	
@@ -35,9 +30,5 @@ public interface FreeMapper {
 	public void insertComment(FreeComment cvo);
 	public void insertReplyComment(FreeComment cvo);
 		
-	
-
-	
-	
 	
 }

@@ -293,6 +293,7 @@
 </head>
 <body>
 
+
 	<jsp:include page="../common/header.jsp"/>
 	<jsp:include page="../common/banner.jsp"/>
 	
@@ -323,7 +324,9 @@
         <!-- 기타 버튼 -->
         <div class="border-bottom text-end pb-3">
 	        <c:if test="${uvo.user_idx == vo.user_idx || uvo.user_admin == true}">
+	         	<c:if test="${uvo.user_idx == vo.user_idx }">
 	            <a href="${contextPath }/free/modify?free_idx=${vo.free_idx}" class="btn btn-secondary">수정</a>
+	            </c:if>
 	            <button onclick="deleteByIdx(${vo.free_idx})" class="btn btn-danger">삭제</button>
             </c:if>
             <a href="javascript:mainfrm()" class="btn btn-secondary">리스트</a>
@@ -331,14 +334,17 @@
 
         <!-- free/main으로 갈때 사용하는 폼 -->
         <form action="${contextPath }/free/main" method="get" id="mainfrm">
-        	<input type="hidden" name="page" value="${cri.page }"/>
-        	<input type="hidden" name="perPageNum" value="${cri.perPageNum }"/>
+        	<c:if test="${cri.page != 1 && cri.perPageNum != 12 }">
+	        	<input type="hidden" name="page" value="${cri.page }"/>
+	        	<input type="hidden" name="perPageNum" value="${cri.perPageNum }"/>
+			</c:if>
         	<c:if test="${!empty cri.type }">
         		<input type="hidden" name="type" value="${cri.type }"/>
         		<input type="hidden" name="keyword" value="${cri.keyword }"/>
         	</c:if>
-        	<input type="hidden" name="tag" value="${vo.free_tag }">
-        	<input type="hidden" name="" value="">
+        	<c:if test="${!empty cri.tag }">
+        		<input type="hidden" name="tag" value="${cri.tag }"/>
+        	</c:if>
         </form>
         
 

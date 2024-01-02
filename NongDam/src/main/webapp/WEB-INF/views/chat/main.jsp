@@ -106,7 +106,7 @@
 	                    <c:if test="${crvo.user_corr_profile != null}">
 	                    	<img class="bg-body-secondary object-fit-cover me-2 border"
 	                        style="height: 40px; width: 40px; border-radius: 50%;"
-	                        src="${contextPath }/resources/image/myPage/${crvo.user_corr_profile}" >
+	                        src="${crvo.user_corr_profile}" >
 	                    </c:if>
 	                    <div>
 	                        <div class="title-overflow-1">

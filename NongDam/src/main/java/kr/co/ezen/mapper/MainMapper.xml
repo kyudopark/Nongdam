@@ -21,5 +21,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		
 		
 		
+		<select id="findInfo" resultType="kr.co.ezen.entity.Info">
+			select info_idx,info_title,info_content from info order by info_idx desc limit 1
+		</select>
+		
 		
 	</mapper>

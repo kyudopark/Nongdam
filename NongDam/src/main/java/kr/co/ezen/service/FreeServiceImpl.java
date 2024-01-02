@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import kr.co.ezen.entity.Criteria;
 import kr.co.ezen.entity.Free;
 import kr.co.ezen.entity.FreeComment;
-import kr.co.ezen.entity.FreeHeart;
 import kr.co.ezen.entity.TrComment;
 import kr.co.ezen.mapper.FreeMapper;
 
@@ -50,53 +49,17 @@ public class FreeServiceImpl implements FreeService {
 	}
 
 	@Override
-	public void Modify(Free fr) {
-		freemapper.updaetByIdx(fr);
-	}
-	
-	@Override
-	public List<Free> findfr(Criteria cri) {
-		List<Free> fr=freemapper.findfr(cri);
-		return fr;
+	public void updateByIdx(Free fr) {
+		freemapper.updateByIdx(fr);
 	}
 
-	@Override
-	public List<Free> findqu(Criteria cri) {
-		List<Free> qu=freemapper.findqu(cri);
-		return qu;
-	}
-	
 	@Override
 	public void updatecnt(int free_idx) {
 		freemapper.updatecnt(free_idx);
 		
 	}
 	
-	@Override
-	public List<Free> findBydate(Criteria cri) {
-		List<Free> fd=freemapper.findBydate(cri);
-		return fd;
-	}
 
-
-	@Override
-	public List<Free> findBycount(Criteria cri) {
-		List<Free> fc=freemapper.findBycount(cri);
-		return fc;
-	}
-	
-	@Override
-	public List<Free> findBycountfr(Criteria cri) {
-		List<Free> cfr=freemapper.findBycountfr(cri);
-		return cfr;
-	}
-
-
-	@Override
-	public List<Free> findBycountqu(Criteria cri) {
-		List<Free> cqu=freemapper.findBycountqu(cri);
-		return cqu;
-	}
 
 	
 	//====================

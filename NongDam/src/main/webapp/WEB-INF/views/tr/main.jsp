@@ -184,7 +184,7 @@
 							<li
 								class="page-item  ${pageCre.cri.page==pageNum? 'active text-secondary' :'' }">
 								<a
-								class="page-link  ${pageCre.cri.page==pageNum? 'bg-secondary border-secondary':' text-body' }"
+								class="page-link  ${pageCre.cri.page==pageNum? 'bg-secondary border-secondary':' text-secondary' }"
 								href="${pageNum}">${pageNum }</a>
 							</li>
 						</c:forEach>
