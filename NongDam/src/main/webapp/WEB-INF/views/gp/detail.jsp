@@ -130,16 +130,21 @@
             <div class="container pt-5 pb-5 ck-content">${vo.gp_content }</div>
             <!-- 신청하기 버튼 -->
             <div class="container pt-5 pb-4 text-center">
-            	<c:if test="${diffDays <= 0 and diffDaysEnd > 0}">
-                	<button class="btn btn-secondary" data-btn = "request" >신청하기</button>
-                </c:if>
-                <button class="btn btn-secondary" data-btn = "back" >목록으로</button>
-                
-                <c:if test="${uvo.user_id eq 'admin' }">
-                	<button class="btn btn-warning" data-btn = "modify" >수정하기</button>
-                	<button class="btn btn-danger" data-btn = "delete">삭제하기</button>
-                </c:if>
-            </div>
+			    <c:choose>
+			        <c:when test="${diffDays <= 0 and diffDaysEnd > 0 and not empty uvo}">
+			            <button class="btn btn-secondary" data-btn="request">신청하기</button>
+			        </c:when>
+			        <c:otherwise>
+			            <button class="btn btn-secondary" disabled>신청하기</button>
+			        </c:otherwise>
+			    </c:choose>
+			    <button class="btn btn-secondary" data-btn="back">목록으로</button>
+			
+			    <c:if test="${uvo.user_id eq 'admin'}">
+			        <button class="btn btn-warning" data-btn="modify">수정하기</button>
+			        <button class="btn btn-danger" data-btn="delete">삭제하기</button>
+			    </c:if>
+			</div>
         </div>
     </div>
     
