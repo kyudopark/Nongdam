@@ -175,7 +175,11 @@
 		let user_idx = parseInt($('#user_idx').val());
 		let chat_message = $('#chatMessage').val();
 		chat_message = chat_message_filtering(chat_message);
-		let chat_time = new Date();
+		//let chat_time = new Date();
+		let now = new Date();
+		let utc = now.getTime() + (now.getTimezoneOffset() * 60 * 1000);
+		let koreaTimeDiff = 9 * 60 * 60 * 1000;
+		let chat_time = new Date(utc+koreaTimeDiff);
 		
 		if(chat_message.length = 0 || chat_message == null || chat_message == ''){
 			alert("채팅 내용을 작성해 주세요.");
