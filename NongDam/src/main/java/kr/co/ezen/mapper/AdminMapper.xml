@@ -89,7 +89,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getCountBySignupMethod" resultType="map">
 	    SELECT 
 	        COUNT(CASE WHEN user_kakaologin IS NULL THEN 1 END) AS nullCount,
-	        COUNT(CASE WHEN user_kakaologin IS NOT NULL THEN 1 END) AS notNullCount
+	        COUNT(CASE WHEN user_kakaologin = 'Y' THEN 1 END) AS kakaoCount,
+	        COUNT(CASE WHEN user_kakaologin = 'G' THEN 1 END) AS googleCount,
+	        COUNT(CASE WHEN user_kakaologin = 'N' THEN 1 END) AS naverCount
 	    FROM User;
 	</select>
 	

@@ -87,7 +87,7 @@ $(document).ready(function () {
             labels: ['공동구매', '1:1거래', '자유'],
             datasets: [{
                 label: '게시판 별 총 게시글 갯수',
-                data: [${gp.gpCount}, ${tr.trCount}, ${free.freeCount}], // 초기 데이터 (0 또는 다른 기본값으로 설정)
+                data: [${gp.gpCount}, ${tr.trCount}, ${free.freeCount}],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
@@ -102,7 +102,6 @@ $(document).ready(function () {
             }]
         };
 
-        // 차트 객체 생성
         myChart = new Chart(context, {
             type: 'bar',
             data: initialData,
@@ -118,7 +117,14 @@ $(document).ready(function () {
                 }
             }
         });
-        $("#chartDataInput").val("공동구매 게시판 게시글 총 갯수 : " + ${gp.gpCount} + "개, 1:1거래 게시판 총 게시글 수 : " + ${tr.trCount} + "개, 자유 게시판 총 게시글 수 : " + ${free.freeCount} +"개");
+        displayInitialChartData();
+    }
+    
+    function displayInitialChartData() {
+        $("#dataSpan1").html("1:1 거래 게시판 게시글 총 갯수 - " + ${tr.trCount} + "개");
+        $("#dataSpan2").html("공동구매 게시판 게시글 총 갯수  - " + ${gp.gpCount} + "개");
+        $("#dataSpan3").html("자유 게시판 게시글 총 갯수  - " + ${free.freeCount} + "개");
+        $("#dataSpan4").hide();
     }
 
     // datepicker 초기화
@@ -130,13 +136,12 @@ $(document).ready(function () {
         dateFormat: 'yy-mm-dd',
         defaultDate: new Date(),
         onSelect: function(dateText, inst) {
-            // 선택한 날짜를 컨트롤러로 전달하고 +3일, -3일의 범위에 있는 데이터를 가져와 차트 갱신
             var formattedDate = $.datepicker.formatDate('yy-mm-dd', new Date(dateText));
             updateChartData(formattedDate);
         },
         beforeShow: function (input, inst) {
             var windowWidth = $(window).width();
-            var isMobile = windowWidth <= 767; // 예제에서는 767px 이하는 모바일로 간주
+            var isMobile = windowWidth <= 767;
 
             if (isMobile) {
                 inst.dpDiv.css({
@@ -165,23 +170,18 @@ $(document).ready(function () {
     createInitialChart();
 
     function updateChartData(selectedDate) {
-        // 기존 차트 제거
         myChart.destroy();
 
-        // 새로운 차트 데이터 가져오기
         $.ajax({
             url: "${contextPath}/admin/getCountsByDate",
             type: "GET",
             data: { date: selectedDate },
             success: function (data) {
-                // 전일과 다음날 데이터 가져오기
                 $.ajax({
                     url: "${contextPath}/admin/getCountsByDate",
                     type: "GET",
                     data: { date: selectedDate, type: 'plus_minus_days' },
                     success: function (plusMinusData) {
-                    	console.log("Received data:", plusMinusData);
-                        // 새로운 차트 데이터 생성
                         var newData = {
 						    labels: ['-1일', plusMinusData.selectedDate, '+1일'],
 						    datasets: [
@@ -212,9 +212,8 @@ $(document).ready(function () {
 						    ]
 						};
 
-                        // 새로운 차트 생성
                         myChart = new Chart(context, {
-                            type: 'line',  // 막대 그래프로 설정
+                            type: 'line',
                             data: newData,
                             options: {
                                 scales: {
@@ -241,14 +240,12 @@ $(document).ready(function () {
         });
     }
     
- // 데이터를 표시하는 함수 추가
     function displayChartData(plusMinusData) {
-    	$("#chartDataInput").val(
-    		    "1:1 거래 - " + plusMinusData.minus1DayCounts.trCount + "개, " + plusMinusData.baseCounts.trCount + "개, " + plusMinusData.plus1DayCounts.trCount + "개 " +
-    		    "\n공동구매 - " + plusMinusData.minus1DayCounts.gpCount + "개, " + plusMinusData.baseCounts.gpCount + "개, " + plusMinusData.plus1DayCounts.gpCount + "개 " +
-    		    "\n자유 - " + plusMinusData.minus1DayCounts.freeCount + "개, " + plusMinusData.baseCounts.freeCount + "개, " + plusMinusData.plus1DayCounts.freeCount + "개"
-    		);
- 	}
+        $("#dataSpan1").html("1:1 거래 게시판 날짜별 게시글 갯수 - " + plusMinusData.minus1DayCounts.trCount + "개, " + plusMinusData.baseCounts.trCount + "개, " + plusMinusData.plus1DayCounts.trCount + "개");
+        $("#dataSpan2").html("공동구매 게시판 날짜별 게시글 갯수  - " + plusMinusData.minus1DayCounts.gpCount + "개, " + plusMinusData.baseCounts.gpCount + "개, " + plusMinusData.plus1DayCounts.gpCount + "개");
+        $("#dataSpan3").html("자유 게시판 날짜별 게시글 갯수  - " + plusMinusData.minus1DayCounts.freeCount + "개, " + plusMinusData.baseCounts.freeCount + "개, " + plusMinusData.plus1DayCounts.freeCount + "개");
+        $("#dataSpan4").hide();
+    }
  
     function getCountBySignupMethod() {
         // 서버에 count 데이터 요청
@@ -256,31 +253,37 @@ $(document).ready(function () {
             url: "${contextPath}/admin/getCountBySignupMethod",
             type: "GET",
             success: function (data) {
-            	console.log(data);  // Log the data to the console for inspection
                 myChart.destroy();
 
                 // 'doughnut' 차트 데이터 생성
                 var newData = {
-                    labels: ['자체 회원가입', '소셜 로그인'],
+                    labels: ['구글 로그인', '카카오 로그인', '자체 로그인', '네이버 로그인'],
                     datasets: [{
                         data: Object.values(data),
-                        backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)'],
-                        borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'],
+                        backgroundColor: ['rgba(255, 0, 0, 0.3)', 'rgba(255, 255, 0, 0.3)', 'rgba(0, 0, 255, 0.3)', 'rgba(0, 128, 0, 0.3)'],
+                        borderColor: ['rgba(255, 0, 0, 1)', 'rgba(255, 255, 0, 1)', 'rgba(0, 0, 255, 1)', 'rgba(0, 128, 0, 1)'],
                         borderWidth: 1
                     }]
                 };
-
+                
                 // 새로운 'doughnut' 차트 생성
                 myChart = new Chart(context, {
                     type: 'doughnut',
                     data: newData
                 });
-                $("#chartDataInput").val("자체 회원가입: " + data.nullCount + "개, 소셜 로그인: " + data.notNullCount + "개");
+                displaySignupMethodData(data);
             },
             error: function (error) {
                 console.log("Error fetching signup method data:", error);
             }
         });
+    }
+    
+    function displaySignupMethodData(data) {
+        $("#dataSpan1").html("자체 회원가입: " + data.nullCount + "개");
+        $("#dataSpan2").html("카카오 로그인: " + data.kakaoCount + "개");
+        $("#dataSpan3").html("구글 로그인: " + data.googleCount + "개");
+        $("#dataSpan4").html("네이버 로그인: " + data.naverCount + "개").show();;
     }
     
 });
@@ -352,9 +355,12 @@ $(document).ready(function () {
 								</div>
 								<div class="col-md-12 mt-4">
 									<div class="mb-3">
-							            <label for="chartDataInput" class="form-label">차트 Data 값 :</label>
-							            <input type="text" id="chartDataInput" class="form-control" readonly>
-							        </div>
+									    <label for="chartDataInput" class="form-label">통계 데이터 값 :</label>
+									    <p id="dataSpan1" class="form-control" readonly></p>
+									    <p id="dataSpan2" class="form-control" readonly></p>
+									    <p id="dataSpan3" class="form-control" readonly></p>
+									    <p id="dataSpan4" class="form-control" readonly></p>
+									</div>
                                 </div>
 		                    </div>
 		                </div>

@@ -55,6 +55,24 @@
 				
 	        });
 	        
+	        $(".btn-outline-secondary").on("click", function (e) {
+	            // Validate title
+	            var title = $("#gp_title").val();
+	            if (!title.trim()) {
+	                alert("제목을 입력해주세요.");
+	                e.preventDefault();  // 링크 이벤트 막기
+	                return;
+	            }
+
+	            // Validate price
+	            var price = $("#gp_price").val();
+	            if (!price.trim()) {
+	                alert("가격을 입력해주세요.");
+	                e.preventDefault();  // 링크 이벤트 막기
+	                return;
+	            }
+	        });
+
 	     // 파일 선택 시 썸네일 미리보기 함수
 	        document.getElementById('thumbImg').addEventListener('change', function(event) {
 	         var input = event.target;

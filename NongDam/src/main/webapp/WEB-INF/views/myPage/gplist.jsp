@@ -71,17 +71,20 @@
         
 	
         // delete문
-        $('button').on('click',function(e){
-        	var btn = $(this).data('btn'); // 내가 현재 클릭한 버튼 -> data-btn
-        	
-        	if(btn == 'delete') {
-        		let result = confirm('해당 공동구매 게시글을 삭제하시겠습니까?');
-				if(result == false){
-					return;
-				} else {
-					location.href = "${contextPath}/myPage/deleteRequest?gp_idx=" + $("#gp_idx").val() + "&user_idx=" + $("#user_idx").val();
-				}
-        	}
+        $('button[id^="deleteBtn_"]').on('click', function (e) {
+            var index = $(this).attr("id").split("_")[1];
+            var gp_idx = $("#gp_idx_" + index).val();
+            
+            if (gp_idx === undefined || user_idx === undefined) {
+                // gp_idx 또는 user_idx가 정의되지 않았을 때의 처리
+                alert('Error: gp_idx 또는 user_idx가 정의되지 않았습니다.');
+                return;
+            }
+
+            var result = confirm('해당 공동구매 게시글을 삭제하시겠습니까?');
+            if (result) {
+                location.href = "${contextPath}/myPage/deleteRequest?gp_idx=" + gp_idx + "&user_idx=" + $("#user_idx").val();;
+            }
         });
         
         
@@ -208,7 +211,7 @@
 								<c:set var="diffMillisEnd" value="${endDate.time - currentDate.time}"/>
 								<c:set var="diffDaysEnd" value="${diffMillisEnd / (24 * 60 * 60 * 1000)}"/>
 								
-								<input type="hidden" id="gp_idx" value="${gpUserList.gp_idx }"  />
+								<input type="hidden" id="gp_idx_${loop.index}" value="${gpUserList.gp_idx}" />
 								<input type="hidden" id="user_idx" value="${uvo.user_idx }"  />
 								
                             <!-- 목록 하나 -->
@@ -253,7 +256,7 @@
                                     <button type="button" class="btn btn-sm btn-secondary" id="info_${loop.index}">세부내역</button>
                                     <c:choose>
 										<c:when test="${diffDaysEnd > 0}">
-											<button class="btn btn-sm btn-secondary" data-btn="delete">취소하기</button> 
+											<button class="btn btn-sm btn-secondary" id="deleteBtn_${loop.index}" data-btn="delete">취소하기</button> 
 										</c:when>
 										<c:when test="${diffDaysEnd < 0}">
 											<button class="btn btn-sm btn-secondary" disabled="disabled">취소하기</button>
