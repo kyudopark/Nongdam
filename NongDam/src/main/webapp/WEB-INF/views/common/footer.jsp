@@ -11,9 +11,8 @@
             <li class="fw-bolder">팀원</li>
             <li>박규도</li>
             <li>유준영</li>
-            <li>지예솔</li>
             <li>김혜관</li>
-            <li>장수원</li>
+            <li>지예솔</li>
         </ol>
         <br>
         <br>

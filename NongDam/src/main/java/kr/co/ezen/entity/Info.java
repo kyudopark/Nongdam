@@ -14,10 +14,10 @@ public class Info {
 	private int user_idx;
 	private String info_tag;
 	private int info_count;
-	private int info_boomup;
+	private int info_like;
 	private String info_imgpath;
 	
-//join
+	//join
 	private String user_nickname;
 	
 }

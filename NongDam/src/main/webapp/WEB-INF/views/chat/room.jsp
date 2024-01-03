@@ -260,7 +260,7 @@
                      	class="object-fit-cover bg-body-secondary">
                     </c:if>
                     <c:if test="${!empty room.user_corr_profile }">
-                    	<img src="${contextPath }/resources/image/myPage/${room.user_corr_profile }"
+                    	<img src="${room.user_corr_profile }"
                     	style="width: 22px; height: 22px; border-radius: 50%;"
                      	class="object-fit-cover bg-body-secondary">
                     </c:if>

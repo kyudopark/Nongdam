@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import kr.co.ezen.entity.Gp;
+import kr.co.ezen.entity.Info;
 import kr.co.ezen.entity.Tr;
 import kr.co.ezen.service.MainService;
 
@@ -30,6 +31,18 @@ public class HomeController {
 		List<Gp> gplist = mainservice.findGp();
 		m.addAttribute("trlist", trlist);
 		m.addAttribute("gplist", gplist);
+		
+		
+		Info infolist = mainservice.findInfo();
+		String getInfo_content = infolist.getInfo_content();
+		getInfo_content = getInfo_content.replaceAll("<(/)?([a-zA-Z]*)([0-9]?)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
+		if(getInfo_content.length() > 250) {
+			getInfo_content = getInfo_content.substring(0, 250);
+		}
+		infolist.setInfo_content(getInfo_content);
+		m.addAttribute("infolist", infolist);
+		
+		
 		return "main";
 	}
 	
