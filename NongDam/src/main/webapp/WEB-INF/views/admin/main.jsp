@@ -84,10 +84,10 @@ $(document).ready(function () {
 
     function createInitialChart() {
         var initialData = {
-            labels: ['공동구매', '1:1거래', '자유'],
+            labels: ['1:1거래', '공동구매', '자유'],
             datasets: [{
                 label: '게시판 별 총 게시글 갯수',
-                data: [${gp.gpCount}, ${tr.trCount}, ${free.freeCount}],
+                data: [${tr.trCount}, ${gp.gpCount}, ${free.freeCount}],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
