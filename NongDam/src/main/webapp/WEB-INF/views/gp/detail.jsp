@@ -144,15 +144,19 @@
     </div>
     
     <form id="fr" method="get">
-    	<input type="hidden" name="gp_idx" value="${vo.gp_idx }" />
-    	<input type="hidden" name="user_idx" value="${vo.user_idx }" />
-    	
-		<input type="hidden" name="page" value="${cri.page }"/>
-        <input type="hidden" name="perPageNum" value="${cri.perPageNum }"/>
-        <c:if test="${!empty cri.type }">
+	    <input type="hidden" name="gp_idx" value="${vo.gp_idx }" />
+	    <input type="hidden" name="user_idx" value="${vo.user_idx }" />
+	
+	    <input type="hidden" name="page" value="${cri.page }"/>
+	    <input type="hidden" name="perPageNum" value="${cri.perPageNum }"/>
+    
+	    <c:if test="${not empty cri.type}">
 	        <input type="hidden" name="type" value="${cri.type }"/>
+	    </c:if>
+	    
+	    <c:if test="${not empty cri.keyword}">
 	        <input type="hidden" name="keyword" value="${cri.keyword }"/>
-        </c:if>
+	    </c:if>
 	</form>
 
 	

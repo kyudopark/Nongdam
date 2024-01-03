@@ -301,7 +301,7 @@
             <!-- 신청하기 버튼 -->
             <div class="container pt-5 pb-4 text-center">
                 <button class="btn btn-secondary" onclick="kakaoPay()"><i class="fa-solid fa-credit-card"></i> 결제</button>
-                <a href="javascript:history.go(-1)" class="btn btn-outline-secondary">취소</a>
+                <a href="${contextPath}/gp/detail?page=${param.page}&perPageNum=${param.perPageNum}&gp_idx=${param.gp_idx}" class="btn btn-outline-secondary">취소</a>
             </div>
             
         </div>
