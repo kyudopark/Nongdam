@@ -40,40 +40,12 @@
     <link rel="shortcut icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
     
     <title>농담 | 농업 정보 커뮤니티</title>
-    
+    <script type="text/javascript" src="${contextPath }/resources/common/js/free/bannerText.js"></script>
+
 </head>
-<!-- 
-<script>
-
-$(document).ready(function() {
-  $('#modify').click(function() {
-        var selectedOption = $('#free_tag').val();
-        if (selectedOption === "") {
-             alert("말머리를 선택해주세요.");
-             return false; 
-        } else {
-             $.ajax({
-                type: 'POST',
-                url: 'modify', 
-                data:{free_idx: '${vo.free_idx}' },
-                contentType: 'application/json',
-                success: function(response) {
-                    alert('수정되었습니다');
-                    location.href = '/ezen/free/detail?free_idx='+${vo.free_idx};
-                },
-                error: function(error) {
-                    console.error('글 수정 중 에러 발생:', error);
-                }
-             });
-         return true; // 선택한 경우 true 반환
-    }
-    });
-});
-
-</script> -->
 
 <body>
-<jsp:include page="../common/header.jsp"/>
+	<jsp:include page="../common/header.jsp"/>
 	<jsp:include page="../common/banner.jsp"/>
 
     <!-- 글 작성 div container-->
@@ -106,20 +78,20 @@ $(document).ready(function() {
                     <p></p>
                 </textarea>
                 <!-- 스크립트문. 항상 에디터 박스 바로 뒤에 놓을 것-->
- <script>
-        ClassicEditor
-            .create(document.querySelector('#editor'), {
-                ckfinder: {
-                    uploadUrl: 'fileupload.do' 
-                }
-            })
-            .then(editor => {
-                console.log('Editor was initialized', editor);
-            })
-            .catch(error => {
-                console.error('There was an error initializing the editor', error);
-            });
-    </script>
+			 	<script>
+			        ClassicEditor
+			            .create(document.querySelector('#editor'), {
+			                ckfinder: {
+			                    uploadUrl: 'fileupload.do' 
+			                }
+			            })
+			            .then(editor => {
+			                console.log('Editor was initialized', editor);
+			            })
+			            .catch(error => {
+			                console.error('There was an error initializing the editor', error);
+			            });
+			    </script>
             </div>
 
             <!-- 글 작성하기 버튼-->
@@ -129,10 +101,7 @@ $(document).ready(function() {
             </div>
         </form>
     </div>
-    
-    <script>
- 
-</script>
+   
     
     <!-- ============================================== -->
 

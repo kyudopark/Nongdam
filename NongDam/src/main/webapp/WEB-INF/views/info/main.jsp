@@ -41,15 +41,27 @@
     <link rel="icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
     <link rel="shortcut icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
     <title>농담 | 농업 정보 커뮤니티</title>
+    <script type="text/javascript" src="${contextPath }/resources/common/js/info/bannerText.js"></script>
    
    	<script type="text/javascript">
 		$(document).ready(function (){
-	      	$(".page-link").on("click", function (e) {
+			$(".page-link").on("click", function (e) {
 		        e.preventDefault();  // 기본 이벤트 막기
 		        var page = $(this).attr("href");  //페이지 번호
 		        $("#page").val(page);  // 페이지 폼 설정
 				$("#pageFrm").submit();
 		    });
+			
+	      	$(".info-list-click").on("click", function (e) {
+		        e.preventDefault();  // 기본 이벤트 막기
+		        $("#pageFrm").attr('action','${contextPath}/info/detail')
+				let p_info_idx = $(this).attr("href");  // 페이지 번호 가져오기
+			    let t_info_idx = "<input type='hidden' name='info_idx' value='"+p_info_idx+"'>";
+			    $("#pageFrm").append(t_info_idx);
+			    $("#pageFrm").submit();  // 폼 서브밋
+		    });
+	     
+	      	
 		});
 	</script>
 
@@ -84,7 +96,7 @@
                 <tr class="table-dark">
                     <th>#</th>
                     <th>제목</th>
-                    <th class=" d-none d-md-table-cell">날짜</th>
+                    <th class=" d-none d-md-table-cell">작성일</th>
                     <th class=" d-none d-md-table-cell">작성자</th>
                     <th class=" d-none d-md-table-cell">추천</th>
                     <th class=" d-none d-md-table-cell">조회수</th>
@@ -95,16 +107,15 @@
 	            <c:forEach var="li" items="${li}">
 				    <tr>
 				        <td><span class="text-muted">${li.info_idx}</span></td>
-				        <td><a class="text-decoration-none tr-list-click" href="${contextPath}/info/detail?info_idx=${li.info_idx}">[${li.info_tag}] ${li.info_title }</span></td>
+				        <td><a class="text-decoration-none info-list-click" href="${li.info_idx}">[${li.info_tag}] ${li.info_title }</span></td>
 				        <td class="d-none d-md-table-cell">
 						<c:set var="targetDate" value="${li.info_date}" />
-
 						<c:choose>
 						    <c:when test="${now.time - targetDate.time < 24 * 60 * 60 * 1000}">
-						        <fmt:formatDate value="${li.info_date}" pattern="HH시 mm분" />
+						        <fmt:formatDate value="${li.info_date}" pattern="HH:mm" />
 						    </c:when>
 						    <c:otherwise>
-						        <fmt:formatDate value="${li.info_date}" pattern="yyyy년 MM월 dd일" />
+						        <fmt:formatDate value="${li.info_date}" pattern="yyyy-MM-dd" />
 						    </c:otherwise>
 						</c:choose>
 				
@@ -119,7 +130,7 @@
  
 		<div class="d-flex flex-wrap justify-content-between">
 		    <!-- 정렬용 더미 -->
-		  	<div class="d-none d-md-block" style="width: 70px"></div>
+		  	<div class="d-none d-md-block" style="width: 80px"></div>
 		  	<!-- 검색 인풋 -->
 		  
 		  	<div style="width: 20rem;">
@@ -131,16 +142,19 @@
 			           	</select>
 			            <input type="text" name="keyword" class="form-control" placeholder="검색" value="${cri.keyword }">
 			          	<button class="btn btn-secondary" type="submit">검색</button>
+		      			<c:if test="${!empty cri.tag }">
+			        		<input type="hidden" name="tag" value="${cri.tag }"/>
+			        	</c:if>
 		      		</div>
 		      	</form>
 		  	</div>
 		  
 		  <!-- 글쓰기 버튼(2) -->
 		  
-		  	<div>
+		  	<div style="width:80px">
 				<c:if test="${ uvo.user_admin== true }">
-		  			<a class="text-decoration-none" href="${contextPath}/info/write">
-		  				<button class="btn btn-outline-secondary" id="a3button"> 글쓰기</button>
+		  			<a class="text-decoration-none btn btn-outline-secondary" href="${contextPath}/info/write" id="a3button">
+		  				글쓰기
 		 			</a>
 		 		</c:if> 	
 		  	</div>
@@ -174,14 +188,15 @@
             </nav>
         </div>	
         
-       	<form id="pageFrm" action="${contextPath}/free/main" method="get">
+       	<form id="pageFrm" action="${contextPath}/info/main" method="get">
+			<c:if test="${pageCre.cri.page != 1 || pageCre.cri.perPageNum != 12 }">
 			<input type="hidden" id="page" name="page" value="${pageCre.cri.page }"/>
 			<input type="hidden" id="perPageNum" name="perPageNum" value="${pageCre.cri.perPageNum }"/>
-		
-              	<!-- 페이지 이동 시 값 가져가는 것 방지  -->
-       		<c:if test="${empty pageCre.cri.keyword }">
+			</c:if>
+            <!-- 페이지 이동 시 값 가져가는 것 방지  -->
+       		<c:if test="${!empty cri.keyword }">
 				<input type="hidden" name="type" value="${ pageCre.cri.type}"/>
-              		<input type="hidden" name="keyword" value="${pageCre.cri.keyword}"/>
+              	<input type="hidden" name="keyword" value="${pageCre.cri.keyword}"/>
 			</c:if>
         	<c:if test="${!empty cri.tag }">
         		<input type="hidden" name="tag" value="${cri.tag }"/>
