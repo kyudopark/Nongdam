@@ -86,7 +86,7 @@
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
             <!--  class="nav-link(기본) active(선택된 값) text-body(텍스트 색 지정)"-->
             <!-- 필요한 경우 button을 a 태그로 바꾸어도 괜찮습니다. (단, a태그로 바꾸는 경우 type=button 삭제하세요 )-->
-        	<a href="../gp/main?type=all" class="nav-link text-body ${pageCre.cri.type=='all' ? 'active':''}" role="tab" aria-controls="nav-all" aria-selected="${pageCre.cri.type=='all' ? 'true':'false'}">전체</a>
+        	<a href="../gp/main?type=all" class="nav-link text-body ${empty pageCre.cri.type or pageCre.cri.type=='all' ? 'active':''}" role="tab" aria-controls="nav-all" aria-selected="${empty pageCre.cri.type or pageCre.cri.type=='all' ? 'true':'false'}">전체</a>
             <a href="../gp/main?type=progress" class="nav-link text-body ${pageCre.cri.type=='progress' ? 'active':''}" role="tab" aria-controls="nav-progress" aria-selected="${pageCre.cri.type=='progress' ? 'true':'false'}">진행</a>
             <a href="../gp/main?type=complete" class="nav-link text-body ${pageCre.cri.type=='complete' ? 'active':''}" role="tab" aria-controls="nav-complete" aria-selected="${pageCre.cri.type=='complet' ? 'true':'false'}">완료</a>
         </div>
