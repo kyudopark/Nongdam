@@ -55,20 +55,20 @@
 				
 	        });
 	        
-	        $(".btn-outline-secondary").on("click", function (e) {
+	        $("form").submit(function (e) {
 	            // Validate title
 	            var title = $("#gp_title").val();
 	            if (!title.trim()) {
 	                alert("제목을 입력해주세요.");
-	                e.preventDefault();  // 링크 이벤트 막기
+	                e.preventDefault();
 	                return;
 	            }
 
 	            // Validate price
 	            var price = $("#gp_price").val();
-	            if (!price.trim()) {
-	                alert("가격을 입력해주세요.");
-	                e.preventDefault();  // 링크 이벤트 막기
+	            if (!price.trim() || isNaN(price)) {
+	                alert("가격을 올바르게 입력해주세요.");
+	                e.preventDefault();
 	                return;
 	            }
 	        });
