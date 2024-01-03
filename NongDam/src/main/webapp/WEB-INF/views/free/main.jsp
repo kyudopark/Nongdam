@@ -41,16 +41,29 @@
     <link rel="icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
     <link rel="shortcut icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
     <title>농담 | 농업 정보 커뮤니티</title>
-    	
+    <script type="text/javascript" src="${contextPath }/resources/common/js/free/bannerText.js"></script>
+
    
    	<script type="text/javascript">
 		$(document).ready(function (){
-	      	$(".page-link").on("click", function (e) {
-		        e.preventDefault();  // 기본 이벤트 막기
-		        var page = $(this).attr("href");  //페이지 번호
-		        $("#page").val(page);  // 페이지 폼 설정
-				$("#pageFrm").submit();
-		    });
+			$(".page-link").on("click", function (e) {
+			    e.preventDefault();  // 기본 이벤트 막기
+			    
+			    var page = $(this).attr("href");  // 페이지 번호 가져오기
+			    $("#page").val(page);  // 페이지 값 폼에 설정
+			    $("#pageFrm").submit();  // 폼 서브밋
+			});
+			
+			
+			//231207 (게시글 넘어가는 부분)
+			$(".free-list-click").click(function(e){
+				e.preventDefault();
+				$("#pageFrm").attr('action','${contextPath}/free/detail')
+				let p_free_idx = $(this).attr("href");  // 페이지 번호 가져오기
+			    let t_free_idx = "<input type='hidden' name='free_idx' value='"+p_free_idx+"'>";
+			    $("#pageFrm").append(t_free_idx);
+			    $("#pageFrm").submit();  // 폼 서브밋
+			})
 		});
 	</script>
   	  
@@ -85,7 +98,7 @@
                 <tr class="table-dark">
                     <th>#</th>
                     <th>제목</th>
-                    <th class=" d-none d-md-table-cell">날짜</th>
+                    <th class=" d-none d-md-table-cell">작성일</th>
                     <th class=" d-none d-md-table-cell">작성자</th>
                     <th class=" d-none d-md-table-cell">조회수</th>
                 </tr>
@@ -95,7 +108,7 @@
 	            <c:forEach var="li" items="${li}">
 				    <tr>
 				        <td><span class="text-muted">${li.free_idx}</span></td>
-				        <td><a class="text-decoration-none tr-list-click" href="${contextPath}/free/detail?free_idx=${li.free_idx}">[${li.free_tag}] ${li.free_title }</span></td>
+				        <td><a class="text-decoration-none free-list-click" href="${li.free_idx}">[${li.free_tag}] ${li.free_title }</span></td>
 				        <td class="d-none d-md-table-cell">
 				        
 						<c:set var="targetDate" value="${li.free_date}" />
@@ -119,23 +132,26 @@
        	
         <div class="d-flex flex-wrap justify-content-between">
             <!-- 정렬용 더미 -->
-            <div class="d-none d-md-block" style="width: 70px"></div>
+            <div class="d-none d-md-block" style="width: 80px"></div>
             <!-- 검색 인풋 -->
             
             <div style="width: 20rem;">
             	<form method="get">
                       <div class="input-group" >
-                          <select class="btn btn-outline-secondary dropdown-toggle" name="type">
-                              	<option class="dropdown-item" value="free_title" ${cri.type == 'free_title' ? 'selected' : ''  }>제목</option>
+	                        <select class="btn btn-outline-secondary dropdown-toggle" name="type">
+	                            <option class="dropdown-item" value="free_title" ${cri.type == 'free_title' ? 'selected' : ''  }>제목</option>
 								<option class="dropdown-item" value="user_nickname" ${cri.type == 'user_nickname' ? 'selected' : ''  }>작성자</option>
-                          </select >
-                          <input type="text" name="keyword" class="form-control" placeholder="검색" value="${cri.keyword }">
-		                    <button class="btn btn-secondary" type="submit">검색</button>
+	                        </select>
+	                        <input type="text" name="keyword" class="form-control" placeholder="검색" value="${cri.keyword }">
+	                    	<button class="btn btn-secondary" type="submit">검색</button>
+	                		<c:if test="${!empty cri.tag }">
+		        				<input type="hidden" name="tag" value="${cri.tag }"/>
+		        			</c:if>
 		                </div>
 	              </form>
 	         </div>
             <!-- 글쓰기 버튼(2) -->
-           	<div style="width: 70px">
+           	<div style="width: 80px">
             	<c:if test="${!empty uvo }">
              		<a class="text-decoration-none" href="${contextPath}/free/write">
              			<button class="btn btn-outline-secondary" id="a3button"> 글쓰기</button>
@@ -176,11 +192,10 @@
        	<form id="pageFrm" action="${contextPath}/free/main" method="get">
 			<input type="hidden" id="page" name="page" value="${pageCre.cri.page }"/>
 			<input type="hidden" id="perPageNum" name="perPageNum" value="${pageCre.cri.perPageNum }"/>
-		
               	<!-- 페이지 이동 시 값 가져가는 것 방지  -->
-       		<c:if test="${empty pageCre.cri.keyword }">
+       		<c:if test="${!empty pageCre.cri.keyword }">
 				<input type="hidden" name="type" value="${ pageCre.cri.type}"/>
-              		<input type="hidden" name="keyword" value="${pageCre.cri.keyword}"/>
+              	<input type="hidden" name="keyword" value="${pageCre.cri.keyword}"/>
 			</c:if>
         	<c:if test="${!empty cri.tag }">
         		<input type="hidden" name="tag" value="${cri.tag }"/>

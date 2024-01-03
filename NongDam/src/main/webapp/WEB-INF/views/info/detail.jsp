@@ -40,6 +40,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
     
     <title>농담 | 농업 정보 커뮤니티</title>
+    <script type="text/javascript" src="${contextPath }/resources/common/js/info/bannerText.js"></script>
     
     <script>
     $(document).ready(function(){
@@ -88,10 +89,10 @@
 		});
     }
     function findUser_idxIsExist(){
-    	let user_idx = ${uvo.user_idx};
+    	let user_idx = ${uvo.user_idx != null ? uvo.user_idx : 'null'};
     	let info_idx = ${vo.info_idx};
     	if(user_idx == 0 || user_idx == '' || user_idx == null){
-    		return
+    		return;
     	}
     	$.ajax({
 			url:"findUser_idxIsExist",
@@ -175,7 +176,7 @@
             ${vo.info_content}
         </div>
         <div class="text-center mb-4">
-        	<button id="clickLikeBtn" class="btn btn-outline-secondary" onclick="clickLikeBtn(${vo.info_idx},${uvo.user_idx })">
+        	<button id="clickLikeBtn" class="btn btn-outline-secondary" onclick="clickLikeBtn(${vo.info_idx},${uvo.user_idx != null ? uvo.user_idx : 'null'})">
                     <span><i class="fa-regular fa-thumbs-up"></i> </span>
                     <span id="infoLikes"> ${vo.info_like }</span>
             </button>
@@ -207,8 +208,6 @@
         	</c:if>
         </form>
       </div>
-        
-       
 	<jsp:include page="../common/footer.jsp"/>
 </body>
 </html>

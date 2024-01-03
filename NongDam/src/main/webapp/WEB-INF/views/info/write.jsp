@@ -40,6 +40,7 @@
     <link rel="icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
     <link rel="shortcut icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
     <title>농담 | 농업 정보 커뮤니티</title>
+    <script type="text/javascript" src="${contextPath }/resources/common/js/info/bannerText.js"></script>
  
 
     <script>

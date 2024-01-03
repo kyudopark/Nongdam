@@ -34,12 +34,14 @@ public class HomeController {
 		
 		
 		Info infolist = mainservice.findInfo();
-		String getInfo_content = infolist.getInfo_content();
-		getInfo_content = getInfo_content.replaceAll("<(/)?([a-zA-Z]*)([0-9]?)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
-		if(getInfo_content.length() > 250) {
-			getInfo_content = getInfo_content.substring(0, 250);
+		if(infolist != null) {
+			String getInfo_content = infolist.getInfo_content();
+			getInfo_content = getInfo_content.replaceAll("<(/)?([a-zA-Z]*)([0-9]?)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
+			if(getInfo_content.length() > 250) {
+				getInfo_content = getInfo_content.substring(0, 250);
+			}
+			infolist.setInfo_content(getInfo_content);
 		}
-		infolist.setInfo_content(getInfo_content);
 		m.addAttribute("infolist", infolist);
 		
 		
