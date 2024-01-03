@@ -111,6 +111,19 @@
 	
 	// 카카오페이 결제 API function
 	function kakaoPay() {
+		
+		var num = $("#gp_num").val();
+	    if (!num.trim() || isNaN(num)) {
+	        alert("수량을 올바르게 입력해주세요.");
+	        return;
+	    }
+
+	    var zipcode = $("#gp_zipcode").val();
+	    if (!zipcode.trim()) {
+	        alert("우편번호를 입력해주세요.");
+	        return;
+	    }
+	    
 		if (confirm("구매 하시겠습니까?")) { // 구매 클릭시 한번 더 확인하기
 			IMP.init("imp01003550"); // 가맹점 식별코드
 			const randomNum = Math.random() * 1000
@@ -288,7 +301,7 @@
             <!-- 신청하기 버튼 -->
             <div class="container pt-5 pb-4 text-center">
                 <button class="btn btn-secondary" onclick="kakaoPay()"><i class="fa-solid fa-credit-card"></i> 결제</button>
-                <a href="javascript:history.go(-1)" class="btn btn-outline-secondary">취소</a>
+                <a href="${contextPath}/gp/detail?page=${param.page}&perPageNum=${param.perPageNum}&gp_idx=${param.gp_idx}" class="btn btn-outline-secondary">취소</a>
             </div>
             
         </div>

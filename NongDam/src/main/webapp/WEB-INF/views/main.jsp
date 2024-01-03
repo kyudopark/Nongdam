@@ -99,43 +99,62 @@
 				<!-- 공동구매 마감 임박 상품들 -->
 				<div class="border-start col-lg-5 col-12 p-3">
 				    <p class="d-flex flex-wrap">
-				        <span class="d-inline-block me-auto fs-6 fw-bolder">공동구매 마감
-				            임박 상품들</span> <a class="d-inline-block text-muted"
-				            href="${contextPath }/gp/main">공동구매 게시판 &gt;</a>
+				        <span class="d-inline-block me-auto fs-6 fw-bolder">공동구매 마감 임박 상품들</span>
+				        <a class="d-inline-block text-muted" href="${contextPath}/gp/main">공동구매 게시판 &gt;</a>
 				    </p>
+				
 				    <div id="carouselExample" class="carousel carousel-dark slide" data-bs-ride="carousel">
-				        <div class="carousel-inner">
-						    <c:forEach var="gplist" items="${gplist}" varStatus="loop">
-						        <div class="carousel-item ${loop.first ? 'active' : ''}">
-						            <div class="row p-3">
-						                <a href="${contextPath}/gp/detail?gp_idx=${gplist.gp_idx}" class="d-flex flex-column col-12 col-sm-6 bg-light object-fit-cover p-0" style="height: 240px">
-						                    <c:choose>
-						                        <c:when test="${empty gplist.gp_thumb }">
-						                            <img src="${contextPath }/resources/image/common/thumbnail.svg" class="w-100 h-100"/>
-						                        </c:when>
-						                        <c:otherwise>
-						                            <img src="${gplist.gp_thumb }" class="w-100 h-100"/>
-						                        </c:otherwise>
-						                    </c:choose>
-						                </a>
-						                <div class="col-12 col-sm-6 pt-3">
-						                    <p class="fw-bolder">상품명 : ${gplist.gp_title}</p>
-						                    <p class="title-overflow-6">신청 시작일 : <fmt:formatDate value="${gplist.gp_date_start }" pattern="YYYY-MM-dd "/></p>
-						                    <p class="title-overflow-6">신청 마감일 : <fmt:formatDate value="${gplist.gp_date_last }" pattern="YYYY-MM-dd "/></p>
-						                    <p class="title-overflow-6">신청 가격 : <fmt:formatNumber type="number" maxFractionDigits="3" value="${gplist.gp_price }" /></p>
-						                </div>
-						            </div>
-						        </div>
-						    </c:forEach>
-						</div>
+				
+				        <c:choose>
+				            <c:when test="${not empty gplist and gplist.size() > 0}">
+				                <!-- If there are items in gplist, render the carousel -->
+				                <div class="carousel-inner">
+				                    <c:forEach var="gplistItem" items="${gplist}" varStatus="loop">
+				                        <div class="carousel-item ${loop.first ? 'active' : ''}">
+				                            <div class="row p-3">
+				                                <a href="${contextPath}/gp/detail?gp_idx=${gplistItem.gp_idx}" class="d-flex flex-column col-12 col-sm-6 bg-light object-fit-cover p-0" style="height: 240px">
+				                                    <c:choose>
+				                                        <c:when test="${empty gplistItem.gp_thumb}">
+				                                            <img src="${contextPath}/resources/image/common/thumbnail.svg" class="w-100 h-100"/>
+				                                        </c:when>
+				                                        <c:otherwise>
+				                                            <img src="${gplistItem.gp_thumb}" class="w-100 h-100"/>
+				                                        </c:otherwise>
+				                                    </c:choose>
+				                                </a>
+				                                <div class="col-12 col-sm-6 pt-3">
+				                                    <p class="fw-bolder">상품명 : ${gplistItem.gp_title}</p>
+				                                    <p class="title-overflow-6">신청 시작일 : <fmt:formatDate value="${gplistItem.gp_date_start}" pattern="YYYY-MM-dd "/></p>
+				                                    <p class="title-overflow-6">신청 마감일 : <fmt:formatDate value="${gplistItem.gp_date_last}" pattern="YYYY-MM-dd "/></p>
+				                                    <p class="title-overflow-6">신청 가격 : <fmt:formatNumber type="number" maxFractionDigits="3" value="${gplistItem.gp_price}" /></p>
+				                                </div>
+				                            </div>
+				                        </div>
+				                    </c:forEach>
+				                </div>
+				            </c:when>
+				            <c:otherwise>
+				                <!-- If gplist is empty or has fewer than 4 items, render the placeholder message -->
+				                <div class="carousel-item active">
+				                    <div class="text-center">
+				                        <p>공동구매 게시글이 준비중입니다.</p>
+				                    </div>
+				                </div>
+				            </c:otherwise>
+				        </c:choose>
+				
+				        <!-- 수정된 부분: 동적으로 생성된 인디케이터 -->
+				        <c:if test="${not empty gplist and gplist.size() > 0}">
+				            <div class="carousel-indicators mb-0">
+				                <c:forEach var="indicator" items="${gplist}" varStatus="loop">
+				                    <button data-bs-target="#carouselExample" data-bs-slide-to="${loop.index}" class="btn bg-tertiary ${loop.first ? 'active' : ''}" aria-current="${loop.first ? 'true' : 'false'}" aria-label="Slide ${loop.index + 1}"></button>
+				                </c:forEach>
+				            </div>
+				        </c:if>
+				        <!-- 끝 -->
+				        
 				        <a class="carousel-control-prev" href="#carouselExample" role="button" data-bs-slide="prev"></a>
 				        <a class="carousel-control-next" href="#carouselExample" role="button" data-bs-slide="next"></a>
-				        <div class="carousel-indicators mb-0">
-							<button data-bs-target="#carouselExample" data-bs-slide-to="0" class="btn bg-tertiary active" aria-current="true" aria-label="Slide 1"></button>
-							<button data-bs-target="#carouselExample" data-bs-slide-to="1" class="btn bg-tertiary" aria-label="Slide 2"></button>
-							<button data-bs-target="#carouselExample" data-bs-slide-to="2" class="btn bg-tertiary" aria-label="Slide 3"></button>
-							<button data-bs-target="#carouselExample" data-bs-slide-to="3" class="btn bg-tertiary" aria-label="Slide 4"></button>
-						</div>
 				    </div>
 				</div>
 			</div>

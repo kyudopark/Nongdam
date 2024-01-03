@@ -43,24 +43,24 @@
     <title>농담 | 농업 정보 커뮤니티</title>
     
     <script type="text/javascript">
-    $(document).ready(function() {
-  	  $('#modify').submit(function(event) {
-      // title과 content 값 가져오기
-      var titleValue = $('#gp_title').val();
-      var contentValue = $('#editor').val();
-
-      // title과 content 유효성 검사
-      if (titleValue.trim() === '') {
-        alert('제목을 입력해주세요.');
-        event.preventDefault();
-      }
-
-      if (contentValue.trim() === '') {
-        alert('내용을 입력해주세요.');
-        event.preventDefault();
-      }
-    });
-  });
+	    $(document).ready(function() {
+	  	  $('#modify').submit(function(event) {
+	      // title과 content 값 가져오기
+	      var titleValue = $('#gp_title').val();
+	      var contentValue = $('#editor').val();
+	
+	      // title과 content 유효성 검사
+	      if (titleValue.trim() === '') {
+	        alert('제목을 입력해주세요.');
+	        event.preventDefault();
+	      }
+	
+	      if (contentValue.trim() === '') {
+	        alert('내용을 입력해주세요.');
+	        event.preventDefault();
+	      }
+	    });
+	  });
     
     
  // 파일 선택 시 썸네일 미리보기 함수
@@ -114,13 +114,14 @@
                     <div class="rounded bg-light 
                     d-flex justify-content-center align-items-center" 
                     style="height: 200px;">
-                        <!-- 이미지 존재시 아래 img태그에 src추가 -->
-                        <img id="thumbnail" class="object-fit-cover w-100 h-100" 
-                        src="${vo.gp_thumb }">    
-                        <!-- 이미지 없을 때 아래 div 태그 보이게 -->
-                        <div id="thumbnailPlaceholder" class="d-none"> 
-                            이미지를 등록해주세요
-                        </div>
+                    	<c:if test="${!empty vo.gp_thumb }">
+                        	<img id="thumbnail" class="object-fit-cover w-100 h-100" 
+                        	src="${vo.gp_thumb }">
+                        </c:if>
+                        <c:if text="${empty vo.gp_thumb }">
+	                        <img id="thumbnail" class="object-fit-cover w-100 h-100" 
+	                        src="${contextPath }/resources/image/common/thumbnail.svg">
+                        </c:if>
                     </div>
                 </div>
 				
