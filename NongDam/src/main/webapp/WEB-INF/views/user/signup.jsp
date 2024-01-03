@@ -358,7 +358,7 @@ function passwordCheck(){
 							class="text-danger">*</span></label>
 						<div class="col-sm-9 col-md-10">
 							<input type="text" class="form-control" id="user_name"
-								name="user_name" placeholder="이름을 입력하세요" /> <span
+								name="user_name" placeholder="이름을 입력하세요" maxlength="10"/> <span
 								id="passMessagename" class="text-danger"></span>
 						</div>
 
@@ -370,7 +370,7 @@ function passwordCheck(){
 							class="text-danger">*</span></label>
 						<div class="col-sm-9 col-md-10">
 							<input type="text" class="form-control" id="user_nickname"
-								name="user_nickname" placeholder="닉네임을 입력하세요" /> <span
+								name="user_nickname" placeholder="닉네임을 입력하세요" maxlength="20"/> <span
 								id="passMessagenickname" class="text-danger"></span>
 						</div>
 

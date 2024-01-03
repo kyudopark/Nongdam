@@ -32,7 +32,7 @@ public class KakaoLoginBO {
 	private final String RESPONSE_TYPE = "code";
 	private final String GRANT_TYPE = "authorization_code";
 	private final String CLIENT_ID = "6b79a2fd9f1c3b8f5a5abcb4da17699f";
-	private final String REDIRECT_URI = "http://localhost:8080/ezen/user/kakaocallback";
+	private final String REDIRECT_URI = "http://ec2-15-165-204-160.ap-northeast-2.compute.amazonaws.com:8080/ezen/user/kakaocallback";
 	private final String SESSION_STATE = "kakao_state";
 
 	RestTemplate restTemplate = new RestTemplate();
