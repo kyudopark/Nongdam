@@ -89,13 +89,16 @@ $(document).ready(function() {
                     <div class="rounded bg-light 
                     d-flex justify-content-center align-items-center" 
                     style="height: 200px;">
+                    
                         <!-- 이미지 존재시 아래 img태그에 src추가 -->
-                        <img id="thumbnail" class="object-fit-cover w-100 h-100" 
-                        src="${vo.tr_imgpath}">    
-                  
-                        <div id="thumbnailPlaceholder" class="d-none"> 
-                            이미지를 등록해주세요
-                        </div>
+                        <c:if test="${ !empty vo.tr_imgpath }">
+	                        <img id="thumbnail" class="object-fit-cover w-100 h-100" 
+	                        src="${vo.tr_imgpath}">    
+	                  	</c:if>
+                        <c:if test="${ empty vo.tr_imgpath }">
+                         	<img id="thumbnail" class="object-fit-cover w-100 h-100" 
+	                        src="${contextPath }/resources/image/common/thumbnail.svg">  
+                        </c:if>
                  
                     </div>
                 </div>
