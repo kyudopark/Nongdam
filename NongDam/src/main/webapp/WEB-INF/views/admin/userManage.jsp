@@ -59,9 +59,9 @@
 
 <title>농담 | 농업 정보 커뮤니티</title>
 
-
-
-
+<!-- bannerText.js -->
+    <script type="text/javascript"
+	src="${contextPath }/resources/common/js/admin/bannerText.js"></script>
 
 </head>
 
@@ -90,7 +90,7 @@
 							<div class="accordion-body p-0">
 								<ul class="list-group list-group-flush rounded-bottom-2">
 									<li class="list-group-item">
-										<a class="text-decoration-none text-body" href="${contextPath }/admin/main">관리자페이지 메인</a>
+										<a class="text-decoration-none text-body" href="${contextPath }/admin/main">홈페이지 통계</a>
 									<li class="list-group-item bg-body-secondary"><a
 										<a class="text-decoration-none text-body" href="${contextPath }/admin/userManage">회원정보 관리</a>
 								</ul>
@@ -165,9 +165,18 @@
 													class="d-none d-lg-block col-lg-3 title-overflow-1 pt-1 pb-1">${li.user_id}</div>
 												<div class="d-none d-lg-block col-lg-1 pt-1 pb-1">
 													<!-- 셋 중 하나를 사용 -->
-													<span class="badge text-bg-warning">카카오</span>
-													<!-- <span class="badge text-bg-secondary">자체 회원</span> -->
-													<!-- <span class="badge text-bg-primary bg-gradient">구글</span> -->
+													<c:if test="${li.user_kakaologin == 'Y' }">
+														<span class="badge text-bg-warning" style="width:58px">카카오</span>
+													</c:if>
+													<c:if test="${empty li.user_kakaologin }">
+														<span class="badge text-bg-secondary" style="width:58x">자체 회원</span>
+													</c:if>
+													<c:if test="${li.user_kakaologin == 'G' }">
+														<span class="badge text-bg-primary bg-gradient" style="width:58px">구글</span>
+													</c:if>
+													<c:if test="${li.user_kakaologin == 'N' }">
+														<span class="badge text-bg-success bg-gradient" style="width:58px">네이버</span>
+													</c:if>
 												</div>
 												<div class="col-2 col-md-2 col-lg-1 pt-1 pb-1">
 													<input type="checkbox" name="selectedUsers"

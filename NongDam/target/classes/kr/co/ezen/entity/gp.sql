@@ -38,4 +38,3 @@ gp_num varchar(20)
 
 drop table gpUser;
 select * from gpUser;
-

@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collection;
+import java.util.Map;
 import java.util.Random;
 
 import javax.mail.internet.MimeMessage;
@@ -101,7 +103,6 @@ public class UserController {
         
         
         //231226
-        
 		String state = naverLoginBO.getState();
 	    session.setAttribute("state", state);
 	    String naverLoginUrl = naverLoginBO.getRedirectApiURI(state);
@@ -137,64 +138,9 @@ public class UserController {
     	userService.findPw(response, user);
     }
     
-    /*@RequestMapping("/googlecallback")
-    public String googlecallback(HttpSession session, @RequestParam("code") String code,@RequestParam(value = "state", required = false) String state) throws MalformedURLException {
-        // Google Access Token 및 사용자 정보 가져오기
-    	System.out.println("Received authorization code: " + code);
-        String apiURL = googleLoginBO.requestToken(code, state);
-        String access_token = "";
-        System.out.println(apiURL);
-        
-        try {
-  			URL url = new URL(apiURL);
-  			HttpURLConnection con = (HttpURLConnection)url.openConnection();
-  			con.setRequestMethod("GET");
-  			int responseCode = con.getResponseCode();
-  			BufferedReader br;
-  			System.out.println(responseCode);
-  			if(responseCode==200) { // 정상 호출
-  			  br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-  			} else {  // 에러 발생
-  			  br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
-  			}
-  			String inputLine;
-  			StringBuffer res = new StringBuffer();
-  			while ((inputLine = br.readLine()) != null) {
-  			  res.append(inputLine);
-  			}
-  			br.close();
-  			if(responseCode==200) {
-  					
-  				 Gson gson = new Gson();
-                 JsonObject googleUser = gson.fromJson(res.toString(), JsonObject.class);
-                 access_token = googleUser.get("access_token").getAsString();
-
-                 User profile = googleLoginBO.getGoogleProfile(access_token);
-
-                 User uvoIsEx = userService.findGoogleId(profile);
-
-                 System.out.println(profile);
-
-                 if (uvoIsEx != null) {
-                     session.setAttribute("uvo", uvoIsEx);
-                 } else {
-                     userService.insertGoogleUser(profile);
-                     User uvo = userService.findGoogleId(profile);
-                     session.setAttribute("uvo", uvo);
-                 }
-  			}
-  	    } catch (Exception e) {
-  	      System.out.println(e);
-  	    }
-
-        
-
-        return "redirect:/";
-    }*/
-    
     @RequestMapping("/googlecallback")
     public String googlecallback(Model model, @RequestParam("code") String code, @RequestParam("state") String state,
-            HttpSession session) throws IOException {
+            HttpSession session, RedirectAttributes rttr) throws IOException {
         String token = googleLoginBO.requestToken(session, code, state);
         apiResult = googleLoginBO.requestProfile(token);
         JSONObject full = new JSONObject(apiResult);
@@ -219,11 +165,15 @@ public class UserController {
 
             // 새로 등록된 사용자를 세션에 설정
             session.setAttribute("uvo", newUser);
+            rttr.addFlashAttribute("msgType", "성공");
+            rttr.addFlashAttribute("msg", "구글 소셜 회원 가입 되었습니다.");
 
             model.addAttribute("mem", newUser);
         } else {
             // 이미 등록된 사용자일 경우, 로그인 처리
             session.setAttribute("uvo", existingUser);
+            rttr.addFlashAttribute("msgType", "성공");
+            rttr.addFlashAttribute("msg", "구글 로그인 되었습니다.");
         }
 
         return "redirect:/";
@@ -232,7 +182,7 @@ public class UserController {
     
     
     @RequestMapping("/kakaocallback")
-    public String kakaoCallBack(HttpSession session, @RequestParam("code") String code,@RequestParam(value = "state", required = false) String state, Model model) {
+    public String kakaoCallBack(HttpSession session, @RequestParam("code") String code,@RequestParam(value = "state", required = false) String state, Model model, RedirectAttributes rttr) {
         
     	try {
             
@@ -247,8 +197,9 @@ public class UserController {
             
             KakaoDTO kakaoDTO = parseKakaoProfile(profile);
             
-            handleKakaoUser(session, kakaoDTO, model);
-
+            handleKakaoUser(session, kakaoDTO, model, rttr);
+            
+			
             return "redirect:/"; // 성공 시 메인 페이지로 리다이렉트
             
 
@@ -283,28 +234,33 @@ public class UserController {
     
    
     
-    private String handleKakaoUser(HttpSession session, KakaoDTO kakaoDTO, Model model) {
+    private String handleKakaoUser(HttpSession session, KakaoDTO kakaoDTO, Model model,RedirectAttributes rttr) {
         // kuser_id를 기준으로 사용자 조회
         User existingUser = userService.selectUserByKakaoLogin(kakaoDTO.getKuser_id());
+
 
         if (existingUser == null) {
             // 등록되지 않은 사용자일 경우, 새로 등록
             User newUser = convertToUser(kakaoDTO);
             
             
-            
-            
-            
             userService.kakaoUser(newUser); // 새로운 사용자 DB에 저장
 
             // 로그인 처리
             session.setAttribute("uvo", newUser);
+            
+            rttr.addFlashAttribute("msgType", "성공");
+            rttr.addFlashAttribute("msg", "카카오 소셜 회원가입 되었습니다.");
 
             // 회원가입 페이지로 리다이렉트
             return "redirect:/";
         } else {
             // 이미 등록된 사용자일 경우, 로그인 처리
             session.setAttribute("uvo", existingUser);
+            
+            rttr.addFlashAttribute("msgType", "성공");
+            rttr.addFlashAttribute("msg", "카카오 로그인 되었습니다.");
+			
             return "redirect:/"; // 또는 리다이렉트할 다른 페이지
         }
     }
@@ -331,8 +287,8 @@ public class UserController {
 		if(u!=null || user_id.equals("")) {
 			return 0;
 		}
-			return 1;
 		
+		return 1;
 	}
 
    
@@ -419,7 +375,7 @@ public class UserController {
          
     }
     
-  //이메일 인증
+    //이메일 인증
   	@PostMapping("/EmailAuth")
   	@ResponseBody
   	public int emailAuth(String user_email) {
@@ -465,9 +421,6 @@ public class UserController {
   		        "</div>";
   		
   		
-  		
-  		
-  		
   		try {
   			MimeMessage message = mailSender.createMimeMessage(); //Spring에서 제공하는 mail API
               MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
@@ -500,10 +453,6 @@ public class UserController {
 	    }
 	}
   	
-  	
-    
-
-   
 
 
 	//231226 naver로그인관련
@@ -511,18 +460,17 @@ public class UserController {
   	//콜백
   	//user/naver-callback?code=&state=
   	@RequestMapping("/naver-callback")
-  	public String navercallback(HttpSession session,String code, String state) {
+  	public String navercallback(HttpSession session,String code, String state, RedirectAttributes rttr) {
 
   		String session_state = (String) session.getAttribute("state");
   	    if (!state.equals(session_state)) {
   	        System.out.println("세션에 저장된 state와 다른 값으로 반환되었습니다.");
   	        session.removeAttribute("state");
-  	        return "redirect:/main";
+  	        return "redirect:/";
   	    }
 
   	    String apiURL = naverLoginBO.getAuthorizationApiURI(code, state);
   	    String access_token = "";
-  	    //String refresh_token = "";
   	    try {
   			URL url = new URL(apiURL);
   			HttpURLConnection con = (HttpURLConnection)url.openConnection();
@@ -551,22 +499,26 @@ public class UserController {
   				
   				if(uvoIsEx!=null){
   					session.setAttribute("uvo", uvoIsEx);
+  					
+  					rttr.addFlashAttribute("msgType", "성공");
+  		            rttr.addFlashAttribute("msg", "네이버 로그인 되었습니다.");
   				}else{
 	  				userService.insertNaverUser(profile);
 	  				User uvo = userService.findNaverId(profile);
 	  				session.setAttribute("uvo", uvo);
+	  				rttr.addFlashAttribute("msgType", "성공");
+	  	            rttr.addFlashAttribute("msg", "네이버 소셜 회원 가입 되었습니다.");
   				}
   			}
   	    } catch (Exception e) {
   	      System.out.println(e);
+  	      return "redirect:user/login";
   	    }
   	    
   	    return "redirect:/";
   	}
     
-  	
-  	
-  	
+  
   
     
 }
