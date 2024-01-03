@@ -8,7 +8,7 @@
 <%@ page language="java" %>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
-
+ <c:set var="now" value="<%=new java.util.Date() %>"></c:set>
 <html lang="ko" data-bs-theme="light">
 <head>
     <!-- UTF-8 사용-->
@@ -41,49 +41,30 @@
     <link rel="icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
     <link rel="shortcut icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
     <title>농담 | 농업 정보 커뮤니티</title>
-    	
-   		<script type="text/javascript">
-   		
+    <script type="text/javascript" src="${contextPath }/resources/common/js/info/bannerText.js"></script>
+   
+   	<script type="text/javascript">
+		$(document).ready(function (){
+			$(".page-link").on("click", function (e) {
+		        e.preventDefault();  // 기본 이벤트 막기
+		        var page = $(this).attr("href");  //페이지 번호
+		        $("#page").val(page);  // 페이지 폼 설정
+				$("#pageFrm").submit();
+		    });
+			
+	      	$(".info-list-click").on("click", function (e) {
+		        e.preventDefault();  // 기본 이벤트 막기
+		        $("#pageFrm").attr('action','${contextPath}/info/detail')
+				let p_info_idx = $(this).attr("href");  // 페이지 번호 가져오기
+			    let t_info_idx = "<input type='hidden' name='info_idx' value='"+p_info_idx+"'>";
+			    $("#pageFrm").append(t_info_idx);
+			    $("#pageFrm").submit();  // 폼 서브밋
+		    });
+	     
+	      	
+		});
+	</script>
 
-  	  $(document).ready(function (){
-  	        $(".page-link").on("click", function (e) {
-  	            e.preventDefault();  // 기본 이벤트 막기
-  	            
-  	            var page = $(this).attr("href");  //페이지 번호
-  	            $("#page").val(page);  // 페이지 폼 설정
-  	            $("#pageFrm").submit();  // 폼 서브밋
-  	        });
-  	        
-  	      const url = new URL(window.location.href);
-		  	const urlParams = url.searchParams;
-		  	var tag = urlParams.get('tag'); //태그를 가지고 온다.
-  	        
-  	      $(document).ready(function() {
-  	        var urlParams = new URLSearchParams(window.location.search);
-  	        var selectedValue = urlParams.get('type'); // 쿼리 매개변수에서 'type' 값 가져오기
-
-  	        // 'type' 값에 따라 선택 상태 설정
-  	        if (selectedValue === 'count') {
-  	            $("#type").val('count');
-  	        } else {
-  	            $("#type").val('new');
-  	        }
-  	    });
-
-  	    $("#type").change(function() {
-  	        var selectValue = this.value;
-  	        var url = "/ezen/info/main"; // 기본 URL
-
-  	        if (selectValue === 'count') {
-  	            url = "/ezen/info/main/sort";
-  	        }
-
-  	        // 선택한 값에 따라 URL에 type명 추가하여 이동
-  	        window.location.href = url + "?type=" + selectValue +"&tag="+tag;
-  	    });
-  	    
-  	    });
-  	  </script>
   	  
 </head>
 <body>
@@ -100,28 +81,22 @@
         <!-- 태그 탭 -->
       <nav id="main">
           <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        <!--  class="nav-link(기본) active(선택된 값) text-body(텍스트 색 지정)"-->
-                        <!-- 필요한 경우 button을 a 태그로 바꾸어도 괜찮습니다. (단, a태그로 바꾸는 경우 type=button 삭제하세요 )-->
-               <a href= "/ezen/info/main?tag=" class="nav-link text-body active" role="tab" aria-controls="nav-home" aria-selected="true">전체</a>
-               <a href="/ezen/info/main?tag=new" class="nav-link text-body" role="tab" aria-controls="nav-profile" aria-selected="true">신규</a>
-               <a href="/ezen/info/main?tag=tenure" class="nav-link text-body" role="tab" aria-controls="nav-contact" aria-selected="true">종사자</a>
+               <!--  class="nav-link(기본) active(선택된 값) text-body(텍스트 색 지정)"-->
+               <!-- 필요한 경우 button을 a 태그로 바꾸어도 괜찮습니다. (단, a태그로 바꾸는 경우 type=button 삭제하세요 )-->
+               <a href= "/ezen/info/main" class="nav-link text-body ${empty cri.tag ? 'active' : '' }" role="tab" aria-controls="nav-home" aria-selected="true">전체</a>
+               <a href="/ezen/info/main?tag=신규" class="nav-link text-body ${cri.tag == '신규' ? 'active' : '' }" role="tab" aria-controls="nav-profile" aria-selected="true">신규</a>
+               <a href="/ezen/info/main?tag=현직" class="nav-link text-body ${cri.tag == '현직' ? 'active' : '' }" role="tab" aria-controls="nav-contact" aria-selected="true">현직</a>
           </div>
       </nav>
         
         <!-- 게시글 테이블 -->
-       <div class="d-flex justify-content-end mt-4">
-            <select class="btn btn-secondary dropdown-toggle" name="type" id="type">
-                <option class="dropdown-item" value="new" <c:if test="${type eq 'new'}">selected</c:if> >최신 순</option>
-                <option class="dropdown-item" value="count" <c:if test="${type eq 'count'}">selected</c:if> >조회수 순</option>
-            </select>
-        </div>
         <table class="table table-hover mt-2 text-center mw-100">
             <!-- 필요없는 열은 빼고 사용하세요. -->
             <thead>
                 <tr class="table-dark">
                     <th>#</th>
                     <th>제목</th>
-                    <th class=" d-none d-md-table-cell">날짜</th>
+                    <th class=" d-none d-md-table-cell">작성일</th>
                     <th class=" d-none d-md-table-cell">작성자</th>
                     <th class=" d-none d-md-table-cell">추천</th>
                     <th class=" d-none d-md-table-cell">조회수</th>
@@ -132,62 +107,59 @@
 	            <c:forEach var="li" items="${li}">
 				    <tr>
 				        <td><span class="text-muted">${li.info_idx}</span></td>
-				        <td><a class="text-decoration-none tr-list-click" href="${contextPath}/info/detail?info_idx=${li.info_idx}">[${li.info_tag}] ${li.info_title }</span></td>
+				        <td><a class="text-decoration-none info-list-click" href="${li.info_idx}">[${li.info_tag}] ${li.info_title }</span></td>
 				        <td class="d-none d-md-table-cell">
-				        <c:set var="now" value="<%=new java.util.Date() %>"></c:set>
 						<c:set var="targetDate" value="${li.info_date}" />
-
-				<c:choose>
-				    <c:when test="${now.time - targetDate.time < 24 * 60 * 60 * 1000}">
-				        <fmt:formatDate value="${li.info_date}" pattern="HH시 mm분" />
-				    </c:when>
-				    <c:otherwise>
-				        <fmt:formatDate value="${li.info_date}" pattern="yyyy년 MM월 dd일" />
-				    </c:otherwise>
-				</c:choose>
+						<c:choose>
+						    <c:when test="${now.time - targetDate.time < 24 * 60 * 60 * 1000}">
+						        <fmt:formatDate value="${li.info_date}" pattern="HH:mm" />
+						    </c:when>
+						    <c:otherwise>
+						        <fmt:formatDate value="${li.info_date}" pattern="yyyy-MM-dd" />
+						    </c:otherwise>
+						</c:choose>
 				
 				        <td class="d-none d-md-table-cell">${li.user_nickname }</td>
-				        <td class="d-none d-md-table-cell">${li.info_boomup }</td>
-				       <td class="d-none d-md-table-cell">${li.info_count}</td>
+				        <td class="d-none d-md-table-cell">${li.info_like}</td>
+				       	<td class="d-none d-md-table-cell">${li.info_count}</td>
 				    </tr>
 				    
 				</c:forEach>
-	                
-                    <td colspan="6">
-                        <div class="d-flex flex-wrap justify-content-between">
-                            <!-- 정렬용 더미 -->
-                            <div class="d-none d-md-block" style="width: 70px"></div>
-                            <!-- 검색 인풋 -->
-                            
-                            <div style="width: 20rem;">
-                            	<form method="get">
-                                <div class="input-group" >
-                                    <select class="btn btn-outline-secondary dropdown-toggle" name="type">
-                                        <option class="dropdown-item" value="info_title">제목</option>
-										<option class="dropdown-item" value="user_nickname">작성자</option>
-                                    </select >
-                                    <input type="text" name="keyword" class="form-control" placeholder="검색" value="${cri.keyword }">
-                                    <button class="btn btn-secondary" type="submit">검색</button>
-                                </div>
-                                </form>
-                            </div>
-                            
-                            <!-- 글쓰기 버튼(2) -->
-                            
-                            
-                           <c:if test="${ uvo.user_admin== true }">
-                            	<a class="text-decoration-none" href="${contextPath}/info/write">
-                            	<button class="btn btn-outline-secondary" id="a3button"> 글쓰기</button>
-                           	</a>
-                           </c:if> 	
-                          
-                        </div>
-                    </td>    
-                </tr>
             </tbody>
-            
-            
         </table>
+ 
+		<div class="d-flex flex-wrap justify-content-between">
+		    <!-- 정렬용 더미 -->
+		  	<div class="d-none d-md-block" style="width: 80px"></div>
+		  	<!-- 검색 인풋 -->
+		  
+		  	<div style="width: 20rem;">
+		  		<form method="get">
+                	<div class="input-group">
+		            	<select class="btn btn-outline-secondary dropdown-toggle" name="type">
+		                	<option class="dropdown-item" value="info_title">제목</option>
+							<option class="dropdown-item" value="user_nickname">작성자</option>
+			           	</select>
+			            <input type="text" name="keyword" class="form-control" placeholder="검색" value="${cri.keyword }">
+			          	<button class="btn btn-secondary" type="submit">검색</button>
+		      			<c:if test="${!empty cri.tag }">
+			        		<input type="hidden" name="tag" value="${cri.tag }"/>
+			        	</c:if>
+		      		</div>
+		      	</form>
+		  	</div>
+		  
+		  <!-- 글쓰기 버튼(2) -->
+		  
+		  	<div style="width:80px">
+				<c:if test="${ uvo.user_admin== true }">
+		  			<a class="text-decoration-none btn btn-outline-secondary" href="${contextPath}/info/write" id="a3button">
+		  				글쓰기
+		 			</a>
+		 		</c:if> 	
+		  	</div>
+		</div> 
+            
        
         <!-- 페이징 -->
         <div class="mt-3">
@@ -200,11 +172,11 @@
 			            </li> 
 			        </c:if> 
 			        <!-- 현재버튼 -->
-				        <c:forEach var="pageNum" begin="${pageCre.startPage}" end="${pageCre.endPage}">
+			        <c:forEach var="pageNum" begin="${pageCre.startPage}" end="${pageCre.endPage}">
 					    <li class="page-item ${pageCre.cri.page == pageNum ? 'active' : ''}">
-					        <a class="page-link ${pageCre.cri.page == pageNum ? 'bg-secondary border-secondary' : ''}" href="${pageNum}">${pageNum}</a>
+					        <a class="page-link ${pageCre.cri.page == pageNum ? 'bg-secondary border-secondary' : 'text-secondary'}" href="${pageNum}">${pageNum}</a>
 					    </li>
-						</c:forEach>
+					</c:forEach>
 			        
 			        <!-- 다음페이지 -->
 			        <c:if test="${pageCre.next}"> 
@@ -213,23 +185,23 @@
 			            </li>
 			        </c:if> 
 			    </ul> 
-			    
-					<!-- /.page -->
             </nav>
         </div>	
         
-        	<form id="pageFrm" action="${contextPath}/info/main" method="get">
-        		
-				<input type="hidden" id="user_idx" name="user_idx" value="1"/>
-				<input type="hidden" id="page" name="page" value="${pageCre.cri.page }"/>
-				<input type="hidden" id="perPageNum" name="perPageNum" value="${pageCre.cri.perPageNum }"/>
-			
-               	<!-- 페이지 이동 시 값 가져가는 것 방지  -->
-        		<c:if test="${empty pageCre.cri.keyword }">
-					<input type="hidden" name="type" value="${ pageCre.cri.type}"/>
-               		<input type="hidden" name="keyword" value="${pageCre.cri.keyword}"/>
-				</c:if>
-			</form>	
+       	<form id="pageFrm" action="${contextPath}/info/main" method="get">
+			<c:if test="${pageCre.cri.page != 1 || pageCre.cri.perPageNum != 12 }">
+			<input type="hidden" id="page" name="page" value="${pageCre.cri.page }"/>
+			<input type="hidden" id="perPageNum" name="perPageNum" value="${pageCre.cri.perPageNum }"/>
+			</c:if>
+            <!-- 페이지 이동 시 값 가져가는 것 방지  -->
+       		<c:if test="${!empty cri.keyword }">
+				<input type="hidden" name="type" value="${ pageCre.cri.type}"/>
+              	<input type="hidden" name="keyword" value="${pageCre.cri.keyword}"/>
+			</c:if>
+        	<c:if test="${!empty cri.tag }">
+        		<input type="hidden" name="tag" value="${cri.tag }"/>
+        	</c:if>
+		</form>	
 
         
     </div>

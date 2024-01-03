@@ -8,158 +8,102 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<mapper namespace="kr.co.ezen.mapper.FreeMapper">
 	
-	<sql id="search">
-		<if test="type == 'user_nickname'">
+		<sql id="search">
+			<if test="type == 'user_nickname'">
 				where user_nickname like concat('%',#{keyword},'%')
 			</if> 
 			<if test="type == 'free_title'">
 				where free_title like concat('%',#{keyword},'%')
 			</if>
-	</sql>
+			<if test="type != null and tag != null">
+				and free_tag=#{tag}
+			</if>
+			<if test="type == null and tag != null">
+				where free_tag=#{tag}
+			</if>
+		</sql>
 		
-	<select id="findAll" resultType="kr.co.ezen.entity.Free" parameterType="kr.co.ezen.entity.Criteria">
-	
-		select free_title,free_content,free_date,free_tag,user_nickname,user_idx,free_idx,free_count from free natural join User
-		<include refid="search"/>
-		order by free_idx desc
-		limit #{pageStart}, #{perPageNum}
-	
-	</select>
-	
-		<select id="findfr" resultType="kr.co.ezen.entity.Free" parameterType="kr.co.ezen.entity.Criteria">
-	        select free_title,free_content,free_date,free_tag,user_nickname,user_idx,free_idx,free_count from free  
-	         natural join User where free_tag="자유" order by free_idx desc
-	        limit #{pageStart}, #{perPageNum}
-		</select>
-	
-		<select id="findqu" resultType="kr.co.ezen.entity.Free" parameterType="kr.co.ezen.entity.Criteria">
-	        select free_title,free_content,free_date,free_tag,user_nickname,user_idx,free_idx,free_count from free 
-	        natural join User where free_tag="질문" order by free_idx desc
-	        limit #{pageStart}, #{perPageNum}
-		</select>
-		
-		<select id="findBycount" resultType="kr.co.ezen.entity.Free" parameterType="kr.co.ezen.entity.Criteria">
-		
-			 select free_title,free_content,free_date,free_tag,user_nickname,user_idx,free_idx,free_count from free natural join User
+		<select id="findAll" resultType="kr.co.ezen.entity.Free" parameterType="kr.co.ezen.entity.Criteria">
+			select free_title,free_content,free_date,free_tag,user_nickname,user_idx,free_idx,free_count from free natural join User
 			<include refid="search"/>
-			order by free_count desc
-			limit #{pageStart}, #{perPageNum}
-		</select>
-		
-		<select id="findBycountfr" resultType="kr.co.ezen.entity.Free" parameterType="kr.co.ezen.entity.Criteria">
-		
-			 select free_title,free_content,free_date,free_tag,user_nickname,user_idx,free_idx,free_count from free natural join User
-			<include refid="search"/>
-			where free_tag="자유" order by free_count desc
-			limit #{pageStart}, #{perPageNum}
-		</select>
-		
-		<select id="findBycountqu" resultType="kr.co.ezen.entity.Free" parameterType="kr.co.ezen.entity.Criteria">
-		
-			 select free_title,free_content,free_date,free_tag,user_nickname,user_idx,free_idx,free_count from free natural join User
-			<include refid="search"/>
-			where free_tag="질문" order by free_count desc
+			order by free_idx desc
 			limit #{pageStart}, #{perPageNum}
 		</select>
 	
-		<select id="findBydate" resultType="kr.co.ezen.entity.Free" parameterType="kr.co.ezen.entity.Criteria">
-			select free_title,free_content,free_date,free_tag,user_nickname,user_idx,free_idx,free_count from free natural join user
-			<include refid="search"/>
-			order by free_date desc
-			LIMIT #{pageStart}, #{perPageNum}
-		</select>
+		
+		
 	
-	<select id="findByidx" resultType="kr.co.ezen.entity.Free" parameterType="int">
-		select free_title,free_content,free_date,free_tag,user_nickname,user_idx,free_idx from free natural join User 
+		<select id="findByidx" resultType="kr.co.ezen.entity.Free" parameterType="int">
+			select free_title,free_content,free_date,free_tag,user_nickname,user_idx,free_idx 
+			from free natural join User 
 			where free_idx=#{free_idx}
+		</select>
 		
-	</select>
-	
-	<insert id="insert" parameterType="kr.co.ezen.entity.Free">
-	    insert into free (
-	        free_idx, free_title, free_content, free_date, free_tag, free_count, user_idx) 
-	        values (#{free_idx}, #{free_title}, #{free_content}, now(), #{free_tag}, #{free_count}, #{user_idx})
-	</insert>
-	
-	<select id="GetUserIdx" resultType="kr.co.ezen.entity.Free" parameterType="int">
-		select user_idx from User where user_nickname=#{user_nickname}
+		<insert id="insert" parameterType="kr.co.ezen.entity.Free">
+		    insert into free (free_idx, free_title, free_content, free_date, free_tag, free_count, user_idx) 
+		    values (#{free_idx}, #{free_title}, #{free_content}, now(), #{free_tag}, #{free_count}, #{user_idx})
+		</insert>
 		
-	</select>
-	
-	
-	<select id="totalCount" resultType="int" parameterType="kr.co.ezen.entity.Criteria">
-		   select count(*) from free natural join User
-		   <include refid="search"/>
-	</select>
-	
-	<update id="updatecnt" parameterType="int">
-	        update free
-	        set free_count = free_count + 1
-	        where free_idx = #{free_idx}
-	</update>
-	
-	<delete id="deleteByIdx" parameterType="int">
-			delete from free where free_idx=#{free_idx}
-	</delete>
-	
-	<update id="updaetByIdx" parameterType="kr.co.ezen.entity.Free">
-			update free set free_title=#{free_title}, free_content=#{free_content}, free_tag=#{free_tag}
-			where free_idx=#{free_idx}
-	</update>
+		<select id="getUserIdx" resultType="kr.co.ezen.entity.Free" parameterType="int">
+			select user_idx from User where user_nickname=#{user_nickname}
+		</select>
+		
+		<select id="totalCount" resultType="int" parameterType="kr.co.ezen.entity.Criteria">
+			   select count(*) from free natural join User
+			   <include refid="search"/>
+		</select>
+		
+		<update id="updatecnt" parameterType="int">
+		        update free
+		        set free_count = free_count + 1
+		        where free_idx = #{free_idx}
+		</update>
+		
+		<delete id="deleteByIdx" parameterType="int">
+				delete from free where free_idx=#{free_idx}
+		</delete>
+		
+		<update id="updateByIdx" parameterType="kr.co.ezen.entity.Free">
+				update free set free_title=#{free_title}, free_content=#{free_content}, free_tag=#{free_tag}
+				where free_idx=#{free_idx}
+		</update>
 	
 	
 
-	<!-- 댓글 -->
-	
-	<select id="findAllComment" parameterType="int"
-		resultType="kr.co.ezen.entity.FreeComment">
-			select free_parent_idx,free_comment_idx,user_idx,user_nickname,free_comment_time,free_comment_content,free_comment_useable
-			from freeComment natural join User where free_idx=#{free_idx}
-
-			order by free_parent_idx desc, free_comment_idx
-		</select> <!-- freeComment와 User조인 free_idx와 일치하는 값을 가지고 온다. -->
-	
-	<insert id="insertComment" parameterType="kr.co.ezen.entity.FreeComment">
-			<selectKey order="BEFORE" keyProperty="free_parent_idx" resultType="int">
-				select IFNULL(max(free_comment_idx)+1,1) as free_parent_idx from freeComment
-			</selectKey><!-- select key값을 가지고 온다. free_parent_idx의 새로운 값을 들고오기 위함.  -->
-			insert into freeComment (free_idx,free_parent_idx,user_idx,free_comment_content,free_comment_useable) 
-			values (#{free_idx},#{free_parent_idx},#{user_idx},#{free_comment_content},1)
-		</insert> <!-- freeComment테이블에 데이터 추가 -->
-	
-	<delete id="deleteCommentByIdx" parameterType="int">
-		update freeComment set free_comment_useable=0 where free_comment_idx=#{free_comment_idx}
-	</delete> <!-- comment_idx값과 일치하는 댓글만 삭제 -->
-	
-	<delete id="deleteCommentByFree_idx" parameterType="int">
-		delete from free_comment where free_idx=#{free_idx}
-	</delete> <!--free_idx값과 일치하는 모든 댓글 삭제 -->
-	
-	<update id="updateCommentByIdx" parameterType="kr.co.ezen.entity.FreeComment">
-			update freeComment set free_comment_content=#{free_comment_content}
-			where free_comment_idx=#{free_comment_idx}
-	</update>
+		<!-- 댓글 -->
+		
+		<select id="findAllComment" parameterType="int"
+			resultType="kr.co.ezen.entity.FreeComment">
+				select free_parent_idx,free_comment_idx,user_idx,user_nickname,free_comment_time,free_comment_content,free_comment_useable
+				from freeComment natural join User where free_idx=#{free_idx}
+				order by free_parent_idx desc, free_comment_idx
+		</select>
+		
+		<insert id="insertComment" parameterType="kr.co.ezen.entity.FreeComment">
+				<selectKey order="BEFORE" keyProperty="free_parent_idx" resultType="int">
+					select IFNULL(max(free_comment_idx)+1,1) as free_parent_idx from freeComment
+				</selectKey>
+				insert into freeComment (free_idx,free_parent_idx,user_idx,free_comment_content,free_comment_useable) 
+				values (#{free_idx},#{free_parent_idx},#{user_idx},#{free_comment_content},1)
+		</insert> 
+		
+		<delete id="deleteCommentByIdx" parameterType="int">
+			update freeComment set free_comment_useable=0 where free_comment_idx=#{free_comment_idx}
+		</delete> 
+		
+		<delete id="deleteCommentByFree_idx" parameterType="int">
+			delete from free_comment where free_idx=#{free_idx}
+		</delete> 
+		
+		<update id="updateCommentByIdx" parameterType="kr.co.ezen.entity.FreeComment">
+				update freeComment set free_comment_content=#{free_comment_content}
+				where free_comment_idx=#{free_comment_idx}
+		</update>
 	
 		<insert id="insertReplyComment" parameterType="kr.co.ezen.entity.FreeComment">
 			insert into freeComment (free_idx,free_parent_idx,user_idx,free_comment_content,free_comment_useable) 
 			values (#{free_idx},#{free_parent_idx},#{user_idx},#{free_comment_content},1)
 		</insert>
-	<!-- 추천 관련 기능 -->
-	
-	<!-- 좋아요를 눌렀는가 누르지 않았는가 -->
-	<select id="findLike" resultType="int">
-		select count(*) from freeHeart user_idx natural join User where free_idx = #{free_idx} and user_idx = #{user_idx}
-	</select>
-	
-	<!-- 좋아요 증가 -->
-	<insert id="likeUp" parameterType="kr.co.ezen.entity.FreeHeart">
-		insert into freeHeart (free_up_like,free_idx, user_idx, free_up_cont )
-		values((select * from (select max(free_up_like)+1 from freeHeart) next), #{free_idx},#{user_idx},1)
-	</insert>
-	<!-- 좋아요 정보 삭제 -->
-	 <delete id="likeDown">
-	  	delete from freeHeart where free_idx = #{free_idx} and user_idx = #{user_idx} 
-	  </delete>
-	
+
 	</mapper>
 	

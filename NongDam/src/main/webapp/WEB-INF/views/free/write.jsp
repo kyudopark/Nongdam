@@ -40,28 +40,13 @@
     <link rel="icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
     <link rel="shortcut icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
     <title>농담 | 농업 정보 커뮤니티</title>
- 
-
-    <script>
-	
-    // select 요소의 변경 이벤트 처리
-    $("select[name=form-select]").change(function(){
-        console.log($(this).val()); // value값 가져오기
-        const selectedOptionText = $('select[name="form-select"] option:selected').text(); // text값 가져오기
-    });
-
-    
-</script>
-	
+    <script type="text/javascript" src="${contextPath }/resources/common/js/free/bannerText.js"></script>
 
 </head>
 <body>
 
 	<jsp:include page="../common/header.jsp"/>
 	<jsp:include page="../common/banner.jsp"/>
-	
-	
-	<body>
 
     <!-- 글 작성 div container-->
     <div class="container mt-5 mb-5">
@@ -72,10 +57,9 @@
          
             <!-- 말머리 있는 버전 -->
            <div class="row">
-    <!-- 말머리 -->
+    		<!-- 말머리 -->
 			    <div class="col-12 col-md-3 mb-3">
 			        <select class="form-select" name="free_tag" id="free_tag">
-			            <option value="">말머리를 선택.</option>
 			            <option value="자유">자유</option>
 			            <option value="질문">질문</option>
 			        </select>
@@ -96,17 +80,22 @@
                     <p></p>
                     <p></p>
                     <p></p>
-                    <p></p>
                 </textarea>
                 <!-- 스크립트문. 항상 에디터 박스 바로 뒤에 놓을 것-->
-                <script>
-                    ClassicEditor
-                        .create( document.querySelector( '#editor' ) )
-                        .catch( error => {
-                            console.error( error );
-                    });
-                    
-                </script>
+				 <script>
+			        ClassicEditor
+			            .create(document.querySelector('#editor'), {
+			                ckfinder: {
+			                    uploadUrl: 'fileupload.do' 
+			                }
+			            })
+			            .then(editor => {
+			                console.log('Editor was initialized', editor);
+			            })
+			            .catch(error => {
+			                console.error('There was an error initializing the editor', error);
+			            });
+			    </script>
             </div>
             
             <!-- 글 작성하기 버튼-->
@@ -116,22 +105,9 @@
             </div>
         </form>
     </div>    
-    
-  <script>
-    $(document).ready(function() {
-        $('#check').on('click', function() {
-            var selectedOption = $('#free_tag').val();
-            if (selectedOption == "") {
-                alert("말머리를 선택해주세요.");
-                return false; // 선택하지 않았을 경우 false 반환
-            }
-            return true; // 선택한 경우 true 반환
-        });
-    });
-</script>
+
     <!-- ============================================== -->
 
-</body>
 	
 	<jsp:include page="../common/footer.jsp"/>
 </body>

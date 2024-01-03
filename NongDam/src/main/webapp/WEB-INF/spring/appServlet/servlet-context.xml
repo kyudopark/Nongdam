@@ -31,8 +31,24 @@
 	        <mvc:mapping path="/admin/**"/> 
 	        <beans:bean class="kr.co.ezen.interceptor.LoginInterceptor"/>
     	</mvc:interceptor>
-    
-       <mvc:interceptor>
+    	<mvc:interceptor>
+	        <mvc:mapping path="/gp/write"/> 
+	        <beans:bean class="kr.co.ezen.interceptor.LoginInterceptor"/>
+    	</mvc:interceptor>
+    	<mvc:interceptor>
+	        <mvc:mapping path="/gp/modify"/> 
+	        <beans:bean class="kr.co.ezen.interceptor.LoginInterceptor"/>
+    	</mvc:interceptor>
+    	<mvc:interceptor>
+	        <mvc:mapping path="/info/write"/> 
+	        <beans:bean class="kr.co.ezen.interceptor.LoginInterceptor"/>
+    	</mvc:interceptor>
+    	<mvc:interceptor>
+	        <mvc:mapping path="/info/modify"/> 
+	        <beans:bean class="kr.co.ezen.interceptor.LoginInterceptor"/>
+    	</mvc:interceptor>
+ 
+       	<mvc:interceptor>
 	        <mvc:mapping path="/myPage/**"/> 
 	        <beans:bean class="kr.co.ezen.interceptor.MyPageInterceptor"/>
 	    </mvc:interceptor>

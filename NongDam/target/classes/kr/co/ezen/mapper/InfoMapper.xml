@@ -12,70 +12,35 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="type == 'info_title'">
 			where info_title like concat('%',#{keyword},'%')
 		</if>
+		<if test="type != null and tag != null">
+			and info_tag=#{tag}
+		</if>
+		<if test="type == null and tag != null">
+			where info_tag=#{tag}
+		</if>
 	</sql>
 		
 	<select id="findAll" resultType="kr.co.ezen.entity.Info" parameterType="kr.co.ezen.entity.Criteria">
-		select info_title,info_content,info_date,info_tag,user_nickname,user_idx,info_idx,info_count from info natural join User
+		select i.info_title,i.info_content,i.info_date,i.info_tag,
+		    u.user_nickname,u.user_idx,i.info_idx,i.info_count,
+		    (select COUNT(*) from infoLike il where il.info_idx = i.info_idx) AS info_like
+		from info AS i join User AS u ON i.user_idx = u.user_idx
 		<include refid="search"/>
-		order by info_idx desc
+		order by i.info_idx desc
 		limit #{pageStart}, #{perPageNum}
-	</select>
-	
-	<select id="findnew" resultType="kr.co.ezen.entity.Info" parameterType="kr.co.ezen.entity.Criteria">
-		select info_title,info_content,info_date,info_tag,user_nickname,user_idx,info_idx,info_count from info  
-		natural join User where info_tag="신규" order by info_idx desc
-		limit #{pageStart}, #{perPageNum}
-	</select>
-	
-	<select id="findtenure" resultType="kr.co.ezen.entity.Info" parameterType="kr.co.ezen.entity.Criteria">
-		select info_title,info_content,info_date,info_tag,user_nickname,user_idx,info_idx,info_count from info
-		natural join User where info_tag="현직" order by info_idx desc
-		limit #{pageStart}, #{perPageNum}	
-	</select>
-		
-	<select id="findBycount" resultType="kr.co.ezen.entity.Info" parameterType="kr.co.ezen.entity.Criteria">
-		select info_title,info_content,info_date,info_tag,user_nickname,user_idx,info_idx,info_count from info natural join User
-		<include refid="search"/>
-		order by info_count desc
-		limit #{pageStart}, #{perPageNum}
-	</select>
-	
-	<select id="findBycountnew" resultType="kr.co.ezen.entity.Info" parameterType="kr.co.ezen.entity.Criteria">
-		select info_title,info_content,info_date,info_tag,user_nickname,user_idx,info_idx,info_count from info natural join User
-		<include refid="search"/>
-		where info_tag="신규" order by info_count desc
-		limit #{pageStart}, #{perPageNum}
-	</select>
-	
-	<select id="findBycountenure" resultType="kr.co.ezen.entity.Info" parameterType="kr.co.ezen.entity.Criteria">
-		select info_title,info_content,info_date,info_tag,user_nickname,user_idx,info_idx,info_count from info natural join user
-		<include refid="search"/>
-		where info_tag="현직" order by info_count desc
-		limit #{pageStart}, #{perPageNum}
-	</select>
-	
-	
-	
-	<select id="findBydate" resultType="kr.co.ezen.entity.Info" parameterType="kr.co.ezen.entity.Criteria">
-		select info_title,info_content,info_date,info_tag,user_nickname,user_idx,info_idx,info_count from info natural join User
-		<include refid="search"/>
-		order by info_date desc
-		LIMIT #{pageStart}, #{perPageNum}
-	</select>
-	
-	<select id="findByidx" resultType="kr.co.ezen.entity.Info" parameterType="int">
-		select * from info where info_idx=#{info_idx} 
 	</select>
 	
 	<insert id="insert" parameterType="kr.co.ezen.entity.Info">
 		insert into info (
-			info_idx,info_title, info_content, info_date, info_tag, info_count, user_idx) 
-			values (#{info_idx}, #{info_title}, #{info_content}, now(), #{info_tag}, #{info_count}, #{user_idx})
+		info_idx,info_title, info_content, info_date, info_tag, info_count, user_idx) 
+		values (#{info_idx}, #{info_title}, #{info_content}, now(), #{info_tag}, #{info_count}, #{user_idx})
 	</insert>
 	
-	<select id="GetUserIdx" resultType="int" parameterType="string">
-		select user_idx from User where user_nickname=#{user_nickname}
+	<select id="findByIdx" resultType="kr.co.ezen.entity.Info" parameterType="int">
+		select info_idx, info_title, info_content, info_tag, info_count, user_idx, user_nickname
+		from info natural join User where info_idx=#{info_idx} 
 	</select>
+
 	
 	<select id="totalCount" resultType="int" parameterType="kr.co.ezen.entity.Criteria">
 		select count(*) from info natural join User
@@ -96,5 +61,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		update info set info_title=#{info_title}, info_content=#{info_content}, info_tag=#{info_tag}
 		where info_idx=#{info_idx}
 	</update>
+	
+	
+	
+	
+	
+	
+	<select id="findUser_idxIsExist" parameterType="kr.co.ezen.entity.InfoLike" resultType="int">
+		select count(*) from infoLike
+		where info_idx=#{info_idx} and user_idx=#{user_idx}
+	</select>
+	
+	<select id="findLikeCount" parameterType="int" resultType="int">
+		select count(*) from infoLike
+		where info_idx=#{info_idx}
+	</select>
+	
+	<insert id="insertInfoLike" parameterType="kr.co.ezen.entity.InfoLike">
+		insert into infoLike (info_idx,user_idx) values (#{info_idx},#{user_idx})
+	</insert>
+	
+	<delete id="deleteInfoLike" parameterType="kr.co.ezen.entity.InfoLike">
+		delete from infoLike where info_idx=#{info_idx} and user_idx=#{user_idx}
+	</delete>
+	
 	
 </mapper>

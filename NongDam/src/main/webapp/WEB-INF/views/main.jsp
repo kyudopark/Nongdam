@@ -83,14 +83,17 @@
 						<span class="d-inline-block me-auto fs-6 fw-bolder">추천하는 최신
 							정보를 알려드립니다.</span> <a class="d-inline-block text-muted"
 							href="${contextPath }/info/main">정보 게시판으로 &gt;</a>
-					<div class="row p-3">
-						<img class="col-12 col-sm-6 bg-light object-fit-cover p-0"
-							style="min-height: 240px" src="#" />
-						<div class="col-12 col-sm-6 pt-3">
-							<p class="fw-bolder">{제목}</p>
-							<p class="title-overflow-6">{내용}</p>
-						</div>
-					</div>
+							<div class="row p-3">
+								<a class="text-body text-decoration-none col-12 p-0  col-sm-6"
+								href="${contextPath }/info/detail?info_idx=${infolist.info_idx}">
+								<img class=" bg-light object-fit-cover p-0 w-100"
+									style="min-height: 240px" src="https://png.pngtree.com/thumb_back/fh260/background/20220312/pngtree-a-good-harvest-of-rice-image_1064011.jpg" />
+									</a>
+								<a class="text-body text-decoration-none col-12 col-sm-6 pt-3" href="${contextPath }/info/detail?info_idx=${infolist.info_idx}">
+									<p class="fw-bolder">${infolist.info_title }</p>
+									<p class="title-overflow-6">${infolist.info_content }</p>
+								</a>
+							</div>	
 					</p>
 				</div>
 				<!-- 공동구매 마감 임박 상품들 -->

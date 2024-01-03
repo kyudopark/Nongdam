@@ -35,7 +35,7 @@ public class NaverLoginBO {
 	//토큰 요청시 redirect
 	public String getRedirectURI() {
 		try {
-			return URLEncoder.encode("http://localhost:8080/ezen/user/naver-callback", "UTF-8");
+			return URLEncoder.encode("http://ec2-15-165-204-160.ap-northeast-2.compute.amazonaws.com:8080/ezen/user/naver-callback", "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			return null;

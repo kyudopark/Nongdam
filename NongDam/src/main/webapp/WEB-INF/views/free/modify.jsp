@@ -40,39 +40,13 @@
     <link rel="shortcut icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
     
     <title>농담 | 농업 정보 커뮤니티</title>
-    
+    <script type="text/javascript" src="${contextPath }/resources/common/js/free/bannerText.js"></script>
+
 </head>
 
-<script>
-
-$(document).ready(function() {
-  $('#modify').click(function() {
-        var selectedOption = $('#free_tag').val();
-        if (selectedOption === "") {
-             alert("말머리를 선택해주세요.");
-             return false; 
-        } else {
-             $.ajax({
-                type: 'POST',
-                url: 'modify', 
-                data:{free_idx: '${vo.free_idx}' },
-                contentType: 'application/json',
-                success: function(response) {
-                    alert('수정하시겠습니까?');
-                    location.href = '/ezen/free/main';
-                },
-                error: function(error) {
-                    console.error('글 수정 중 에러 발생:', error);
-                }
-             });
-         return true; // 선택한 경우 true 반환
-    }
-    });
-});
-
-</script>
-
 <body>
+	<jsp:include page="../common/header.jsp"/>
+	<jsp:include page="../common/banner.jsp"/>
 
     <!-- 글 작성 div container-->
     <div class="container mt-5 mb-5">
@@ -84,9 +58,8 @@ $(document).ready(function() {
                 <!-- 말머리 -->
                 <div class="col-12 col-md-3 mb-3">
                     <select class="form-select" name="free_tag" id="free_tag">
-                        <option selected value="">말머리를 선택해주세요.</option>
-                        <option value="자유">자유</option>
-                        <option value="질문">질문</option>
+						<option value="자유" ${vo.free_tag == '자유' ? 'selected' : ''}>자유</option>
+    					<option value="질문" ${vo.free_tag == '질문' ? 'selected' : ''}>질문</option>
                     </select>
                 </div>
                 <!--제목-->
@@ -105,13 +78,20 @@ $(document).ready(function() {
                     <p></p>
                 </textarea>
                 <!-- 스크립트문. 항상 에디터 박스 바로 뒤에 놓을 것-->
-                <script>
-                    ClassicEditor
-                        .create( document.querySelector( '#editor' ) )
-                        .catch( error => {
-                            console.error( error );
-                    });
-                </script>
+			 	<script>
+			        ClassicEditor
+			            .create(document.querySelector('#editor'), {
+			                ckfinder: {
+			                    uploadUrl: 'fileupload.do' 
+			                }
+			            })
+			            .then(editor => {
+			                console.log('Editor was initialized', editor);
+			            })
+			            .catch(error => {
+			                console.error('There was an error initializing the editor', error);
+			            });
+			    </script>
             </div>
 
             <!-- 글 작성하기 버튼-->
@@ -121,10 +101,7 @@ $(document).ready(function() {
             </div>
         </form>
     </div>
-    
-    <script>
- 
-</script>
+   
     
     <!-- ============================================== -->
 

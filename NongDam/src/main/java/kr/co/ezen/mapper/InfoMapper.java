@@ -5,24 +5,21 @@ import java.util.List;
 import kr.co.ezen.entity.Criteria;
 import kr.co.ezen.entity.Free;
 import kr.co.ezen.entity.Info;
+import kr.co.ezen.entity.InfoLike;
 
 public interface InfoMapper {
 	
 	public List<Info> findAll(Criteria cri);
-	public void insert(Info In);
-	public Info findByidx(int info_idx);
-	public int totalCount(Criteria cre);
+	public void insert(Info vo);
+	public Info findByIdx(int info_idx);
+	public int totalCount(Criteria cri);
 	public void updatecnt(int info_idx);
 	public void deleteByIdx(int info_idx);
-	public void updaetByIdx(Info In);
-	public void Modify(Info In);
-	public List<Info> findnew(Criteria cri);
-	public List<Info> findtenure(Criteria cri);
-	public List<Info> findBydate(Criteria cri);
-	public List<Info> findBycount(Criteria cri);
-	public List<Info> findBycountnew(Criteria cri);
-	public List<Info> findBycountenure(Criteria cri);
-	public void updateLike(int info_idx); 
+	public void updateByIdx(Info vo);
 
-
+	
+	public int findUser_idxIsExist(InfoLike lvo);
+	public int findLikeCount(int info_idx);
+	public void insertInfoLike(InfoLike lvo);
+	public void deleteInfoLike(InfoLike lvo);
 }

@@ -29,7 +29,7 @@
 								style="height: 24px; width: 24px; border-radius: 50%; "
 								class="object-fit-cover bg-body-secondary border"
 								src="${contextPath }/resources/image/common/thumbnail-profile-seed.svg">
-							<span>${uvo.user_nickname }님</span>
+							<a class="text-body text-decoration-none" href="${contextPath }/myPage/main">${uvo.user_nickname }님</a>
 						</c:if> 
 						<c:if test="${!empty uvo.user_profile }">
 							<img
@@ -37,7 +37,7 @@
 								class="object-fit-cover bg-body-secondary border"
 								src="${uvo.user_profile }"
 								alt="프로필 이미지" />
-							<span>${uvo.user_nickname }님</span>
+							<a class="text-body text-decoration-none" href="${contextPath }/myPage/main">${uvo.user_nickname }님</a>
 
 						</c:if></c:if>
 				</li>

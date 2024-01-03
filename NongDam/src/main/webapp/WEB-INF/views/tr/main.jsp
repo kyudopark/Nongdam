@@ -58,8 +58,7 @@
 	href="${contextPath }/resources/image/common/favicon.ico" />
 
 <title>농담 | 농업 정보 커뮤니티</title>
-<script type="text/javascript"
-	src="${contextPath }/resources/common/js/tr/bannerText.js"></script>
+<script type="text/javascript" src="${contextPath }/resources/common/js/tr/bannerText.js"></script>
 
 
 <script type="text/javascript">
@@ -184,7 +183,7 @@
 							<li
 								class="page-item  ${pageCre.cri.page==pageNum? 'active text-secondary' :'' }">
 								<a
-								class="page-link  ${pageCre.cri.page==pageNum? 'bg-secondary border-secondary':' text-body' }"
+								class="page-link  ${pageCre.cri.page==pageNum? 'bg-secondary border-secondary':' text-secondary' }"
 								href="${pageNum}">${pageNum }</a>
 							</li>
 						</c:forEach>
@@ -203,10 +202,8 @@
 			<!-- 페이징 끝 -->
 			<!-- 페이징 폼 + 231207 추가) 이동시에도 사용 -->
 			<form id="pageFrm" action="${contextPath}/tr/main" method="get">
-				<input type="hidden" id="page" name="page"
-					value="${pageCre.cri.page }" /> <input type="hidden"
-					id="perPageNum" name="perPageNum"
-					value="${pageCre.cri.perPageNum }" />
+				<input type="hidden" id="page" name="page" value="${pageCre.cri.page }" /> 
+				<input type="hidden" id="perPageNum" name="perPageNum" value="${pageCre.cri.perPageNum }" />
 				<c:if test="${!empty pageCre.cri.keyword}">
 					<!-- 231207 페이지 이동시 무조건 검색값 함께 가져가는 것 방지 -->
 					<input type="hidden" name="type" value="${ pageCre.cri.type}" />

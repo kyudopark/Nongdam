@@ -40,34 +40,113 @@
     <link rel="shortcut icon" type="image/x-icon" href="${contextPath }/resources/image/common/favicon.ico"/>
     
     <title>농담 | 농업 정보 커뮤니티</title>
+    <script type="text/javascript" src="${contextPath }/resources/common/js/info/bannerText.js"></script>
     
     <script>
-    
-    $(document).ready(function() {
-        $('#delete').click(function() {
-            $.ajax({
-                type: 'GET',
-                url: 'deleteByIdx',
-                data: { info_idx: '${vo.info_idx}' }, 
-                success: function(response) {
-                    alert('삭제하겠습니까?');
-                    location.href = '/ezen/info/main';
-                },
-                error: function(error) {
-                    console.error('에러:', error);
-                }
-            });
-        });
+    $(document).ready(function(){
+    	findLikeCount();
+    	findUser_idxIsExist();
     })
+    function deleteByIdx(info_idx){
+		let result = confirm('정말 삭제하시겠습니까?');
+			
+		if(result == false){
+			return;
+		}else{
+			$.ajax({
+				url:"deleteByIdx",
+				type:"post",
+				data:{"info_idx":info_idx},
+				success:function(data){
+					alert("성공적으로 삭제되었습니다.");
+					location.href="${contextPath}/info/main";
+				},
+				error:function(){
+					alert("error");
+				}
+			})
+			
+		}
+	}
     
+    function mainfrm(){
+    	$('#mainfrm').submit();
+    }
+    
+    function findLikeCount(){
+		let info_idx = ${vo.info_idx};
+    	$.ajax({
+			url:"findLikeCount",
+			type:"get",
+			data: {"info_idx":info_idx},
+			dataType: "json",
+			success:function(data){
+				$('#infoLikes').text(data);
+			},
+			error:function(){
+				alert("error");
+			}
+		});
+    }
+    function findUser_idxIsExist(){
+    	let user_idx = ${uvo.user_idx != null ? uvo.user_idx : 'null'};
+    	let info_idx = ${vo.info_idx};
+    	if(user_idx == 0 || user_idx == '' || user_idx == null){
+    		return;
+    	}
+    	$.ajax({
+			url:"findUser_idxIsExist",
+			type:"get",
+			data: {"user_idx":user_idx,
+				"info_idx":info_idx},
+			dataType: "json",
+			success:function(data){
+				if(data == 1){
+		    		$('#clickLikeBtn').removeClass('btn-outline-secondary');
+		    		$('#clickLikeBtn').addClass('btn-secondary');
+		    	}else if(data == 0){
+		    		$('#clickLikeBtn').removeClass('btn-secondary');
+		    		$('#clickLikeBtn').addClass('btn-outline-secondary');
+		    	}
+			},
+			error:function(){
+				alert("error");
+			}
+		});
+    }
+    function clickLikeBtn(info_idx,user_idx){
+    	if(user_idx == '0' || user_idx == '' || user_idx == null){
+    		alert("로그인시 이용할 수 있는 기능입니다. 로그인해주세요.");	
+    		return false;
+    	}
+    	//ajax
+    	//int값을 리턴받음
+    	$.ajax({
+			url:"clickLikeBtn",
+			type:"get",
+			data: {"info_idx":info_idx,
+				"user_idx":user_idx},
+			dataType: "json",
+			success:function(data){
+				findLikeCount();
+				if(data == 1){
+		    		//추천 버튼을 누름
+		    		alert("추천되었습니다.");
+		    		$('#clickLikeBtn').removeClass('btn-outline-secondary');
+		    		$('#clickLikeBtn').addClass('btn-secondary');
+		    	}else if(data == 0){
+		    		//추천을 누르지 않음
+		    		alert("추천을 취소하였습니다.");
+		    		$('#clickLikeBtn').removeClass('btn-secondary');
+		    		$('#clickLikeBtn').addClass('btn-outline-secondary');
+		    	}
+			},
+			error:function(){
+				alert("error");
+			}
+		})
+    }
     </script>
-    
-    
-    
-    
-    
-    
-</script>
        
 </head>
 <body>
@@ -76,59 +155,59 @@
 	<jsp:include page="../common/banner.jsp"/>
 	
 	
-	<!-- 글 조회 div container-->
+		<!-- 글 조회 div container-->
     <div class="container mt-5 mb-5">
         <div class="pt-3 pb-3">
-             <a class="text-muted " href="${contextPath}/free/main"">목록으로</a>
+            <a class="text-muted" href="javascript:mainfrm()"> &lt; 목록으로 </a>
         </div>
         <!-- 글 제목 -->
         <div class="border-bottom">
-            <h4 class="fw-4"> ${vo.info_title}</h4>
+            <h4 class="fw-4">[${vo.info_tag}] ${vo.info_title }</h4>
             <p class="d-flex flex-wrap align-items-center gap-2">
-                <span class="d-block me-auto fst-italic text-muted"><fmt:formatDate value="${vo.info_date}" pattern="yyyy-MM-dd"/></span>
-
-                <span class="d-inline-block"></span>
-                <button class="btn bxtn-sm btn-outline-secondary">
-                    <i class="fa-regular fa-comment"></i>
-                    1:1 채팅
-                </button>
+                <span class="d-block me-auto fst-italic text-muted">
+                	<fmt:formatDate value="${vo.info_date }" pattern="YYYY-MM-dd hh:mm"/>
+                </span>
+                <span class="d-inline-block"><b>작성자</b> ${vo.user_nickname }</span>
             </p>
         </div>
-            <!-- 글 본문(ckEditor) -->
-            <div class="pt-3 pb-3 ck-content">
-                <!-- 이 안에서 출력-->
-                ${vo.info_content}
-            </div>
-            
-            <form name="freeboomup">
-						<s:csrfInput />
-						<input type="hidden" name="freeidx" value="${vo.info_idx}">
-						<input type="hidden" name="userIdx" value="${vo.user_idx}">
-					</form>
-            
-              <div class=" pb-3">
-            <div class="m-auto text-center">
-                <button class="btn  btn-outline-secondary" id="boomup" type="button">
-                    <span><i class="fa-regular fa-thumbs-up"></i></span>
-                    <span id="boomup" name="boomup">${vo.info_boomup }</span>	
-                    
-                </button>
-            </div>
+        <!-- 글 본문(ckEditor) -->
+        <div class="pt-3 pb-3 ck-content">
+            <!-- 이 안에서 출력-->
+            ${vo.info_content}
         </div>
-            
-					
-            
-	            <!-- 기타 버튼 -->
-	       
-			    <div class="border-bottom text-end pb-3">
-			     <c:if test="${ uvo.user_admin == true}">
-			        <a class="btn btn-secondary" href="${contextPath}/info/modify?info_idx=${vo.info_idx}"> 수정하기 </a>
-			        <button class="btn btn-secondary" id="delete" type="button">삭제</button>
-			      </c:if> 
-			        <a class="btn btn-secondary" href="${contextPath}/info/main"> 리스트 </a>
-			    </div>
+        <div class="text-center mb-4">
+        	<button id="clickLikeBtn" class="btn btn-outline-secondary" onclick="clickLikeBtn(${vo.info_idx},${uvo.user_idx != null ? uvo.user_idx : 'null'})">
+                    <span><i class="fa-regular fa-thumbs-up"></i> </span>
+                    <span id="infoLikes"> ${vo.info_like }</span>
+            </button>
+        </div>
 
-       
+        <!-- 기타 버튼 -->
+        <div class="border-bottom text-end mt-3 pb-3">
+	        <c:if test="${uvo.user_idx == vo.user_idx || uvo.user_admin == true}">
+	            <c:if test="${uvo.user_idx == vo.user_idx }">
+	            <a href="${contextPath }/info/modify?info_idx=${vo.info_idx}" class="btn btn-secondary">수정</a>
+	            </c:if>
+	            <button onclick="deleteByIdx(${vo.info_idx})" class="btn btn-danger">삭제</button>
+            </c:if>
+            <a href="javascript:mainfrm()" class="btn btn-secondary">리스트</a>
+        </div>
+
+        <!-- info/main으로 갈때 사용하는 폼 -->
+        <form action="${contextPath }/info/main" method="get" id="mainfrm">
+        	<c:if test="${cri.page != 1 && cri.perPageNum != 12 }">
+	        	<input type="hidden" name="page" value="${cri.page }"/>
+	        	<input type="hidden" name="perPageNum" value="${cri.perPageNum }"/>
+			</c:if>
+        	<c:if test="${!empty cri.type }">
+        		<input type="hidden" name="type" value="${cri.type }"/>
+        		<input type="hidden" name="keyword" value="${cri.keyword }"/>
+        	</c:if>
+        	<c:if test="${!empty cri.tag }">
+        		<input type="hidden" name="tag" value="${cri.tag }"/>
+        	</c:if>
+        </form>
+      </div>
 	<jsp:include page="../common/footer.jsp"/>
 </body>
 </html>

@@ -16,6 +16,9 @@ public class Criteria {
 	private String type;
 	private String keyword;
 	
+	private String tag;
+	
+	
 	public Criteria() { //기본생성자
 		this.page= 1;
 		this.perPageNum = 12; //페이지에 들어가는 게시글 개수
