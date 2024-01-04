@@ -15,6 +15,7 @@ public class Free {
 	private int free_count;
 	
 	private String user_nickname;
+	private int freeCount;
 
 }
 
