@@ -144,10 +144,10 @@
 	                        </select>
 	                        <input type="text" name="keyword" class="form-control" placeholder="검색" value="${cri.keyword }">
 	                    	<button class="btn btn-secondary" type="submit">검색</button>
-	                		<c:if test="${!empty cri.tag }">
-		        				<input type="hidden" name="tag" value="${cri.tag }"/>
-		        			</c:if>
 		                </div>
+		                <c:if test="${!empty cri.tag }">
+		        				<input type="hidden" name="tag" value="${cri.tag }"/>
+	        			</c:if>
 	              </form>
 	         </div>
             <!-- 글쓰기 버튼(2) -->
