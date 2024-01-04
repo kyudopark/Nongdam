@@ -189,10 +189,10 @@
         </div>	
         
        	<form id="pageFrm" action="${contextPath}/info/main" method="get">
-			<c:if test="${pageCre.cri.page != 1 || pageCre.cri.perPageNum != 12 }">
+			
 			<input type="hidden" id="page" name="page" value="${pageCre.cri.page }"/>
 			<input type="hidden" id="perPageNum" name="perPageNum" value="${pageCre.cri.perPageNum }"/>
-			</c:if>
+			
             <!-- 페이지 이동 시 값 가져가는 것 방지  -->
        		<c:if test="${!empty cri.keyword }">
 				<input type="hidden" name="type" value="${ pageCre.cri.type}"/>

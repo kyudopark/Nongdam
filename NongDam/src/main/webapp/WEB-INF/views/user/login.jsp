@@ -60,7 +60,7 @@
 	crossorigin="anonymous"></script>
 	
 
-<script src="https://www.google.com/recaptcha/enterprise.js?render=6Lef5zcpAAAAAANXCWScFJ1ACpQ1Inwjmsdc-qAq"></script>
+<script src="https://www.google.com/recaptcha/enterprise.js?render=6LePKTkpAAAAAMrly0tV36TPjrmDBVwRJhKV01Ua"></script>
 <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
 <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.5.0/kakao.min.js"
 	integrity="sha384-kYPsUbBPlktXsY6/oNHSUDZoTX6+YI51f63jCPEIPFP09ttByAdxd2mEjKuhdqn4"
@@ -175,7 +175,9 @@ $(function () {
 						href="${contextPath }/user/findpw" class="text-muted ps-3 pe-3">비밀번호
 						찾기</a>
 				</div>
-				<div class="g-recaptcha" data-sitekey="6LePKTkpAAAAAMrly0tV36TPjrmDBVwRJhKV01Ua"></div>	
+														
+				<div class="g-recaptcha" data-sitekey="6LePKTkpAAAAAMrly0tV36TPjrmDBVwRJhKV01Ua"></div>
+															
 				
 				<!-- SNS 로그인 파트 -->
 				<div class="container mt-4">

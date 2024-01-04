@@ -29,7 +29,7 @@ public class GoogleLoginBO {
 	private final String GRANT_TYPE = "authorization_code";
 	private final String CLIENT_ID = "220297266440-0j0v50kmorgqq1hh49igc2qon03lnrqm.apps.googleusercontent.com";
 	private final String CLIENT_SECRET = "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";
-	private final String REDIRECT_URI = "http://ec2-15-165-204-160.ap-northeast-2.compute.amazonaws.com:8080/ezen/user/googlecallback";
+	private final String REDIRECT_URI = "http://www.nongdam.kro.kr:8080/ezen/user/googlecallback";
 	private final String SESSION_STATE = "google_state";
 	private final String SCOPE = "email profile openid";
 	private final String ACCESS_TYPE = "offline";
