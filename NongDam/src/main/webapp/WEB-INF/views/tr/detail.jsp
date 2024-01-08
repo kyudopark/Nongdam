@@ -86,6 +86,7 @@
 				commentList += "	<div style='margin-top:2px;width: 22px; height: 22px; border-radius: 50%; display: flex; justify-content: center; align-items: center; '>";
 				
 				// 썸네일
+				
 				if(obj.user_profile == null || obj.user_profile == ''){
 				commentList +="			<img class='object-fit-cover' style='width: 22px; height: 22px; border-radius: 50%;'";
 				commentList += " 			src='${contextPath}/resources/image/common/thumbnail-profile-seed.svg'>"

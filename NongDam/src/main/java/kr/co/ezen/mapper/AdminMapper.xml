@@ -35,7 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 	<delete id="deleteByCheckbox" parameterType="java.util.List">
-		delete from user where user_idx in
+		delete from User where user_idx in
 		<foreach item="item" collection="list" open="(" separator=","
 			close=")">
 			#{item}

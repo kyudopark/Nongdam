@@ -61,7 +61,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		
 		<select id="findAllComment" parameterType="int"
 		resultType="kr.co.ezen.entity.TrComment">
-			select tr_parent_idx,tr_comment_idx,user_idx,user_nickname,tr_comment_time,tr_comment_content,tr_comment_useable
+			select tr_parent_idx,tr_comment_idx,user_idx,user_nickname,user_profile,tr_comment_time,tr_comment_content,tr_comment_useable
 			from trComment natural join User where tr_idx=#{tr_idx}
 			order by tr_parent_idx desc, tr_comment_idx
 		</select>

@@ -74,7 +74,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		
 		<select id="findAllComment" parameterType="int"
 			resultType="kr.co.ezen.entity.FreeComment">
-				select free_parent_idx,free_comment_idx,user_idx,user_nickname,free_comment_time,free_comment_content,free_comment_useable
+				select free_parent_idx,free_comment_idx,user_idx,user_nickname,user_profile,free_comment_time,free_comment_content,free_comment_useable
 				from freeComment natural join User where free_idx=#{free_idx}
 				order by free_parent_idx desc, free_comment_idx
 		</select>
