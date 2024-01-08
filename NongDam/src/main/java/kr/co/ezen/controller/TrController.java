@@ -263,8 +263,8 @@ public class TrController {
 
 	@PostMapping("/deleteByIdx")
 	public @ResponseBody void deleteByIdx(int tr_idx) {
-		trService.deleteByIdx(tr_idx);
 		trService.deleteCommentByTr_idx(tr_idx);
+		trService.deleteByIdx(tr_idx);
 	}
 
 	@PostMapping("/deleteCommentByIdx")

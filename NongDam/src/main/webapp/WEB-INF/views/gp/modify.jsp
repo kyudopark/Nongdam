@@ -118,7 +118,7 @@
                         	<img id="thumbnail" class="object-fit-cover w-100 h-100" 
                         	src="${vo.gp_thumb }">
                         </c:if>
-                        <c:if text="${empty vo.gp_thumb }">
+                        <c:if test="${empty vo.gp_thumb }">
 	                        <img id="thumbnail" class="object-fit-cover w-100 h-100" 
 	                        src="${contextPath }/resources/image/common/thumbnail.svg">
                         </c:if>

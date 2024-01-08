@@ -257,11 +257,11 @@ $(document).ready(function () {
 
                 // 'doughnut' 차트 데이터 생성
                 var newData = {
-                    labels: ['구글 로그인', '카카오 로그인', '자체 로그인', '네이버 로그인'],
+                    labels: ['카카오 로그인', '네이버 로그인', '자체 로그인', '구글 로그인'],
                     datasets: [{
                         data: Object.values(data),
-                        backgroundColor: ['rgba(255, 0, 0, 0.3)', 'rgba(255, 255, 0, 0.3)', 'rgba(0, 0, 255, 0.3)', 'rgba(0, 128, 0, 0.3)'],
-                        borderColor: ['rgba(255, 0, 0, 1)', 'rgba(255, 255, 0, 1)', 'rgba(0, 0, 255, 1)', 'rgba(0, 128, 0, 1)'],
+                        backgroundColor: ['rgba(255, 255, 0, 0.3)', 'rgba(0, 128, 0, 0.3)', 'rgba(0, 0, 255, 0.3)', 'rgba(255, 0, 0, 0.3)'],
+                        borderColor: ['rgba(255, 255, 0, 1)', 'rgba(0, 128, 0, 1)', 'rgba(0, 0, 255, 1)', 'rgba(255, 0, 0, 1)'],
                         borderWidth: 1
                     }]
                 };

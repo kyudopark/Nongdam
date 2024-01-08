@@ -139,7 +139,7 @@
 		            <c:set var="diffDaysEnd" value="${diffMillisEnd / (24 * 60 * 60 * 1000)}"/>
 		            
 		            <c:choose>
-        				<c:when test="${pageCre.cri.type==null || pageCre.cri.type=='all' || (pageCre.cri.type=='progress' && diffDaysEnd >= 0) || (pageCre.cri.type=='complet' && diffDaysEnd < 0)}">
+        				<c:when test="${pageCre.cri.type==null || pageCre.cri.type=='all' || (pageCre.cri.type=='progress' && diffDaysEnd >= 0) || (pageCre.cri.type=='complete' && diffDaysEnd < 0)}">
 			                <div class="col pb-4">
 			                    <a class="text-decoration-none moving-list" href="${li.gp_idx }">
 			                        <div class="card">

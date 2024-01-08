@@ -172,7 +172,9 @@
 				<h5>추천하는 최신 정보를 알려드립니다.</h5>
 				<div>
 					<p class="m-0">
-						Lorem ipsum dolor sit amet, <br> consectetur adipisicing
+						농업 정보 커뮤니티 농담에 오신 것을 환영합니다.
+						<br>
+						로그인하시고 더 많은 정보를 얻어보세요.
 					</p>
 				</div>
 			</div>
