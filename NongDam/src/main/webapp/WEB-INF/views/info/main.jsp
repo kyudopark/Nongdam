@@ -142,10 +142,10 @@
 			           	</select>
 			            <input type="text" name="keyword" class="form-control" placeholder="검색" value="${cri.keyword }">
 			          	<button class="btn btn-secondary" type="submit">검색</button>
-		      			<c:if test="${!empty cri.tag }">
-			        		<input type="hidden" name="tag" value="${cri.tag }"/>
-			        	</c:if>
 		      		</div>
+		      		<c:if test="${!empty cri.tag }">
+			        		<input type="hidden" name="tag" value="${cri.tag }"/>
+		        	</c:if>
 		      	</form>
 		  	</div>
 		  
@@ -189,10 +189,10 @@
         </div>	
         
        	<form id="pageFrm" action="${contextPath}/info/main" method="get">
-			<c:if test="${pageCre.cri.page != 1 || pageCre.cri.perPageNum != 12 }">
+			
 			<input type="hidden" id="page" name="page" value="${pageCre.cri.page }"/>
 			<input type="hidden" id="perPageNum" name="perPageNum" value="${pageCre.cri.perPageNum }"/>
-			</c:if>
+			
             <!-- 페이지 이동 시 값 가져가는 것 방지  -->
        		<c:if test="${!empty cri.keyword }">
 				<input type="hidden" name="type" value="${ pageCre.cri.type}"/>

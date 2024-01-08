@@ -263,6 +263,7 @@ $(document).ready(function(){
 										class="text-danger">*</span></label>
 									<div class="col-sm-9 col-md-10">
 										<div class="form-check form-check-inline">
+											<c:if test="${uvo.user_gender==1 }">
 											<input class="form-check-input" type="radio" name="user_gender"
 												id="user_gender_male" value="1" checked /> <label
 												class="form-check-label" for="user_gender_male">남자</label>
@@ -272,6 +273,21 @@ $(document).ready(function(){
 												id="user_gender_female" value="0" /> <label
 												class="form-check-label" for="user_gender_female">여자</label>
 										</div>
+											</c:if>
+											
+												<c:if test="${uvo.user_gender==0 }">
+											<input class="form-check-input" type="radio" name="user_gender"
+												id="user_gender_male" value="1"  /> <label
+												class="form-check-label" for="user_gender_male">남자</label>
+										
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="radio" name="user_gender"
+												id="user_gender_female" value="0" checked/> <label
+												class="form-check-label" for="user_gender_female">여자</label>
+										</div>
+											</c:if>
+											</div>
+											
 									</div>
 								</div>
 			

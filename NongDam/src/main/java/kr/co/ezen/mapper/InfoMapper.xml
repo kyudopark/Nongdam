@@ -37,7 +37,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	
 	<select id="findByIdx" resultType="kr.co.ezen.entity.Info" parameterType="int">
-		select info_idx, info_title, info_content, info_tag, info_count, user_idx, user_nickname
+		select info_idx, info_title, info_content, info_date, info_tag, info_count, user_idx, user_nickname
 		from info natural join User where info_idx=#{info_idx} 
 	</select>
 

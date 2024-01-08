@@ -15,7 +15,7 @@ create table chatRoom(
 desc chatRoom
 -- ====================================
 drop table 
-select * from 
+select * from info
 delete from 
 select * from 
 
