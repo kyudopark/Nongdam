@@ -82,7 +82,7 @@ function sample6_execDaumPostcode() {
 
             // 우편번호와 주소 정보를 해당 필드에 넣는다.
             document.getElementById('user_zipcode').value = data.zonecode;
-            document.getElementById("sample6_address").value = addr;
+            document.getElementById("sample6_address1").value = addr;
 
             // 커서를 상세주소 필드로 이동한다.
             document.getElementById("sample6_detailAddress").focus();
@@ -129,7 +129,7 @@ $(document).ready(function(){
     var addrParts = userAddr.split(',');
 
     if (addrParts.length === 2) {
-        $('#sample6_ddress1').val(addrParts[0]);
+        $('#sample6_address1').val(addrParts[0]);
         $('#sample6_detailAddress').val(addrParts[1]);
     }
 });
@@ -334,7 +334,7 @@ $(document).ready(function(){
 									</div>
 		
 		
-									<input type="text" class="form-control mb-2" id="sample6_ddress1"
+									<input type="text" class="form-control mb-2" id="sample6_address1"
 										name="user_addr" value="${uvo.user_addr }"> <input type="text"
 										class="form-control" id="sample6_detailAddress" name="user_addr" placeholder="상세주소"
 										>
